@@ -1,10 +1,12 @@
 using API.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     public class ValuesController : Controller
     {
         private readonly DataContext _dataContext;
@@ -15,15 +17,17 @@ namespace API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetValues()
         {
-            var values = _dataContext.valueTestModels.ToListAsync();
-            return Ok(await values);
+            var values = await _dataContext.ValueTestModels.ToListAsync();
+            return Ok(values);
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> Value(int id){
-            var value = _dataContext.valueTestModels.FirstOrDefaultAsync(x=> x.Id == id);
-            return Ok(await value);
+        public async Task<IActionResult> Value(int id)
+        {
+            var value = await _dataContext.ValueTestModels.FirstOrDefaultAsync(x => x.Id == id);
+            return Ok(value);
         }
     }
 }
