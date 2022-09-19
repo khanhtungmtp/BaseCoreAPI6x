@@ -1,6 +1,8 @@
 
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MessageConstants } from '../_core/_constants/message.enum';
 import { AuthService } from '../_core/_services/auth.service';
+import { NgxNotiflixService } from '../_core/_services/ngx-notiflix.service';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -11,7 +13,8 @@ export class RegisterComponent implements OnInit {
   @Input() valuesFromHome: any;
   @Output() cancelRegister = new EventEmitter();
   constructor(
-    private authService: AuthService
+    private authService: AuthService,
+    private snotiflix: NgxNotiflixService
   ) { }
 
   ngOnInit() {
@@ -20,9 +23,9 @@ export class RegisterComponent implements OnInit {
   register() {
     this.authService.register(this.model).subscribe({
       next: (res) => {
-        console.log(res);
+        this.snotiflix.success(MessageConstants.CREATED_OK_MSG)
       }, error: () => {
-        console.log('err');
+        this.snotiflix.error(MessageConstants.CREATED_ERROR_MSG)
       }
     });
   }
