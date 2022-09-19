@@ -2,10 +2,10 @@ namespace API.Models
 {
     public class User
     {
-        public int Id { get; set; }
-        public string? UserName { get; set; }
-        public byte[]? PasswordHash {get;set;}
-        public byte[]? PasswordSalt {get;set;}
+        public int id { get; set; }
+        public string? username { get; set; }
+        public byte[]? password_hash {get;set;}
+        public byte[]? password_salt {get;set;}
 
 
     }

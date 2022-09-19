@@ -1,0 +1,24 @@
+<main class="form-signin w-100 m-auto">
+  <form #registerForm="ngForm" (ngSubmit)="register()">
+    <h1 class="h3 mb-3 fw-normal">Please sign up</h1>
+
+    <div class="form">
+      <label for="username">User name</label>
+      <input type="text" required class="form-control" id="username" name="username" [(ngModel)]="model.username">
+    </div>
+    <div class="form">
+      <label for="password">Password</label>
+      <input type="password" required class="form-control" id="password" name="password" [(ngModel)]="model.password">
+    </div>
+    <div class="form-group">
+      <label for="favouriteValue">What is your favourite</label>
+      <select class="form-control" id="favouriteValue">
+        <option *ngFor="let value of valuesFromHome" [value]="value.id">{{value.name}}</option>
+      </select>
+    </div>
+    <div class="form-group register-button">
+      <button class="btn btn-success btn-lg" type="submit">Register</button>
+      <button class="btn btn-default btn-lg" type="button" (click)="cancel()">Cancel</button>
+    </div>
+  </form>
+</main>

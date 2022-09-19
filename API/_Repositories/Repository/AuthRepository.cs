@@ -15,10 +15,10 @@ namespace API._Repositories.Repository
 
         public async Task<User> Login(string username, string password)
         {
-            var user = await _dataContext.Users.FirstOrDefaultAsync(x => x.UserName == username);
+            var user = await _dataContext.Users.FirstOrDefaultAsync(x => x.username == username);
             if (user == null)
                 return null;
-            if (!VeryPasswordHash(password, user.PasswordHash, user.PasswordSalt))
+            if (!VeryPasswordHash(password, user.password_hash, user.password_salt))
                 return null;
 
             return user;
@@ -42,8 +42,8 @@ namespace API._Repositories.Repository
         {
             byte[] passwordHash, passwordSalt;
             CreatePasswordHash(password, out passwordHash, out passwordSalt);
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
+            user.password_hash = passwordHash;
+            user.password_salt = passwordSalt;
             await _dataContext.Users.AddAsync(user);
             await _dataContext.SaveChangesAsync();
             return user;
@@ -60,7 +60,7 @@ namespace API._Repositories.Repository
 
         public async Task<bool> UserExits(string username)
         {
-            var user = await _dataContext.Users.AnyAsync(x => x.UserName == username);
+            var user = await _dataContext.Users.AnyAsync(x => x.username == username);
             if (user)
                 return true;
             return false;

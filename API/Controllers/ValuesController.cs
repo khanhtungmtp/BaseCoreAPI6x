@@ -26,7 +26,7 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Value(int id)
         {
-            var value = await _dataContext.ValueTestModels.FirstOrDefaultAsync(x => x.Id == id);
+            var value = await _dataContext.ValueTestModels.FirstOrDefaultAsync(x => x.id == id);
             return Ok(value);
         }
     }

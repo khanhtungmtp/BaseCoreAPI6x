@@ -1,8 +1,9 @@
+
 using System.ComponentModel.DataAnnotations;
 
 namespace API.Dtos
 {
-    public class RegisterUserParam
+    public class LoginUserParam
     {
         public string? username { get; set; }
         [Required]

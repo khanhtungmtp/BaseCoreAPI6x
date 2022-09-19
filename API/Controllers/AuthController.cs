@@ -21,28 +21,28 @@ namespace API.Controllers
             _AuthRepository = authRepository;
         }
         [HttpPost("Register")]
-        public async Task<IActionResult> Register(RegisterUserDto userDto)
+        public async Task<IActionResult> Register(RegisterUserParam param)
         {
-            userDto.UserName = userDto.UserName.ToLower();
-            if (await _AuthRepository.UserExits(userDto.UserName))
+            param.username = param.username.ToLower();
+            if (await _AuthRepository.UserExits(param.username))
                 return BadRequest("username already exists");
             var userToCreate = new User
             {
-                UserName = userDto.UserName
+                username = param.username
             };
-            var createdUser = await _AuthRepository.Register(userToCreate, userDto.Password);
+            var createdUser = await _AuthRepository.Register(userToCreate, param.password);
             return StatusCode(201);
         }
 
         [HttpPost("Login")]
-        public async Task<IActionResult> Login(string UserName, string Password)
+        public async Task<IActionResult> Login([FromBody] LoginUserParam param)
         {
-            var user = await _AuthRepository.Login(UserName.ToLower(), Password);
+            var user = await _AuthRepository.Login(param.username.ToLower(), param.password);
             if (user == null)
                 return Unauthorized();
             var claims = new[] {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, UserName)
+                new Claim(ClaimTypes.NameIdentifier, user.id.ToString()),
+                new Claim(ClaimTypes.Name, param.username)
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_Configuration.GetSection("AppSettings:Token").Value));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
