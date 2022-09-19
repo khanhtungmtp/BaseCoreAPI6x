@@ -1,3 +1,4 @@
+import { GlobalHttpInterceptorProvider } from './_core/_helpers/utilities/global-http-interceptor';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
@@ -20,7 +21,8 @@ import { RegisterComponent } from './register/register.component';
     FormsModule
   ],
   providers: [
-    AuthService
+    AuthService,
+    GlobalHttpInterceptorProvider
   ],
   bootstrap: [AppComponent]
 })

@@ -1,4 +1,5 @@
 using API.Configurations;
+using API.Helpers.Utilities;
 
 var builder = WebApplication.CreateBuilder(args);
 // add databaseconfig
@@ -15,6 +16,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDependencyInjectionConfig();
 // add auth
 builder.Services.AddAuthenticationConfig(builder.Configuration);
+// add middleware error global
+builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -26,6 +29,8 @@ if (app.Environment.IsDevelopment())
 
 // use cors allow
 app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+// middleware global
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 // use auth
 app.UseAuthentication();
 app.UseHttpsRedirection();
