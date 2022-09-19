@@ -1,6 +1,7 @@
 import { AuthService } from './../_core/_services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { NgxNotiflixService } from '../_core/_services/ngx-notiflix.service';
+import { MessageConstants } from '../_core/_constants/message.enum';
 
 @Component({
   selector: 'app-nav',
@@ -21,20 +22,21 @@ export class NavComponent implements OnInit {
   login() {
     this.authService.login(this.model).subscribe({
       next: (res) => {
-        this.snotiflix.success('Login successfully')
+        this.snotiflix.success(MessageConstants.LOGGED_IN)
       }, error: () => {
-        this.snotiflix.error('Failed to login');
+        this.snotiflix.error(MessageConstants.LOGIN_FAILED);
       }
     })
   }
 
   loggedIn(){
-    const token = localStorage.getItem('token');
-    return !!token; // tip convert boolean
+    return this.authService.loggedIn();
   }
 
   logOut(){
-    localStorage.removeItem('token');
+    localStorage.clear();
+    this.model = {}
+    this.snotiflix.success(MessageConstants.LOGGED_OUT)
   }
 
 }
