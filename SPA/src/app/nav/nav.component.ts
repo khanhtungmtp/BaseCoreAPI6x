@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { AuthService } from './../_core/_services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { NgxNotiflixService } from '../_core/_services/ngx-notiflix.service';
@@ -13,7 +14,8 @@ export class NavComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private snotiflix: NgxNotiflixService
+    private snotiflix: NgxNotiflixService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -25,7 +27,9 @@ export class NavComponent implements OnInit {
         this.snotiflix.success(MessageConstants.LOGGED_IN)
       }, error: () => {
         this.snotiflix.error(MessageConstants.LOGIN_FAILED);
-      }
+      }, complete:() => {
+        this.router.navigate(['/members']);
+      },
     })
   }
 
@@ -37,6 +41,7 @@ export class NavComponent implements OnInit {
     localStorage.clear();
     this.model = {}
     this.snotiflix.success(MessageConstants.LOGGED_OUT)
+    this.router.navigate(['/home']);
   }
 
 }

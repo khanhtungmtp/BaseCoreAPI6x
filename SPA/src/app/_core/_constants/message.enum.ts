@@ -2,7 +2,7 @@ export const MessageConstants = {
   LOGGED_IN : 'Welcome to the system',
   LOGIN_FAILED : 'Your username and/or password do not match',
   CONFIRM_PASSWORD : 'New Password and Confirm Password do not match',
-
+  PLEASE_LOGIN: 'You are denied access',
   LOGGED_OUT : 'You have been logged out',
   NEW_VERSION_AVAILABLE : 'New Version Available! Try re-login again',
 
