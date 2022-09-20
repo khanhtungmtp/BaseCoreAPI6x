@@ -1,13 +1,13 @@
 <header>
   <!-- Fixed navbar -->
   <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-    <div class="container-fluid">
+    <div class="container">
       <a class="navbar-brand" href="#">BaseCore</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav me-auto mb-2 mb-md-0">
+      <div [class]="loggedIn() ? 'collapse navbar-collapse' : ''" id="navbarCollapse">
+        <ul class="navbar-nav me-auto" *ngIf="loggedIn()">
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="#">Matches</a>
           </li>
@@ -19,7 +19,7 @@
           </li>
         </ul>
 
-        <div class="dropdown text-end dropstart" *ngIf="loggedIn()">
+        <div class="dropdown text-end " *ngIf="loggedIn()">
           <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
             <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
           </a>
@@ -31,7 +31,7 @@
             <li><a class="dropdown-item" href="#" (click)="logOut()">Sign out</a></li>
           </ul>
         </div>
-        <form #loginForm="ngForm" class="d-flex" role="search" (ngSubmit)="login()" *ngIf="!loggedIn()">
+        <form #loginForm="ngForm" class="d-flex text-end" role="search" (ngSubmit)="login()" *ngIf="!loggedIn()">
           <input class="form-control me-2" type="text" name="username" placeholder="UserName" required [(ngModel)]="model.username">
           <input class="form-control me-2" type="text" name="password" placeholder="Password" required [(ngModel)]="model.password">
           <button class="btn btn-outline-success" type="submit">Login</button>
