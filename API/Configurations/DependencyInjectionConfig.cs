@@ -1,6 +1,7 @@
 
 using API._Repositories.Interfaces;
 using API._Repositories.Repository;
+using API.Data;
 
 namespace API.Configurations
 {
@@ -12,7 +13,7 @@ namespace API.Configurations
                 throw new ArgumentNullException(nameof(services));
             // add repository
             services.AddScoped<IAuthRepository, AuthRepository>();
-            // add services
+            // add services           
         }
     }
 }

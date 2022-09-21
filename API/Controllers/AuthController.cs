@@ -13,31 +13,31 @@ namespace API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        public readonly IAuthRepository _AuthRepository;
+        public readonly IAuthRepository _authRepository;
         public readonly IConfiguration _Configuration;
         public AuthController(IAuthRepository authRepository, IConfiguration configuration)
         {
             _Configuration = configuration;
-            _AuthRepository = authRepository;
+            _authRepository = authRepository;
         }
         [HttpPost("Register")]
         public async Task<IActionResult> Register(RegisterUserParam param)
         {
             param.username = param.username.ToLower();
-            if (await _AuthRepository.UserExits(param.username))
+            if (await _authRepository.UserExits(param.username))
                 return BadRequest("username already exists");
             var userToCreate = new User
             {
                 username = param.username
             };
-            var createdUser = await _AuthRepository.Register(userToCreate, param.password);
+            var createdUser = await _authRepository.Register(userToCreate, param.password);
             return StatusCode(201);
         }
 
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginUserParam param)
         {
-            var user = await _AuthRepository.Login(param.username.ToLower(), param.password);
+            var user = await _authRepository.Login(param.username.ToLower(), param.password);
             if (user == null)
                 return Unauthorized();
             var claims = new[] {

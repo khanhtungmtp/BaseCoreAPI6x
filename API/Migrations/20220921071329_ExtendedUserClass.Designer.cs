@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220920085901_ExtendedUserClass")]
+    [Migration("20220921071329_ExtendedUserClass")]
     partial class ExtendedUserClass
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,22 +32,17 @@ namespace API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
 
-                    b.Property<DateTime>("date_added")
+                    b.Property<DateTime?>("date_added")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("is_main")
+                    b.Property<bool?>("is_main")
                         .HasColumnType("bit");
 
                     b.Property<string>("url")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("user_id")
-                        .HasColumnType("int");
 
                     b.Property<int>("userid")
                         .HasColumnType("int");
@@ -68,40 +63,33 @@ namespace API.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
 
                     b.Property<string>("city")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("country")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("created")
+                    b.Property<DateTime?>("created")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("date_of_birth")
+                    b.Property<DateTime?>("date_of_birth")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("gender")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("interests")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("introduction")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("known_as")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("last_active")
+                    b.Property<DateTime?>("last_active")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("looking_for")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("password_hash")

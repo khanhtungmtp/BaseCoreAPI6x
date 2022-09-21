@@ -1,6 +1,6 @@
 using API.Models;
 using Microsoft.EntityFrameworkCore;
-
+using Newtonsoft.Json;
 namespace API.Data
 {
     public class DataContext : DbContext
