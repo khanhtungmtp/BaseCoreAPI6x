@@ -13,6 +13,7 @@ namespace API.Configurations
                 throw new ArgumentNullException(nameof(services));
             // add repository
             services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<IDatingRepository, DatingRepository>();
             // add services           
         }
     }

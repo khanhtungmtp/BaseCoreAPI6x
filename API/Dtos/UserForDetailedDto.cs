@@ -18,6 +18,6 @@ namespace API.Dtos
         public string? city { get; set; }
         public string? country { get; set; }
         public string? photo_url { get; set; }
-        public ICollection<Photo> photos { get; set; }
+        public ICollection<PhotoForDetailedDto> photos { get; set; }
     }
 }

@@ -23,7 +23,7 @@ export class AuthGuard implements CanActivate {
       return true;
     }
     this.notiflix.error(MessageConstants.PLEASE_LOGIN);
-    this.router.navigate(['/home'])
+    this.router.navigate(['/'])
     return false;
   }
 }

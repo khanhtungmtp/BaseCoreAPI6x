@@ -13,9 +13,11 @@ import { RegisterComponent } from './register/register.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ListsComponent } from './views/lists/lists.component';
-import { MemberListComponent } from './views/member-list/member-list.component';
+import { MemberListComponent } from './views/members/member-list/member-list.component';
 import { MessagesComponent } from './views/messages/messages.component';
 import { routes } from './routes';
+import { UserService } from './_core/_services/user.service';
+import { MemberCardComponent } from './views/members/member-card/member-card.component';
 @NgModule({
   declarations: [				
     AppComponent,
@@ -24,7 +26,8 @@ import { routes } from './routes';
       RegisterComponent,
       ListsComponent,
       MemberListComponent,
-      MessagesComponent
+      MessagesComponent,
+      MemberCardComponent,
    ],
   imports: [
     BrowserModule,
@@ -37,7 +40,8 @@ import { routes } from './routes';
   providers: [
     AuthService,
     GlobalHttpInterceptorProvider,
-    AuthGuard
+    AuthGuard,
+    UserService
   ],
   bootstrap: [AppComponent]
 })

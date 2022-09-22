@@ -13,7 +13,8 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// add Swapger config with jwt
+builder.Services.AddSwaggerGenConfiguration();
 // RepositoryAccessor and Service
 builder.Services.AddDependencyInjectionConfig();
 // add auth
@@ -36,7 +37,6 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 // use auth
 app.UseAuthentication();
 app.UseHttpsRedirection();
-
 
 app.UseAuthorization();
 
