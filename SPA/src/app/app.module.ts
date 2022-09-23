@@ -1,3 +1,4 @@
+import { MemberDetailResolver } from './_core/_resolvers/member-detail.resolver';
 import { AuthGuard } from './_core/_guards/auth/auth.guard';
 import { RouterModule } from '@angular/router';
 import { GlobalHttpInterceptorProvider } from './_core/_helpers/utilities/global-http-interceptor';
@@ -12,6 +13,7 @@ import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './register/register.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ListsComponent } from './views/lists/lists.component';
 import { MemberListComponent } from './views/members/member-list/member-list.component';
 import { MessagesComponent } from './views/messages/messages.component';
@@ -20,6 +22,8 @@ import { UserService } from './_core/_services/user.service';
 import { MemberCardComponent } from './views/members/member-card/member-card.component';
 import { JwtModule } from '@auth0/angular-jwt';
 import { environment } from 'src/environments/environment';
+import { MemeberDetailComponent } from './views/members/memeber-detail/memeber-detail.component';
+import { MemberListResolver } from './_core/_resolvers/member-list.resolver';
 export function tokenGetter(){
   return localStorage.getItem('token');
 }
@@ -33,6 +37,7 @@ export function tokenGetter(){
       MemberListComponent,
       MessagesComponent,
       MemberCardComponent,
+      MemeberDetailComponent,
    ],
   imports: [
     BrowserModule,
@@ -40,6 +45,7 @@ export function tokenGetter(){
     FormsModule,
     BrowserAnimationsModule,
     BsDropdownModule.forRoot(),
+    TabsModule.forRoot(),
     RouterModule.forRoot(routes),
     JwtModule.forRoot({
       config: {
@@ -53,7 +59,9 @@ export function tokenGetter(){
     AuthService,
     GlobalHttpInterceptorProvider,
     AuthGuard,
-    UserService
+    UserService,
+    MemberDetailResolver,
+    MemberListResolver
   ],
   bootstrap: [AppComponent]
 })
