@@ -18,6 +18,11 @@ import { MessagesComponent } from './views/messages/messages.component';
 import { routes } from './routes';
 import { UserService } from './_core/_services/user.service';
 import { MemberCardComponent } from './views/members/member-card/member-card.component';
+import { JwtModule } from '@auth0/angular-jwt';
+import { environment } from 'src/environments/environment';
+export function tokenGetter(){
+  return localStorage.getItem('token');
+}
 @NgModule({
   declarations: [				
     AppComponent,
@@ -35,7 +40,14 @@ import { MemberCardComponent } from './views/members/member-card/member-card.com
     FormsModule,
     BrowserAnimationsModule,
     BsDropdownModule.forRoot(),
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        allowedDomains: environment.allowedDomains,
+        disallowedRoutes: environment.disallowedRoutes
+      }
+  }),
   ],
   providers: [
     AuthService,

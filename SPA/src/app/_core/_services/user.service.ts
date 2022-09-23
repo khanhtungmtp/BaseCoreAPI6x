@@ -4,11 +4,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { User } from '../_models/user';
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Authorization': 'Bearer ' + localStorage.getItem('token')
-  })
-}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -19,10 +15,10 @@ export class UserService {
     private http: HttpClient
   ) { }
   getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.baseUrl, httpOptions);
+    return this.http.get<User[]>(this.baseUrl);
   }
 
   getUser(id: number): Observable<User> {
-    return this.http.get<User>(this.baseUrl + id, httpOptions);
+    return this.http.get<User>(this.baseUrl + id);
   }
 }
