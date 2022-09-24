@@ -24,7 +24,7 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { environment } from 'src/environments/environment';
 import { MemeberDetailComponent } from './views/members/memeber-detail/memeber-detail.component';
 import { MemberListResolver } from './_core/_resolvers/member-list.resolver';
-import { GalleryModule } from  'ng-gallery';
+import { CarouselModule } from 'ngx-bootstrap/carousel';
 export function tokenGetter(){
   return localStorage.getItem('token');
 }
@@ -48,7 +48,7 @@ export function tokenGetter(){
     BsDropdownModule.forRoot(),
     TabsModule.forRoot(),
     RouterModule.forRoot(routes),
-    GalleryModule,
+    CarouselModule.forRoot(),
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,

@@ -46,7 +46,13 @@
                         <p>{{user.interests}}</p>
                     </tab>
                     <tab heading="Photos">
-                        <gallery imageSize="cover" [thumbWidth]="120" [thumbHeight]="50" [thumb]="true" [items]="items" [imageSize]="'contain'"></gallery>
+                        <!-- <gallery imageSize="cover" [thumbWidth]="120" [thumbHeight]="50" [thumb]="true" [items]="items" [imageSize]="'contain'"></gallery> -->
+                        <carousel [interval]="0" class="carousel-dark">
+                            <slide *ngFor="let photo of user.photos; let index=index">
+                              <img [src]="photo.url" alt="{{photo.description}}" class="w-50 d-block m-auto">
+                            </slide>
+                          </carousel>
+                          
                     </tab>
                     <tab heading="Messages">
                         <h4>Messages</h4>

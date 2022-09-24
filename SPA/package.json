@@ -22,7 +22,6 @@
     "@coreui/coreui": "^4.2.2",
     "bootstrap": "^5.2.0",
     "font-awesome": "^4.7.0",
-    "ng-gallery": "^7.0.4",
     "ngx-bootstrap": "^9.0.0",
     "notiflix": "^3.2.5",
     "rxjs": "~7.5.0",

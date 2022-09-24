@@ -4,7 +4,6 @@ import { User } from './../../../_core/_models/user';
 import { UserService } from './../../../_core/_services/user.service';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Gallery, GalleryItem, ImageItem } from 'ng-gallery';
 
 @Component({
   selector: 'app-memeber-detail',
@@ -15,23 +14,14 @@ import { Gallery, GalleryItem, ImageItem } from 'ng-gallery';
 
 export class MemeberDetailComponent implements OnInit {
   user: User = <User>{};
-  items!: GalleryItem[];
-  imageData = [{
-    srcUrl: '',
-    previewUrl: ''
-  }];
   constructor(
     private userService: UserService,
     private route: ActivatedRoute,
-    private notiflix: NgxNotiflixService,
-    public gallery: Gallery
+    private notiflix: NgxNotiflixService
   ) { }
 
   ngOnInit(): void {
     this.loadUser();
-    this.getImages();
-    // Creat gallery items
-    this.items = this.imageData.map(item => new ImageItem({ src: item.srcUrl, thumb: item.previewUrl }));
   }
 
 
@@ -46,18 +36,6 @@ export class MemeberDetailComponent implements OnInit {
         this.notiflix.hideLoading();
       }
     })
-  }
-
-  getImages() {
-    const imageUrls = [];
-    const data = this.user.photos;
-    for (let i = 0; i < data?.length; i++) {
-      imageUrls.push({
-        srcUrl: data[i].url!,
-        previewUrl: data[i].url!
-      })
-    }
-    return this.imageData = imageUrls;
   }
 
 }
