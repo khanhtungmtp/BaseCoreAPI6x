@@ -9,12 +9,14 @@ import { MemberListResolver } from 'src/app/_core/_resolvers/member-list.resolve
 import { MemberCardComponent } from './member-card/member-card.component';
 import { MemeberDetailComponent } from './memeber-detail/memeber-detail.component';
 import { UserService } from 'src/app/_core/_services/user.service';
+import { MemberEditComponent } from './member-edit/member-edit.component';
 
 @NgModule({
   declarations: [
     MemberCardComponent,
     MemberListComponent,
-    MemeberDetailComponent
+    MemeberDetailComponent,
+    MemberEditComponent
   ],
   imports: [
     CommonModule,

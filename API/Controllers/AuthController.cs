@@ -1,9 +1,12 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using API._Repositories.Interfaces;
 using API.Dtos;
 using API.Models;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -15,10 +18,12 @@ namespace API.Controllers
     {
         public readonly IAuthRepository _authRepository;
         public readonly IConfiguration _Configuration;
-        public AuthController(IAuthRepository authRepository, IConfiguration configuration)
+        private readonly IMapper _mapper;
+        public AuthController(IAuthRepository authRepository, IConfiguration configuration, IMapper mapper)
         {
             _Configuration = configuration;
             _authRepository = authRepository;
+            _mapper = mapper;
         }
         [HttpPost("Register")]
         public async Task<IActionResult> Register(RegisterUserParam param)
@@ -38,6 +43,15 @@ namespace API.Controllers
         public async Task<IActionResult> Login([FromBody] LoginUserParam param)
         {
             var user = await _authRepository.Login(param.username.ToLower(), param.password);
+            var userDetail = await _authRepository.GetUser(user.id);
+            var userToReturn = _mapper.Map<UserForDetailedDto>(user);
+            JsonSerializerOptions options = new()
+            {
+                ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                WriteIndented = true
+            };
+
+            string userJson = JsonSerializer.Serialize(userToReturn, options);
             if (user == null)
                 return Unauthorized();
             var claims = new[] {
@@ -56,7 +70,8 @@ namespace API.Controllers
             var token = tokenHanler.CreateToken(tokenDescriptor);
             return Ok(new
             {
-                token = tokenHanler.WriteToken(token)
+                token = tokenHanler.WriteToken(token),
+                user = userJson
             });
         }
     }

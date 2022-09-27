@@ -5,6 +5,7 @@ import { MemberListComponent } from './views/members/member-list/member-list.com
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { HomeComponent } from './home/home.component';
+import { MemberEditComponent } from './views/members/member-edit/member-edit.component';
 
 
 export const routes: Routes = [
@@ -19,7 +20,8 @@ export const routes: Routes = [
                 loadChildren: () => import('./views/members/members.module').then(m => m.MembersModule),
             },
             { path: 'messages', component: MessagesComponent},
-            { path: 'lists', component: ListsComponent}
+            { path: 'lists', component: ListsComponent},
+            {path: 'member/edit', component: MemberEditComponent}
         ]
     },
     { path: '**', redirectTo: '', pathMatch: 'full' }

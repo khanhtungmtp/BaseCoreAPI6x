@@ -3,6 +3,10 @@ import { AuthService } from './../_core/_services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { NgxNotiflixService } from '../_core/_services/ngx-notiflix.service';
 import { MessageConstants } from '../_core/_constants/message.enum';
+import { User } from '../_core/_models/user';
+import { UserService } from '../_core/_services/user.service';
+import { LoginModel } from '../_core/_models/auth/login-model';
+import { LocalStorageContains } from '../_core/_constants/localStorageContains';
 
 @Component({
   selector: 'app-nav',
@@ -10,23 +14,34 @@ import { MessageConstants } from '../_core/_constants/message.enum';
   styleUrls: ['./nav.component.css']
 })
 export class NavComponent implements OnInit {
-  model: any = {}
-
+  loginForms: LoginModel = {
+    username: '',
+    password: '',
+  };
+  user: User = JSON.parse(localStorage.getItem(LocalStorageContains.USER) as string);
   constructor(
     private authService: AuthService,
-    private snotiflix: NgxNotiflixService,
-    private router: Router
+    private notiflix: NgxNotiflixService,
+    private router: Router,
+    private userService: UserService
   ) { }
 
   ngOnInit() {
+    this.getCurrentUser()
+  }
+
+  getCurrentUser() {
+    if(this.loggedIn()){
+      this.user
+     }
   }
 
   login() {
-    this.authService.login(this.model).subscribe({
-      next: (res) => {
-        this.snotiflix.success(MessageConstants.LOGGED_IN)
+    this.authService.login(this.loginForms).subscribe({
+      next: (res) => {       
+        this.notiflix.success(MessageConstants.LOGGED_IN)
       }, error: () => {
-        this.snotiflix.error(MessageConstants.LOGIN_FAILED);
+        this.notiflix.error(MessageConstants.LOGIN_FAILED);
       }, complete:() => {
         this.router.navigate(['/members']);
       },
@@ -39,9 +54,12 @@ export class NavComponent implements OnInit {
 
   logOut(){
     localStorage.clear();
-    this.model = {}
-    this.snotiflix.success(MessageConstants.LOGGED_OUT)
-    this.router.navigate(['/home']);
+    this.loginForms = {
+      username: '',
+      password: ''
+    }
+    this.notiflix.success(MessageConstants.LOGGED_OUT)
+    this.router.navigate(['/']);
   }
 
 }

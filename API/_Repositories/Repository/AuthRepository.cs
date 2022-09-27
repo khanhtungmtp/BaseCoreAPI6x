@@ -13,6 +13,12 @@ namespace API._Repositories.Repository
             _dataContext = dataContext;
         }
 
+        public async Task<User> GetUser(int id)
+        {
+            var user = await _dataContext.Users.Include(p => p.photos).FirstOrDefaultAsync(u => u.id == id);
+            return user;
+        }
+
         public async Task<User> Login(string username, string password)
         {
             var user = await _dataContext.Users.FirstOrDefaultAsync(x => x.username == username);
