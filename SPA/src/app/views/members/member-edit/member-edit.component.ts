@@ -85,6 +85,10 @@ export class MemberEditComponent implements OnInit {
       error: () => {
         this.notiflix.error(MessageConstants.SYSTEM_ERROR_MSG);
         this.notiflix.hideLoading();
+      },
+      complete: () => {
+        this.getUserData();
+        this.notiflix.hideLoading();
       }
     })
   }
