@@ -19,6 +19,7 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { environment } from 'src/environments/environment';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { TabsModule } from 'ngx-bootstrap/tabs';
+import { PreventUnsavedChanges } from './_core/_guards/profile/prevent-unsaved-changes-guard';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -51,6 +52,7 @@ export function tokenGetter() {
     AuthService,
     GlobalHttpInterceptorProvider,
     AuthGuard,
+    PreventUnsavedChanges
     
   ],
   bootstrap: [AppComponent]

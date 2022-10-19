@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse, HttpStatusCode, HTTP_INTERCEPTORS, } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 @Injectable()
 export class GlobalHttpInterceptor implements HttpInterceptor {
   constructor(
     private router: Router,
-  ){}
+  ) { }
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
@@ -30,7 +30,7 @@ export class GlobalHttpInterceptor implements HttpInterceptor {
   }
 }
 export const GlobalHttpInterceptorProvider = {
-  provide:  HTTP_INTERCEPTORS,
+  provide: HTTP_INTERCEPTORS,
   useClass: GlobalHttpInterceptor,
   multi: true
 }

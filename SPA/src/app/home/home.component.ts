@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Component,  OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
+import { LocalStorageContains } from '../_core/_constants/localStorageContains';
+import { User } from '../_core/_models/user';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -9,7 +11,6 @@ import { Component,  OnInit } from '@angular/core';
 export class HomeComponent implements OnInit {
   registerMode: boolean = false;
   values: any;
-  
   constructor(
     private http: HttpClient
   ) { }
@@ -18,19 +19,19 @@ export class HomeComponent implements OnInit {
     this.getValues();
   }
 
-  getValues(){
+  getValues() {
     this.http.get('https://localhost:7215/api/Values').subscribe(res => {
       this.values = res;
     }, error => {
-      console.log(error); 
+      console.log(error);
     })
   }
 
-  registerToggle(){
+  registerToggle() {
     this.registerMode = !this.registerMode;
   }
 
-  cancelRegisterMode(mode: boolean){
+  cancelRegisterMode(mode: boolean) {
     this.registerMode = mode
   }
 

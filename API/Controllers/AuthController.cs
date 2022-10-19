@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using API._Repositories.Interfaces;
 using API.Dtos;
+using API.Dtos.user;
 using API.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -43,15 +44,21 @@ namespace API.Controllers
         public async Task<IActionResult> Login([FromBody] LoginUserParam param)
         {
             var user = await _authRepository.Login(param.username.ToLower(), param.password);
-            var userDetail = await _authRepository.GetUser(user.id);
-            var userToReturn = _mapper.Map<UserForDetailedDto>(user);
-            JsonSerializerOptions options = new()
+            var getUser = await _authRepository.GetUser(user.id);
+            var userDetail = _mapper.Map<UserForLogedIn>(getUser);
+            var userToReturn = new UserForLogedIn
             {
-                ReferenceHandler = ReferenceHandler.IgnoreCycles,
-                WriteIndented = true
+                id = userDetail.id,
+                username = userDetail.username,
+                photo_url = userDetail.photo_url
             };
+            // JsonSerializerOptions options = new()
+            // {
+            //     ReferenceHandler = ReferenceHandler.IgnoreCycles,
+            //     WriteIndented = true
+            // };
 
-            string userJson = JsonSerializer.Serialize(userToReturn, options);
+            // string userJson = JsonSerializer.Serialize(userToReturn, options);
             if (user == null)
                 return Unauthorized();
             var claims = new[] {
@@ -71,7 +78,7 @@ namespace API.Controllers
             return Ok(new
             {
                 token = tokenHanler.WriteToken(token),
-                user = userJson
+                user = userToReturn
             });
         }
     }

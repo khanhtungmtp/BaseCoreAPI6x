@@ -5,7 +5,7 @@ import { Block, Confirm, Loading, Notify, Report } from 'notiflix';
 export class NgxNotiflixService {
   private okButton: string = 'OK';
   private cancelButton: string = 'Cancel';
-  private loadingType: string = 'standard';
+  private loadingType: string = 'hourglass';
   private loadingColor: string = '#fff';
   private loadingSvgUrl: string | null = null;
 

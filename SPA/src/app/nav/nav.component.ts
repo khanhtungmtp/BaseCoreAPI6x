@@ -14,46 +14,50 @@ import { LocalStorageContains } from '../_core/_constants/localStorageContains';
   styleUrls: ['./nav.component.css']
 })
 export class NavComponent implements OnInit {
+  currentUser: any;
   loginForms: LoginModel = {
     username: '',
     password: '',
   };
-  user: User = JSON.parse(localStorage.getItem(LocalStorageContains.USER) as string);
+  user: User;
   constructor(
-    private authService: AuthService,
+    public authService: AuthService,
     private notiflix: NgxNotiflixService,
     private router: Router,
     private userService: UserService
-  ) { }
-
-  ngOnInit() {
-    this.getCurrentUser()
+  ) {
+    this.user = localStorage.getItem(LocalStorageContains.USER) ? JSON.parse(localStorage.getItem(LocalStorageContains.USER) as string) : '';
   }
 
-  getCurrentUser() {
-    if(this.loggedIn()){
-      this.user
-     }
+  ngOnInit() {
+  }
+
+
+  editProfile(user: User) {
+    this.userService.userSource.next(user);
+    this.router.navigate(['member/edit']);
   }
 
   login() {
     this.authService.login(this.loginForms).subscribe({
-      next: (res) => {       
+      next: () => {
+        this.user = localStorage.getItem(LocalStorageContains.USER) ? JSON.parse(localStorage.getItem(LocalStorageContains.USER) as string) : '';
         this.notiflix.success(MessageConstants.LOGGED_IN)
       }, error: () => {
         this.notiflix.error(MessageConstants.LOGIN_FAILED);
-      }, complete:() => {
+      },
+      complete: () => {
         this.router.navigate(['/members']);
       },
     })
   }
 
-  loggedIn(){
+  loggedIn() {
     return this.authService.loggedIn();
   }
 
-  logOut(){
-    localStorage.clear();
+  logOut() {
+    this.authService.logOut();
     this.loginForms = {
       username: '',
       password: ''

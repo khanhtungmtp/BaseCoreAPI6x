@@ -1,3 +1,4 @@
+import { FormsModule } from '@angular/forms';
 import { MemberListComponent } from './member-list/member-list.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -23,11 +24,12 @@ import { MemberEditComponent } from './member-edit/member-edit.component';
     MembersRoutingModule,
     CarouselModule.forRoot(),
     TabsModule.forRoot(),
+    FormsModule
   ], 
   providers: [
     MemberDetailResolver,
     MemberListResolver,
-    UserService,
+    UserService
   ]
 })
 export class MembersModule { }

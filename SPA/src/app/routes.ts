@@ -1,3 +1,4 @@
+import { PreventUnsavedChanges } from './_core/_guards/profile/prevent-unsaved-changes-guard';
 import { AuthGuard } from './_core/_guards/auth/auth.guard';
 import { ListsComponent } from './views/lists/lists.component';
 import { MessagesComponent } from './views/messages/messages.component';
@@ -19,9 +20,9 @@ export const routes: Routes = [
                 path: 'members',
                 loadChildren: () => import('./views/members/members.module').then(m => m.MembersModule),
             },
-            { path: 'messages', component: MessagesComponent},
-            { path: 'lists', component: ListsComponent},
-            {path: 'member/edit', component: MemberEditComponent}
+            { path: 'messages', component: MessagesComponent },
+            { path: 'lists', component: ListsComponent },
+            { path: 'member/edit', component: MemberEditComponent }
         ]
     },
     { path: '**', redirectTo: '', pathMatch: 'full' }
