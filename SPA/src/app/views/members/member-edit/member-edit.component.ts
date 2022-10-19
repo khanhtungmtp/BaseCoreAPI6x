@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageConstants } from 'src/app/_core/_constants/message.enum';
@@ -15,20 +15,18 @@ import { UserService } from 'src/app/_core/_services/user.service';
 export class MemberEditComponent implements OnInit {
   user: User = <User>{}
   userid: number;
-  @ViewChild('editForm') editForm: NgForm
+  @ViewChild('editFrofile') editFrofile: NgForm
 
-  // @HostListener('window:beforeunload', ['$event'])
-  // unloadNotification($event: any) {
-  //   if (this.editForm.dirty) {
-  //     $event.returnValue = true;
-  //   }
-  // }
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: any) {
+    if (this.editFrofile.dirty) {
+      $event.returnValue = true;
+    }
+  }
   constructor(
     private notiflix: NgxNotiflixService,
     private router: Router,
-    private userService: UserService,
-    private authService: AuthService,
-    private route: ActivatedRoute,
+    private userService: UserService
   ) { }
 
 
@@ -43,8 +41,6 @@ export class MemberEditComponent implements OnInit {
         }
       },
       error: () => {
-        console.log(1);
-
         this.notiflix.error(MessageConstants.SYSTEM_ERROR_MSG);
         this.notiflix.hideLoading();
       }
@@ -79,7 +75,7 @@ export class MemberEditComponent implements OnInit {
     this.userService.updateUser(this.user.id, this.user).subscribe({
       next: () => {
         this.notiflix.success(MessageConstants.UPDATED_OK_MSG);
-        this.editForm.reset(this.user);
+        this.editFrofile.resetForm();
         this.notiflix.hideLoading();
       },
       error: () => {

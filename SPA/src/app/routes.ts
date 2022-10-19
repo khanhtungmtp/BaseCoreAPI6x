@@ -22,7 +22,7 @@ export const routes: Routes = [
             },
             { path: 'messages', component: MessagesComponent },
             { path: 'lists', component: ListsComponent },
-            { path: 'member/edit', component: MemberEditComponent }
+            { path: 'member/edit', component: MemberEditComponent, canDeactivate: [PreventUnsavedChanges] }
         ]
     },
     { path: '**', redirectTo: '', pathMatch: 'full' }
