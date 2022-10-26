@@ -23,6 +23,18 @@ namespace API._Repositories.Repository
             _dataContext.Remove(entity);
         }
 
+        public async Task<Photo> GetMainPhotoForUser(int userid)
+        {
+            var photo = await _dataContext.Photos.Where(u => u.userid == userid).FirstOrDefaultAsync(m => m.is_main);
+            return photo;
+        }
+
+        public async Task<Photo> GetPhoto(int id)
+        {
+            var photo = await _dataContext.Photos.FirstOrDefaultAsync(p => p.id == id);
+            return photo;
+        }
+
         public async Task<User> GetUser(int id)
         {
             var user = await _dataContext.Users.Include(p => p.photos).FirstOrDefaultAsync(u => u.id == id);

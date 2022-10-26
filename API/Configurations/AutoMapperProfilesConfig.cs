@@ -1,6 +1,6 @@
-using System.Linq;
 using API.Dtos;
-using API.Dtos.user;
+using API.Dtos.Photo;
+using API.Dtos.User;
 using API.Helpers.Utilities;
 using API.Models;
 using AutoMapper;
@@ -34,6 +34,8 @@ namespace API.Configurations
             });
             CreateMap<Photo, PhotoForDetailedDto>();
             CreateMap<UserForUpdateDto, User>();
+            CreateMap<Photo, PhotoForReturnDto>();
+            CreateMap<PhotoForCreationDto, Photo>().ReverseMap();
         }
     }
 }

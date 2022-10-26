@@ -24,11 +24,11 @@
           <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown"
             aria-expanded="false">
             <!-- <img src="https://randomuser.me/api/portraits/men/96.jpg" alt="mdo" width="32" height="32" class="rounded-circle"> -->
-            <img src="{{user.photo_url || '../../assets/user.png'}}" alt="mdo" width="32" height="32"
-              class="rounded-circle">
+            <img src="{{photo_url || '../../assets/user.png'}}" alt="mdo" width="32" height="32" class="rounded-circle">
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" (click)="editProfile(user)">{{ user.username}}</a></li>
+            <li><a class="dropdown-item" (click)="editProfile(this.authService.currentUser)">{{
+                authService.decodedToken?.name}}</a></li>
             <li>
               <hr class="dropdown-divider">
             </li>

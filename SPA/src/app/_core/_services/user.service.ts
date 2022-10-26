@@ -1,5 +1,5 @@
 import { BehaviorSubject, Observable } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
@@ -9,8 +9,8 @@ import { User } from '../_models/user';
   providedIn: 'root'
 })
 export class UserService {
-  baseUrl = environment.apiUrl + 'User/'
-  userSource  = new BehaviorSubject<User>({} as User)
+  baseUrl: string = environment.apiUrl + 'User/'
+  userSource = new BehaviorSubject<User>({} as User)
   currentUser = this.userSource.asObservable();
   constructor(
     private router: Router,
@@ -25,6 +25,7 @@ export class UserService {
   }
 
   updateUser(id: number, user: User) {
-    return this.http.put<User>(this.baseUrl + id, user, { headers: { 'Content-Type': 'application/json' } });
+    return this.http.put<User>(this.baseUrl + id, user);
   }
+
 }

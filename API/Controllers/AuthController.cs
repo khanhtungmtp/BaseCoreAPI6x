@@ -1,11 +1,9 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using API._Repositories.Interfaces;
 using API.Dtos;
-using API.Dtos.user;
+using API.Dtos.User;
 using API.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -52,13 +50,6 @@ namespace API.Controllers
                 username = userDetail.username,
                 photo_url = userDetail.photo_url
             };
-            // JsonSerializerOptions options = new()
-            // {
-            //     ReferenceHandler = ReferenceHandler.IgnoreCycles,
-            //     WriteIndented = true
-            // };
-
-            // string userJson = JsonSerializer.Serialize(userToReturn, options);
             if (user == null)
                 return Unauthorized();
             var claims = new[] {

@@ -15,6 +15,7 @@ import { UserService } from 'src/app/_core/_services/user.service';
 export class MemberEditComponent implements OnInit {
   user: User = <User>{}
   userid: number;
+  photo_url: string = '../../assets/user.png';
   @ViewChild('editFrofile') editFrofile: NgForm
 
   @HostListener('window:beforeunload', ['$event'])
@@ -26,7 +27,8 @@ export class MemberEditComponent implements OnInit {
   constructor(
     private notiflix: NgxNotiflixService,
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    private authService: AuthService
   ) { }
 
 
@@ -46,6 +48,13 @@ export class MemberEditComponent implements OnInit {
       }
     })
     this.getUserData()
+    this.authService.currentPhotoUrl.subscribe({
+      next: (res) => {
+        this.photo_url = res;
+      }, error: () => {
+        this.notiflix.error(MessageConstants.SYSTEM_ERROR_MSG);
+      }
+    })
     this.notiflix.hideLoading();
   }
 
@@ -57,7 +66,6 @@ export class MemberEditComponent implements OnInit {
           if (res !== null) {
             this.user = res
             this.notiflix.hideLoading();
-            //}
           } else {
             this.router.navigate(['/']);
             this.notiflix.hideLoading();
@@ -88,7 +96,5 @@ export class MemberEditComponent implements OnInit {
       }
     })
   }
-
-
 
 }

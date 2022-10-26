@@ -1,3 +1,4 @@
+import { LocalStorageContains } from './_core/_constants/localStorageContains';
 import { AuthGuard } from './_core/_guards/auth/auth.guard';
 import { RouterModule } from '@angular/router';
 import { GlobalHttpInterceptorProvider } from './_core/_helpers/utilities/global-http-interceptor';
@@ -17,12 +18,10 @@ import { MessagesComponent } from './views/messages/messages.component';
 import { routes } from './routes';
 import { JwtModule } from '@auth0/angular-jwt';
 import { environment } from 'src/environments/environment';
-import { CarouselModule } from 'ngx-bootstrap/carousel';
-import { TabsModule } from 'ngx-bootstrap/tabs';
 import { PreventUnsavedChanges } from './_core/_guards/profile/prevent-unsaved-changes-guard';
 
 export function tokenGetter() {
-  return localStorage.getItem('token');
+  return localStorage.getItem(LocalStorageContains.TOKEN);
 }
 @NgModule({
   declarations: [
@@ -53,7 +52,7 @@ export function tokenGetter() {
     GlobalHttpInterceptorProvider,
     AuthGuard,
     PreventUnsavedChanges
-    
+
   ],
   bootstrap: [AppComponent]
 })

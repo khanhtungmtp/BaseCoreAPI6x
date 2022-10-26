@@ -12,7 +12,7 @@
     <div class="row">
         <div class="col-sm-4">
             <div class="card">
-                <img class="card-img-top img-thumbnail" src="{{user.photo_url}}" alt="{{user.known_as}}">
+                <img class="card-img-top img-thumbnail" src="{{photo_url}}" alt="{{user.known_as}}">
                 <div class="card-body">
                     <div>
                         <strong>Location:</strong>
@@ -63,11 +63,7 @@
                         </form>
                     </tab>
                     <tab heading="Photos">
-                        <carousel [interval]="0" class="carousel-dark">
-                            <slide *ngFor="let photo of user.photos; let index=index">
-                                <img [src]="photo.url" alt="{{photo.description}}" class="w-50 d-block m-auto">
-                            </slide>
-                        </carousel>
+                        <app-photo-editor [photos]="user.photos"></app-photo-editor>
                     </tab>
                 </tabset>
             </div>

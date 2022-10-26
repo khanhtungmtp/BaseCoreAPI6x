@@ -1,5 +1,5 @@
 
-namespace API.Dtos.user
+namespace API.Dtos.User
 {
     public class UserForLogedIn
     {

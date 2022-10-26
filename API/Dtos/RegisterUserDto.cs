@@ -4,10 +4,10 @@ namespace API.Dtos
 {
     public class RegisterUserParam
     {
-        public string? username { get; set; }
+        public string username { get; set; }
         [Required]
         [StringLength(8, MinimumLength = 4, ErrorMessage = "You must specify password between 4 and 8 characters")]
 
-        public string? password { get; set; }
+        public string password { get; set; }
     }
 }

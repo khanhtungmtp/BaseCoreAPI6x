@@ -14,23 +14,29 @@ import { LocalStorageContains } from '../_core/_constants/localStorageContains';
   styleUrls: ['./nav.component.css']
 })
 export class NavComponent implements OnInit {
-  currentUser: any;
   loginForms: LoginModel = {
     username: '',
     password: '',
   };
-  user: User;
+  photo_url: string;
   constructor(
     public authService: AuthService,
     private notiflix: NgxNotiflixService,
     private router: Router,
     private userService: UserService
   ) {
-    this.user = localStorage.getItem(LocalStorageContains.USER) ? JSON.parse(localStorage.getItem(LocalStorageContains.USER) as string) : '';
   }
 
   ngOnInit() {
+    this.authService.currentPhotoUrl.subscribe({
+      next: (res) => {
+        this.photo_url = res
+      }, error: () => {
+        this.notiflix.error('Get current photo url error');
+      }
+    });
   }
+
 
 
   editProfile(user: User) {
@@ -41,7 +47,6 @@ export class NavComponent implements OnInit {
   login() {
     this.authService.login(this.loginForms).subscribe({
       next: () => {
-        this.user = localStorage.getItem(LocalStorageContains.USER) ? JSON.parse(localStorage.getItem(LocalStorageContains.USER) as string) : '';
         this.notiflix.success(MessageConstants.LOGGED_IN)
       }, error: () => {
         this.notiflix.error(MessageConstants.LOGIN_FAILED);

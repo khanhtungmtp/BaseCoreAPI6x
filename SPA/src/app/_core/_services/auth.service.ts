@@ -1,11 +1,11 @@
 import { User } from './../_models/user';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, catchError } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { LocalStorageContains } from '../_constants/localStorageContains';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { LoginModel } from '../_models/auth/login-model';
 @Injectable({
   providedIn: 'root'
@@ -27,7 +27,7 @@ export class AuthService {
   }
 
   login(model: LoginModel) {
-    return this.http.post<any>(this.baseUrl + 'Login', model).pipe(
+    return this.http.post<LoginModel>(this.baseUrl + 'Login', model).pipe(
       map((response: any) => {
         const user = response;
         if (user) {
