@@ -3,16 +3,16 @@ import { Photo } from "./photo";
 export interface User {
     id: number;
     username: string;
-    gender: string | null;
-    age: number | null;
-    known_as: string | null;
-    created: string | null;
-    last_active: string | null;
-    introduction: string | null;
-    looking_for: string | null;
-    interests: string | null;
-    city: string | null;
-    country: string | null;
+    gender: string;
+    age: number;
+    known_as: string;
+    created: string;
+    last_active: string;
+    introduction: string;
+    looking_for: string;
+    interests: string;
+    city: string;
+    country: string;
     photo_url: string;
     photos: Photo[];
 }

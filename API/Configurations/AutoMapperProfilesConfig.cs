@@ -36,6 +36,7 @@ namespace API.Configurations
             CreateMap<UserForUpdateDto, User>();
             CreateMap<Photo, PhotoForReturnDto>();
             CreateMap<PhotoForCreationDto, Photo>().ReverseMap();
+            CreateMap<RegisterUserDto, User>();
         }
     }
 }

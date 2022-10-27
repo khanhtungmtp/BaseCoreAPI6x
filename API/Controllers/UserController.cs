@@ -1,11 +1,9 @@
+
 using System.Security.Claims;
 using API._Repositories.Interfaces;
-using API.Data;
-using API.Dtos;
+using API.Dtos.User;
 using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -23,8 +21,8 @@ namespace API.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> getUser(int id)
+        [HttpGet("{id}", Name = "GetUser")]
+        public async Task<IActionResult> GetUser(int id)
         {
             var user = await _datingRepository.GetUser(id);
             var userToReturn = _mapper.Map<UserForDetailedDto>(user);
@@ -42,8 +40,8 @@ namespace API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, UserForUpdateDto userForUpdateDto)
         {
-            // if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value))
-            //     return Unauthorized();
+            if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value))
+                return Unauthorized();
             var userFromRepo = await _datingRepository.GetUser(id);
             _mapper.Map(userForUpdateDto, userFromRepo);
             if (await _datingRepository.SaveAll())

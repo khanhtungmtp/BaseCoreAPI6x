@@ -10,21 +10,12 @@ import { User } from '../_core/_models/user';
 })
 export class HomeComponent implements OnInit {
   registerMode: boolean = false;
-  values: any;
   constructor(
     private http: HttpClient
   ) { }
 
   ngOnInit() {
-    this.getValues();
-  }
 
-  getValues() {
-    this.http.get('https://localhost:7215/api/Values').subscribe(res => {
-      this.values = res;
-    }, error => {
-      console.log(error);
-    })
   }
 
   registerToggle() {

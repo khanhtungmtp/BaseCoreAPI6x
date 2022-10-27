@@ -1,7 +1,5 @@
 
-using API.Models;
-
-namespace API.Dtos
+namespace API.Dtos.User
 {
     public class UserForDetailedDto
     {

@@ -25,17 +25,15 @@ namespace API.Controllers
             _mapper = mapper;
         }
         [HttpPost("Register")]
-        public async Task<IActionResult> Register(RegisterUserParam param)
+        public async Task<IActionResult> Register(RegisterUserDto param)
         {
             param.username = param.username.ToLower();
             if (await _authRepository.UserExits(param.username))
                 return BadRequest("username already exists");
-            var userToCreate = new User
-            {
-                username = param.username
-            };
-            var createdUser = await _authRepository.Register(userToCreate, param.password);
-            return StatusCode(201);
+            var userMapped = _mapper.Map<User>(param);
+            var createdUser = await _authRepository.Register(userMapped, param.password);
+            var userToReturn = _mapper.Map<UserForDetailedDto>(createdUser);
+            return CreatedAtRoute("GetUser", new { controller = "User", id = createdUser.id }, userToReturn);
         }
 
         [HttpPost("Login")]
