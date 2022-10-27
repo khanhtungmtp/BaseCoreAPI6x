@@ -31,6 +31,7 @@ export function tokenGetter() {
     RegisterComponent,
     ListsComponent,
     MessagesComponent,
+
   ],
   imports: [
     BrowserModule,

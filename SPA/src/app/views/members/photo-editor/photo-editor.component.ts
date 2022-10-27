@@ -3,7 +3,7 @@ import { NgxNotiflixService } from 'src/app/_core/_services/ngx-notiflix.service
 import { Notify } from 'notiflix';
 import { PhotoService } from './../../../_core/_services/photo.service';
 import { Photo } from './../../../_core/_models/photo';
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FileUploader } from 'ng2-file-upload';
 import { environment } from 'src/environments/environment';
 import { LocalStorageContains } from 'src/app/_core/_constants/localStorageContains';
@@ -11,13 +11,14 @@ import { LocalStorageContains } from 'src/app/_core/_constants/localStorageConta
 @Component({
   selector: 'app-photo-editor',
   templateUrl: './photo-editor.component.html',
-  styleUrls: ['./photo-editor.component.css']
+  styleUrls: ['./photo-editor.component.css'],
 })
 export class PhotoEditorComponent implements OnInit {
   user = localStorage.getItem(LocalStorageContains.USER) ? JSON.parse(localStorage.getItem(LocalStorageContains.USER) as string) : '';
   @Input() photos: Photo[];
   // @Output() getMemberPhotoChanges = new EventEmitter<string>();
-  uploader: FileUploader;
+  public uploader: FileUploader;
+  response: string;
   hasBaseDropZoneOver: boolean = false;
   baseUrl: string = environment.apiUrl;
   currentMain: Photo;
@@ -30,6 +31,11 @@ export class PhotoEditorComponent implements OnInit {
   ngOnInit(): void {
     this.initilizeUploader();
   }
+
+  fileOverBase(e: any): void {
+    this.hasBaseDropZoneOver = e;
+  }
+
   initilizeUploader() {
     this.uploader = new FileUploader({
       url: this.baseUrl + 'users/' + this.user.id + '/Photos',
@@ -37,14 +43,14 @@ export class PhotoEditorComponent implements OnInit {
       headers: [{ name: 'Accept', value: 'application/json' }],
       isHTML5: true,
       allowedFileType: ['image'],
-      removeAfterUpload: true,
+      //removeAfterUpload: true,
       autoUpload: false,
-      maxFileSize: 10 * 1024 * 1024, // 10Mb
+      maxFileSize: 10 * 1024 * 1024, // 10Mb,
 
     })
     this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };
+
     this.uploader.onSuccessItem = (item, response, status, header) => {
-      console.log(response);
       if (response) {
         const res: Photo = JSON.parse(response);
         const photo = {
@@ -56,12 +62,11 @@ export class PhotoEditorComponent implements OnInit {
         };
         this.photos.push(photo);
       }
+
     };
+
   }
 
-  fileOverBase(e: any): void {
-    this.hasBaseDropZoneOver = e;
-  }
 
   setMainPhotos(photo: Photo) {
     this.photoService.setMainPhoto(this.user.id, photo.id).subscribe({

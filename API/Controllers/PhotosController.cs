@@ -63,8 +63,8 @@ namespace API.Controllers
             if (await _repo.SaveAll())
             {
                 var photo_mapped = _mapper.Map<PhotoForReturnDto>(photo);
-                // return CreatedAtAction(nameof(GetPhoto), new { id = photo.id }, photo_mapped);
-                return StatusCode(201);
+                return Created(nameof(GetPhoto), photo_mapped);
+                // return StatusCode(201);
             }
             return BadRequest("Could not add photo");
         }
@@ -91,7 +91,7 @@ namespace API.Controllers
             return BadRequest("Could not set photo to main");
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetPhoto")]
         public async Task<IActionResult> GetPhoto(int id)
         {
             var photo = await _repo.GetPhoto(id);
