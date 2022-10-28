@@ -1,4 +1,6 @@
 
+using API.Dtos.Photo;
+
 namespace API.Dtos.User
 {
     public class UserForDetailedDto

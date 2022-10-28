@@ -16,3 +16,15 @@ export interface User {
     photo_url: string;
     photos: Photo[];
 }
+
+export interface UserForRegister {
+    username: string;
+    password: string;
+    gender: string;
+    known_as: string;
+    date_of_birth: string;
+    city: string;
+    country: string;
+    created: string;
+    last_active: string;
+}

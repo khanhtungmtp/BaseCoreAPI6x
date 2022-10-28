@@ -17,7 +17,7 @@ namespace API.Dtos.User
         [Required]
         public string gender { get; set; }
         [Required]
-        public string knownAs { get; set; }
+        public string known_as { get; set; }
         [Required]
         public DateTime date_of_birth { get; set; }
         [Required]

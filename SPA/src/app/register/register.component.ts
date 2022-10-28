@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import { LoginModel } from './../_core/_models/auth/login-model';
-import { User } from './../_core/_models/user';
+import { UserForRegister } from './../_core/_models/user';
 
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -14,7 +14,7 @@ import { NgxNotiflixService } from '../_core/_services/ngx-notiflix.service';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-  user: User = <User>{};
+  user: UserForRegister = <UserForRegister>{};
   loginModel: LoginModel;
   registerForm: FormGroup;
   bsConfig: Partial<BsDatepickerConfig>
@@ -28,7 +28,8 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
     this.bsConfig = {
-      containerClass: 'theme-red'
+      containerClass: 'theme-red',
+      dateInputFormat: 'YYYY-MM-DD, h:mm:ss a'
     }
     this.registerForms();
   }
@@ -37,8 +38,8 @@ export class RegisterComponent implements OnInit {
     this.registerForm = this.fb.group({
       gender: ['male'],
       username: new FormControl('', Validators.required),
-      knownAs: ['', Validators.required],
-      dateOfBirth: [null, Validators.required],
+      known_as: ['', Validators.required],
+      date_of_birth: [null, Validators.required],
       city: ['', Validators.required],
       country: ['', Validators.required],
       password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(32)]),

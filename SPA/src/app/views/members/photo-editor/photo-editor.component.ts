@@ -43,7 +43,7 @@ export class PhotoEditorComponent implements OnInit {
       headers: [{ name: 'Accept', value: 'application/json' }],
       isHTML5: true,
       allowedFileType: ['image'],
-      //removeAfterUpload: true,
+      removeAfterUpload: true,
       autoUpload: false,
       maxFileSize: 10 * 1024 * 1024, // 10Mb,
 
@@ -61,6 +61,12 @@ export class PhotoEditorComponent implements OnInit {
           is_main: res.is_main
         };
         this.photos.push(photo);
+        // update image profile if new user change image first
+        if (photo.is_main) {
+          this.authService.changeMemberPhoto(res.url);
+          this.authService.currentUser.photo_url = res.url;
+          localStorage.setItem(LocalStorageContains.USER, JSON.stringify(this.authService.currentUser));
+        }
       }
 
     };

@@ -17,19 +17,20 @@
       <div class="invalid-feedback">Please choose a username</div>
     </div>
     <div class="form-group">
-      <input [ngClass]="{'is-invalid': registerForm.get('knownAs')?.errors && registerForm.get('knownAs')?.touched}"
-        class="form-control" placeholder="Known as" formControlName="knownAs">
+      <input [ngClass]="{'is-invalid': registerForm.get('known_as')?.errors && registerForm.get('known_as')?.touched}"
+        class="form-control" placeholder="Known as" formControlName="known_as">
       <div class="invalid-feedback"
-        *ngIf="registerForm.get('knownAs')?.touched && registerForm.get('knownAs')?.hasError('required')">Known as is
+        *ngIf="registerForm.get('known_as')?.touched && registerForm.get('known_as')?.hasError('required')">Known as is
         required</div>
     </div>
     <div class="form-group">
       <input
-        [ngClass]="{'is-invalid': registerForm.get('dateOfBirth')?.errors && registerForm.get('dateOfBirth')?.touched}"
-        class="form-control" placeholder="Date of Birth" formControlName="dateOfBirth" type="text" bsDatepicker
+        [ngClass]="{'is-invalid': registerForm.get('date_of_birth')?.errors && registerForm.get('date_of_birth')?.touched}"
+        class="form-control" placeholder="Date of Birth" formControlName="date_of_birth" type="text" bsDatepicker
         [bsConfig]="bsConfig">
       <div class="invalid-feedback"
-        *ngIf="registerForm.get('dateOfBirth')?.touched && registerForm.get('dateOfBirth')?.hasError('required')">Date
+        *ngIf="registerForm.get('date_of_birth')?.touched && registerForm.get('date_of_birth')?.hasError('required')">
+        Date
         of Birth is required</div>
     </div>
     <div class="form-group">

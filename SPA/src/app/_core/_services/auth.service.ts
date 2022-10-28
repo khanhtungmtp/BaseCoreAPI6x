@@ -1,4 +1,4 @@
-import { User } from './../_models/user';
+import { User, UserForRegister } from './../_models/user';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
@@ -53,7 +53,7 @@ export class AuthService {
     return !this.jwtHelper.isTokenExpired(token);
   }
 
-  register(user: User) {
-    return this.http.post<User>(this.baseUrl + 'Register', user);
+  register(user: UserForRegister) {
+    return this.http.post<UserForRegister>(this.baseUrl + 'Register', user);
   }
 }
