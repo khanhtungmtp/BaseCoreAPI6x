@@ -13,6 +13,7 @@ import { UserService } from 'src/app/_core/_services/user.service';
 import { MemberEditComponent } from './member-edit/member-edit.component';
 import { PhotoEditorComponent } from './photo-editor/photo-editor.component';
 import { FileUploadModule } from 'ng2-file-upload';
+import { DateAgoPipe } from 'src/app/_core/_helpers/pipes/date-ago.pipe';
 @NgModule({
   declarations: [
     MemberCardComponent,
@@ -20,6 +21,7 @@ import { FileUploadModule } from 'ng2-file-upload';
     MemeberDetailComponent,
     MemberEditComponent,
     PhotoEditorComponent,
+    DateAgoPipe
   ],
   imports: [
     CommonModule,
