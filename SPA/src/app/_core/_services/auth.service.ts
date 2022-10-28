@@ -7,6 +7,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { LocalStorageContains } from '../_constants/localStorageContains';
 import { BehaviorSubject } from 'rxjs';
 import { LoginModel } from '../_models/auth/login-model';
+import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root'
 })
@@ -18,7 +19,8 @@ export class AuthService {
   currentPhotoUrl = this.photoUrl.asObservable();
   public currentUser: User
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private router: Router
   ) {
   }
 
@@ -50,7 +52,12 @@ export class AuthService {
     // this.currentUser = localStorage.getItem(LocalStorageContains.USER) ? localStorage.getItem(LocalStorageContains.USER) : '';
     // return !(!this.currentUser || !token) || !this.jwtHelper.isTokenExpired(token);
     // const token: string = localStorage.getItem(LocalStorageContains.TOKEN) as string;
-    return !this.jwtHelper.isTokenExpired(token);
+    if (token && !this.jwtHelper.isTokenExpired(token)) {
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 
   register(user: UserForRegister) {

@@ -20,6 +20,8 @@ builder.Services.AddSwaggerGenConfiguration();
 builder.Services.AddDependencyInjectionConfig();
 // add auth
 builder.Services.AddAuthenticationConfig(builder.Configuration);
+// add logUserActivity custom user
+builder.Services.AddScoped<LogUserActivity>();
 // add middleware error global
 builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 var app = builder.Build();

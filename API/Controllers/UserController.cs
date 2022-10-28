@@ -2,14 +2,17 @@
 using System.Security.Claims;
 using API._Repositories.Interfaces;
 using API.Dtos.User;
+using API.Helpers.Utilities;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [ApiController]
-    // [Authorize]
+    [ServiceFilter(typeof(LogUserActivity))]
     [Route("api/[controller]")]
+    [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IDatingRepository _datingRepository;

@@ -20,6 +20,7 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { environment } from 'src/environments/environment';
 import { PreventUnsavedChanges } from './_core/_guards/profile/prevent-unsaved-changes-guard';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { TokenInterceptorProvider } from './_core/_helpers/utilities/token-interceptor';
 export function tokenGetter() {
   return localStorage.getItem(LocalStorageContains.TOKEN);
 }
@@ -52,9 +53,9 @@ export function tokenGetter() {
   providers: [
     AuthService,
     GlobalHttpInterceptorProvider,
+    TokenInterceptorProvider,
     AuthGuard,
     PreventUnsavedChanges
-
   ],
   bootstrap: [AppComponent]
 })

@@ -18,7 +18,7 @@ export const routes: Routes = [
         children: [
             {
                 path: 'members',
-                loadChildren: () => import('./views/members/members.module').then(m => m.MembersModule),
+                loadChildren: () => import('./views/members/members.module').then(m => m.MembersModule)
             },
             { path: 'messages', component: MessagesComponent },
             { path: 'lists', component: ListsComponent },

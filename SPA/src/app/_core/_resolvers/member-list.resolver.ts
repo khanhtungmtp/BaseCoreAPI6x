@@ -3,9 +3,9 @@ import { catchError } from 'rxjs/operators';
 import { NgxNotiflixService } from '../_services/ngx-notiflix.service';
 import { UserService } from '../_services/user.service';
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, Router} from '@angular/router';
+import { Resolve, Router } from '@angular/router';
 import { User } from '../_models/user';
-import { empty, Observable} from 'rxjs';
+import { empty, Observable } from 'rxjs';
 @Injectable()
 export class MemberListResolver implements Resolve<User[]> {
 
@@ -13,13 +13,13 @@ export class MemberListResolver implements Resolve<User[]> {
         private userService: UserService,
         private router: Router,
         private notiflix: NgxNotiflixService
-    ) {}
+    ) { }
 
-    resolve():Observable<User[]>{
+    resolve(): Observable<User[]> {
         return this.userService.getUsers().pipe(
             catchError((error) => {
                 this.notiflix.error(MessageConstants.SYSTEM_ERROR_MSG);
-                this.router.navigate(['/members']);
+                this.router.navigate(['/']);
                 return empty();
             })
         )
