@@ -1,6 +1,7 @@
 
 using API._Repositories.Interfaces;
 using API.Data;
+using API.Helpers.Utilities;
 using API.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,10 +42,10 @@ namespace API._Repositories.Repository
             return user;
         }
 
-        public async Task<IEnumerable<User>> GetUsers()
+        public async Task<PaginationUtilities<User>> GetUsers(PaginationParams paginationParams)
         {
-            var users = await _dataContext.Users.Include(p => p.photos).ToListAsync();
-            return users;
+            var users = _dataContext.Users.Include(p => p.photos);
+            return await PaginationUtilities<User>.CreateAsync(users, paginationParams.pageNumber, paginationParams.PageSize);
         }
 
         public async Task<bool> SaveAll()

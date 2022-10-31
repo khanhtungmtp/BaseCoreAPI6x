@@ -1,5 +1,7 @@
+using System.Net;
 using API.Configurations;
 using API.Helpers.Utilities;
+using Microsoft.AspNetCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 // add databaseconfig
@@ -31,6 +33,23 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+else
+{
+    // add header application error
+    app.UseExceptionHandler(builder =>
+    {
+        builder.Run(async context =>
+        {
+            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            var error = context.Features.Get<IExceptionHandlerFeature>();
+            if (error != null)
+            {
+                context.Response.AddAplicationError(error.Error.Message);
+                await context.Response.WriteAsync(error.Error.Message);
+            }
+        });
+    });
 }
 
 // use cors allow
