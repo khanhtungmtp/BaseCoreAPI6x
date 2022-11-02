@@ -1,10 +1,11 @@
 
 using API._Repositories.Interfaces;
 using API.Data;
+using API.Dtos.user;
 using API.Helpers.Utilities;
 using API.Models;
+using LinqKit;
 using Microsoft.EntityFrameworkCore;
-
 namespace API._Repositories.Repository
 {
     public class DatingRepository : IDatingRepository
@@ -42,9 +43,16 @@ namespace API._Repositories.Repository
             return user;
         }
 
-        public async Task<PaginationUtilities<User>> GetUsers(PaginationParams paginationParams)
+        public async Task<PaginationUtilities<User>> GetUsers(PaginationParams paginationParams, UserFilter userFilter)
         {
-            var users = _dataContext.Users.Include(p => p.photos);
+            var predicate = PredicateBuilder.New<User>(true);
+            if (!string.IsNullOrEmpty(userFilter.gender))
+            {
+                predicate.And(u => u.gender == userFilter.gender);
+            }
+            predicate.And(u => u.id != userFilter.user_id);
+            var users = _dataContext.Users.Include(p => p.photos).Where(predicate);
+
             return await PaginationUtilities<User>.CreateAsync(users, paginationParams.pageNumber, paginationParams.PageSize);
         }
 

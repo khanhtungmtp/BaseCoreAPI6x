@@ -1,6 +1,7 @@
 
 using System.Security.Claims;
 using API._Repositories.Interfaces;
+using API.Dtos.user;
 using API.Dtos.User;
 using API.Helpers.Utilities;
 using AutoMapper;
@@ -33,9 +34,12 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetUsers([FromQuery] PaginationParams paginationParams)
+        public async Task<IActionResult> GetUsers([FromQuery] PaginationParams paginationParams, [FromQuery] UserFilter userFilter)
         {
-            var users = await _datingRepository.GetUsers(paginationParams);
+            var user_id = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var user = await _datingRepository.GetUser(user_id);
+            userFilter.user_id = user_id;
+            var users = await _datingRepository.GetUsers(paginationParams, userFilter);
             var usersToReturn = _mapper.Map<IEnumerable<UserForListDto>>(users);
             Response.AddPagination(users.CurrentPage, users.PageSize, users.TotalCount, users.TotalPages);
             return Ok(usersToReturn);

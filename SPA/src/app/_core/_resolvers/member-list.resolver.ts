@@ -11,7 +11,7 @@ import { PaginationParams, PaginationResult } from '../_helpers/utilities/pagina
 export class MemberListResolver implements Resolve<PaginationResult<User[]>> {
     paginationParams: PaginationParams = <PaginationParams>{
         pageNumber: 1,
-        pageSize: 2
+        pageSize: 12
     }
     constructor(
         private userService: UserService,
