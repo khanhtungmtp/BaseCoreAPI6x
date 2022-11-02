@@ -46,11 +46,20 @@ namespace API._Repositories.Repository
         public async Task<PaginationUtilities<User>> GetUsers(PaginationParams paginationParams, UserFilter userFilter)
         {
             var predicate = PredicateBuilder.New<User>(true);
+            // neu co chon gioi tinh
             if (!string.IsNullOrEmpty(userFilter.gender))
             {
                 predicate.And(u => u.gender == userFilter.gender);
             }
             predicate.And(u => u.id != userFilter.user_id);
+            // filter age
+            if (userFilter.min_age != 18 || userFilter.max_age != 99)
+            {
+                // nam hien tai trừ đi số tuổi => ra năm sinh 
+                var minDob = DateTime.Today.AddYears(-userFilter.max_age - 1);
+                var maxDob = DateTime.Today.AddYears(-userFilter.min_age);
+                predicate.And(u => u.date_of_birth >= minDob && u.date_of_birth <= maxDob);
+            }
             var users = _dataContext.Users.Include(p => p.photos).Where(predicate);
 
             return await PaginationUtilities<User>.CreateAsync(users, paginationParams.pageNumber, paginationParams.PageSize);
