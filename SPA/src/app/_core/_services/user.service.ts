@@ -1,8 +1,9 @@
 import { BehaviorSubject, Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { User } from '../_models/user';
+import { PaginationParams, PaginationResult } from '../_helpers/utilities/pagination-utilities';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +16,12 @@ export class UserService {
   constructor(
     private http: HttpClient
   ) { }
-  getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.baseUrl);
+  getUsers(paginationParam?: PaginationParams): Observable<PaginationResult<User[]>> {
+    let params = new HttpParams();
+    if (paginationParam?.pageNumber != null && paginationParam.pageSize != null) {
+      params = params.appendAll({ ...paginationParam });
+    }
+    return this.http.get<PaginationResult<User[]>>(this.baseUrl, { params: params });
   }
 
   getUser(id: number): Observable<User> {

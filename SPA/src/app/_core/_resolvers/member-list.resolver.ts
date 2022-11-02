@@ -6,17 +6,21 @@ import { Injectable } from '@angular/core';
 import { Resolve, Router } from '@angular/router';
 import { User } from '../_models/user';
 import { empty, Observable } from 'rxjs';
+import { PaginationParams, PaginationResult } from '../_helpers/utilities/pagination-utilities';
 @Injectable()
-export class MemberListResolver implements Resolve<User[]> {
-
+export class MemberListResolver implements Resolve<PaginationResult<User[]>> {
+    paginationParams: PaginationParams = <PaginationParams>{
+        pageNumber: 1,
+        pageSize: 2
+    }
     constructor(
         private userService: UserService,
         private router: Router,
         private notiflix: NgxNotiflixService
     ) { }
 
-    resolve(): Observable<User[]> {
-        return this.userService.getUsers().pipe(
+    resolve(): Observable<PaginationResult<User[]>> {
+        return this.userService.getUsers(this.paginationParams).pipe(
             catchError((error) => {
                 this.notiflix.error(MessageConstants.SYSTEM_ERROR_MSG);
                 this.router.navigate(['/']);
