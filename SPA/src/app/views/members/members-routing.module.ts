@@ -9,19 +9,16 @@ const routes: Routes = [
   {
     path: '',
     component: MemberListComponent,
-    data: {
-      title: 'List members'
-    },
-    resolve: {users: MemberListResolver}
+    resolve: { users: MemberListResolver }
 
-  }, 
+  },
   {
     path: ':id',
     component: MemeberDetailComponent,
     data: {
       title: 'Detail member'
     },
-    resolve: {user: MemberDetailResolver}
+    resolve: { user: MemberDetailResolver }
   }
 ];
 

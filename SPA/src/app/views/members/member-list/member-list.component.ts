@@ -1,3 +1,4 @@
+import { PaginationUtilities, PaginationParams } from './../../../_core/_helpers/utilities/pagination-utilities';
 import { ActivatedRoute } from '@angular/router';
 import { MessageConstants } from '../../../_core/_constants/message.enum';
 import { NgxNotiflixService } from '../../../_core/_services/ngx-notiflix.service';
@@ -12,6 +13,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MemberListComponent implements OnInit {
   users: User[] = [];
+  pagination: PaginationUtilities
+  paginationParams: PaginationParams
   constructor(
     private userService: UserService,
     private notiflix: NgxNotiflixService,
@@ -26,7 +29,8 @@ export class MemberListComponent implements OnInit {
     this.notiflix.showLoading();
     this.route.data.subscribe({
       next: (data) => {
-        this.users = data['users']
+        this.users = data['users'].result
+        this.pagination = data['users'].pagination
         this.notiflix.hideLoading();
       }, error: () => {
         this.notiflix.error(MessageConstants.SYSTEM_ERROR_MSG);
@@ -34,14 +38,25 @@ export class MemberListComponent implements OnInit {
       }
     })
   }
-  // loadUsers(){
-  //   this.userService.getUsers().subscribe({
-  //     next: (users: User[]) => {
-  //       this.users = users
-  //     },error:() => {
-  //       this.notiflix.error(MessageConstants.SYSTEM_ERROR_MSG)
-  //     }
-  //   })
-  // }
+
+  pageChanged(event: any) {
+    this.pagination.currentPage = event.page;
+    this.getUsers();
+
+  }
+  getUsers() {
+    this.notiflix.showLoading();
+    this.paginationParams = { pageNumber: this.pagination.currentPage, pageSize: this.pagination.itemsPerPage }
+    this.userService.getUsers(this.paginationParams).subscribe({
+      next: (res) => {
+        this.users = res.result;
+        this.pagination = res.pagination;
+        this.notiflix.hideLoading();
+      }, error: () => {
+        this.notiflix.error(MessageConstants.SYSTEM_ERROR_MSG);
+        this.notiflix.hideLoading();
+      }
+    })
+  }
 
 }

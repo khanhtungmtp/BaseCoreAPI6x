@@ -14,6 +14,7 @@ import { MemberEditComponent } from './member-edit/member-edit.component';
 import { PhotoEditorComponent } from './photo-editor/photo-editor.component';
 import { FileUploadModule } from 'ng2-file-upload';
 import { DateAgoPipe } from 'src/app/_core/_helpers/pipes/date-ago.pipe';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 @NgModule({
   declarations: [
     MemberCardComponent,
@@ -30,6 +31,7 @@ import { DateAgoPipe } from 'src/app/_core/_helpers/pipes/date-ago.pipe';
     TabsModule.forRoot(),
     FormsModule,
     FileUploadModule,
+    PaginationModule.forRoot(),
   ],
   providers: [
     MemberDetailResolver,

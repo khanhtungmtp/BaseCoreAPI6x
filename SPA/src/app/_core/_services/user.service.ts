@@ -1,3 +1,4 @@
+import { map } from 'rxjs/operators';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -16,12 +17,21 @@ export class UserService {
   constructor(
     private http: HttpClient
   ) { }
-  getUsers(paginationParam?: PaginationParams): Observable<PaginationResult<User[]>> {
+  getUsers(paginationParam?: PaginationParams) {
+    let paginatedResult: PaginationResult<User[]> = <PaginationResult<User[]>>{};
     let params = new HttpParams();
     if (paginationParam?.pageNumber != null && paginationParam.pageSize != null) {
       params = params.appendAll({ ...paginationParam });
     }
-    return this.http.get<PaginationResult<User[]>>(this.baseUrl, { params: params });
+    return this.http.get<User[]>(this.baseUrl, { observe: 'response', params: params }).pipe(
+      map(response => {
+        paginatedResult.result = response.body as User[];
+        if (response.headers.get('pagination') != null) {
+          paginatedResult.pagination = JSON.parse(response.headers.get('pagination') as string);
+        }
+        return paginatedResult;
+      })
+    );
   }
 
   getUser(id: number): Observable<User> {

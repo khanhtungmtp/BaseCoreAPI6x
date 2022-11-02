@@ -1,8 +1,8 @@
 export interface PaginationUtilities {
     currentPage: number;
     totalPages: number;
-    pageSize: number;
-    totalCount: number;
+    itemsPerPage: number;
+    totalItems: number;
 }
 
 export interface PaginationParams {
@@ -18,6 +18,6 @@ export interface PaginationHeader {
 }
 
 export interface PaginationResult<T> {
-    items: T[],
+    result: T,
     pagination: PaginationUtilities
 }
