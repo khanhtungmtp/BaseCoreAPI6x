@@ -25,6 +25,12 @@ namespace API._Repositories.Repository
             _dataContext.Remove(entity);
         }
 
+        public async Task<Like> GetLike(int userid, int recipientid)
+        {
+            var likes = await _dataContext.Like.FirstOrDefaultAsync(l => l.liker_id == userid && l.likeeid == recipientid);
+            return likes;
+        }
+
         public async Task<Photo> GetMainPhotoForUser(int userid)
         {
             var photo = await _dataContext.Photos.Where(u => u.userid == userid).FirstOrDefaultAsync(m => m.is_main);

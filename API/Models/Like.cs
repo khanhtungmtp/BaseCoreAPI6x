@@ -6,6 +6,6 @@ namespace API.Models
         public int liker_id { get; set; }
         public int likeeid { get; set; }
         public User likers { get; set; }
-        public User likee { get; set; }
+        public User likee { get; set; } // nguoi nhan
     }
 }

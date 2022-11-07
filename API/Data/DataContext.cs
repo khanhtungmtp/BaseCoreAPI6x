@@ -9,6 +9,7 @@ namespace API.Data
         public DbSet<ValueTestModel> ValueTestModels { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Photo> Photos { get; set; }
+        public DbSet<Like> Like { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Like>().HasKey(k => new { k.liker_id, k.likeeid });

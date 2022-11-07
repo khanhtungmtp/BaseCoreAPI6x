@@ -20,7 +20,7 @@ namespace API.Models
         public string country { get; set; }
         public ICollection<Photo> photos { get; set; }
         public ICollection<Like> likers { get; set; }
-        public ICollection<Like> likees { get; set; }
+        public ICollection<Like> likees { get; set; } // nguoi nhan
 
 
     }
