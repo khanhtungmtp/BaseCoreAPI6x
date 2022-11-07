@@ -33,4 +33,5 @@ export interface UserFilter {
     gender: string;
     min_age: number;
     max_age: number;
+    order_by: string;
 }

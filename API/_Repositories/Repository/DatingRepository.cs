@@ -64,7 +64,7 @@ namespace API._Repositories.Repository
             // sorting created, last active
             if (!string.IsNullOrEmpty(userFilter.order_by))
             {
-                if (userFilter.order_by == "Created")
+                if (userFilter.order_by == "created")
                 {
                     users.OrderByDescending(u => u.created);
                 }

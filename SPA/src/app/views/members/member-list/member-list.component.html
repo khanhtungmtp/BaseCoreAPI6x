@@ -8,16 +8,24 @@
         <ng-select [(ngModel)]="userFilter.min_age" name="min_age" style="width: 120px;">
             <ng-option *ngFor="let ageMin of ageList()" [value]="ageMin">{{ageMin}}</ng-option>
         </ng-select>
-        <label class="my-1 me-2" for="max_age">Age from</label>
+        <label class="ms-2 me-2" for="max_age">Age from</label>
         <ng-select [(ngModel)]="userFilter.max_age" name="max_age" style="width: 120px;">
             <ng-option *ngFor="let ageMax of ageList()" [value]="ageMax">{{ageMax}}</ng-option>
         </ng-select>
-        <label class="my-1 me-2" for="gender">Gender</label>
+        <label class="ms-2 me-2" for="gender">Gender</label>
         <ng-select [(ngModel)]="userFilter.gender" name="gender" style="width: 120px;">
             <ng-option *ngFor="let gender of genderList" [value]="gender.key">{{gender.value}}</ng-option>
         </ng-select>
-        <button type="submit" class="btn btn-primary my-1">Apply Filters</button>
-        <button type="button" class="btn btn-info my-1" (click)="resetFilter()">Reset Filter</button>
+        <button type="submit" class="btn btn-primary ms-2">Apply Filters</button>
+        <button type="button" class="btn btn-info ms-1" (click)="resetFilter()">Reset Filter</button>
+        <div class="col">
+            <div class="btn-group float-right ms-5">
+                <button type="button" name="orderBy" (click)="getUsers()" [(ngModel)]="userFilter.order_by"
+                    class="btn btn-primary" btnRadio="last_active">Last Active</button>
+                <button type="button" name="orderBy" (click)="getUsers()" [(ngModel)]="userFilter.order_by"
+                    class="btn btn-warning" btnRadio="created">Newest Members</button>
+            </div>
+        </div>
     </form>
     <br>
     <div class="row">
