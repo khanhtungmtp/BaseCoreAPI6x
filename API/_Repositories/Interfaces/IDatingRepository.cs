@@ -10,7 +10,7 @@ namespace API._Repositories.Interfaces
         void Add<T>(T entity) where T : class;
         void Delete<T>(T entity) where T : class;
         Task<bool> SaveAll();
-        Task<PaginationUtilities<User>> GetUsers(PaginationParams paginationParams, UserFilter userFilter);
+        Task<PaginationUtilities<User>> GetUsers(PaginationParams paginationParams, UserFilter userFilter, User user);
         Task<User> GetUser(int id);
         Task<Photo> GetPhoto(int id);
         Task<Photo> GetMainPhotoForUser(int userid);

@@ -39,7 +39,11 @@ namespace API.Controllers
             var user_id = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var user = await _datingRepository.GetUser(user_id);
             userFilter.user_id = user_id;
-            var users = await _datingRepository.GetUsers(paginationParams, userFilter);
+            if (userFilter.gender == null)
+            {
+                userFilter.gender = user.gender;
+            }
+            var users = await _datingRepository.GetUsers(paginationParams, userFilter, user);
             var usersToReturn = _mapper.Map<IEnumerable<UserForListDto>>(users);
             Response.AddPagination(users.CurrentPage, users.PageSize, users.TotalCount, users.TotalPages);
             return Ok(usersToReturn);

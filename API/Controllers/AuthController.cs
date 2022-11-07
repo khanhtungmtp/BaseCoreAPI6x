@@ -46,6 +46,7 @@ namespace API.Controllers
             {
                 id = userDetail.id,
                 username = userDetail.username,
+                gender = userDetail.gender,
                 photo_url = userDetail.photo_url
             };
             if (user == null)

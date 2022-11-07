@@ -1,3 +1,5 @@
+import { LocalStorageContains } from './../_constants/localStorageContains';
+import { UserFilter } from './../_models/user';
 import { MessageConstants } from '../_constants/message.enum';
 import { catchError } from 'rxjs/operators';
 import { NgxNotiflixService } from '../_services/ngx-notiflix.service';
@@ -11,7 +13,11 @@ import { PaginationParams, PaginationResult } from '../_helpers/utilities/pagina
 export class MemberListResolver implements Resolve<PaginationResult<User[]>> {
     paginationParams: PaginationParams = <PaginationParams>{
         pageNumber: 1,
-        pageSize: 12
+        pageSize: 6
+    }
+    userFilter: UserFilter = <UserFilter>{
+        min_age: 18,
+        max_age: 59
     }
     constructor(
         private userService: UserService,
@@ -20,7 +26,14 @@ export class MemberListResolver implements Resolve<PaginationResult<User[]>> {
     ) { }
 
     resolve(): Observable<PaginationResult<User[]>> {
-        return this.userService.getUsers(this.paginationParams).pipe(
+        let user = JSON.parse(localStorage.getItem(LocalStorageContains.USER) as string);
+        this.userFilter.gender = user.gender;
+        if (this.userFilter.gender === 'Male') {
+            this.userFilter.gender = 'Female'
+        } else {
+            this.userFilter.gender = 'Male'
+        }
+        return this.userService.getUsers(this.paginationParams, this.userFilter).pipe(
             catchError((error) => {
                 this.notiflix.error(MessageConstants.SYSTEM_ERROR_MSG);
                 this.router.navigate(['/']);

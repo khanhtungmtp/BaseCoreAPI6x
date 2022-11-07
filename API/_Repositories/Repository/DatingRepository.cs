@@ -43,7 +43,7 @@ namespace API._Repositories.Repository
             return user;
         }
 
-        public async Task<PaginationUtilities<User>> GetUsers(PaginationParams paginationParams, UserFilter userFilter)
+        public async Task<PaginationUtilities<User>> GetUsers(PaginationParams paginationParams, UserFilter userFilter, User user)
         {
             var predicate = PredicateBuilder.New<User>(true);
             // neu co chon gioi tinh

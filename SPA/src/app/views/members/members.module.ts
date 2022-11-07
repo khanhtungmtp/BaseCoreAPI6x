@@ -1,3 +1,4 @@
+import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 import { MemberListComponent } from './member-list/member-list.component';
 import { NgModule } from '@angular/core';
@@ -30,6 +31,7 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
     CarouselModule.forRoot(),
     TabsModule.forRoot(),
     FormsModule,
+    NgSelectModule,
     FileUploadModule,
     PaginationModule.forRoot(),
   ],

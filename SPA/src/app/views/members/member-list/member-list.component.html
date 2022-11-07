@@ -1,11 +1,32 @@
-<div class="container">
+<div class="text-center mt-3">
+    <h2>Your matches - {{pagination.totalItems}} found</h2>
+</div>
+
+<div class="container mt-3">
+    <form class="d-flex flex-row align-items-center flex-wrap" novalidate #form="ngForm" (submit)="getUsers()">
+        <label class="my-1 me-2" for="min_age">Age to</label>
+        <ng-select [(ngModel)]="userFilter.min_age" name="min_age" style="width: 120px;">
+            <ng-option *ngFor="let ageMin of ageList()" [value]="ageMin">{{ageMin}}</ng-option>
+        </ng-select>
+        <label class="my-1 me-2" for="max_age">Age from</label>
+        <ng-select [(ngModel)]="userFilter.max_age" name="max_age" style="width: 120px;">
+            <ng-option *ngFor="let ageMax of ageList()" [value]="ageMax">{{ageMax}}</ng-option>
+        </ng-select>
+        <label class="my-1 me-2" for="gender">Gender</label>
+        <ng-select [(ngModel)]="userFilter.gender" name="gender" style="width: 120px;">
+            <ng-option *ngFor="let gender of genderList" [value]="gender.key">{{gender.value}}</ng-option>
+        </ng-select>
+        <button type="submit" class="btn btn-primary my-1">Apply Filters</button>
+        <button type="button" class="btn btn-info my-1" (click)="resetFilter()">Reset Filter</button>
+    </form>
+    <br>
     <div class="row">
         <div *ngFor="let user of users" class="col-lg-2 col-md-3 col-sm-6">
             <app-member-card [user]="user"></app-member-card>
         </div>
     </div>
 </div>
-<div class="d-flex justify-content-center">
+<div class="d-flex justify-content-center mt-3">
     <pagination [boundaryLinks]="true" [totalItems]="pagination.totalItems" [itemsPerPage]="pagination.itemsPerPage"
         [maxSize]="5" [(ngModel)]="pagination.currentPage" (pageChanged)="pageChanged($event)" previousText="&lsaquo;"
         nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">

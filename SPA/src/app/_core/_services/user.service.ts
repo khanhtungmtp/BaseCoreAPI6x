@@ -1,3 +1,4 @@
+import { UserFilter } from './../_models/user';
 import { map } from 'rxjs/operators';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -17,11 +18,15 @@ export class UserService {
   constructor(
     private http: HttpClient
   ) { }
-  getUsers(paginationParam?: PaginationParams) {
+  getUsers(paginationParam?: PaginationParams, userFilter?: UserFilter) {
     let paginatedResult: PaginationResult<User[]> = <PaginationResult<User[]>>{};
     let params = new HttpParams();
     if (paginationParam?.pageNumber != null && paginationParam.pageSize != null) {
       params = params.appendAll({ ...paginationParam });
+    }
+    if (userFilter != null) {
+      // or append('gender', userFilter.gender)
+      params = params.appendAll({ ...userFilter });
     }
     return this.http.get<User[]>(this.baseUrl, { observe: 'response', params: params }).pipe(
       map(response => {
