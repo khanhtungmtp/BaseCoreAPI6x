@@ -60,8 +60,19 @@ namespace API._Repositories.Repository
                 var maxDob = DateTime.Today.AddYears(-userFilter.min_age);
                 predicate.And(u => u.date_of_birth >= minDob && u.date_of_birth <= maxDob);
             }
-            var users = _dataContext.Users.Include(p => p.photos).Where(predicate);
-
+            var users = _dataContext.Users.Include(p => p.photos).OrderByDescending(u => u.last_active).Where(predicate);
+            // sorting created, last active
+            if (!string.IsNullOrEmpty(userFilter.order_by))
+            {
+                if (userFilter.order_by == "Created")
+                {
+                    users.OrderByDescending(u => u.created);
+                }
+                else
+                {
+                    users.OrderByDescending(u => u.last_active);
+                }
+            }
             return await PaginationUtilities<User>.CreateAsync(users, paginationParams.pageNumber, paginationParams.PageSize);
         }
 
