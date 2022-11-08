@@ -21,6 +21,8 @@ import { environment } from 'src/environments/environment';
 import { PreventUnsavedChanges } from './_core/_guards/profile/prevent-unsaved-changes-guard';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TokenInterceptorProvider } from './_core/_helpers/utilities/token-interceptor';
+import { CustomPipesModule } from './_core/_helpers/pipes/custom-pipes.module';
+
 export function tokenGetter() {
   return localStorage.getItem(LocalStorageContains.TOKEN);
 }
@@ -42,6 +44,7 @@ export function tokenGetter() {
     BsDatepickerModule.forRoot(),
     BsDropdownModule.forRoot(),
     RouterModule.forRoot(routes),
+    CustomPipesModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
@@ -55,7 +58,7 @@ export function tokenGetter() {
     GlobalHttpInterceptorProvider,
     TokenInterceptorProvider,
     AuthGuard,
-    PreventUnsavedChanges
+    PreventUnsavedChanges,
   ],
   bootstrap: [AppComponent]
 })

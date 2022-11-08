@@ -14,17 +14,16 @@ import { UserService } from 'src/app/_core/_services/user.service';
 import { MemberEditComponent } from './member-edit/member-edit.component';
 import { PhotoEditorComponent } from './photo-editor/photo-editor.component';
 import { FileUploadModule } from 'ng2-file-upload';
-import { DateAgoPipe } from 'src/app/_core/_helpers/pipes/date-ago.pipe';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
+import { CustomPipesModule } from 'src/app/_core/_helpers/pipes/custom-pipes.module';
 @NgModule({
   declarations: [
     MemberCardComponent,
     MemberListComponent,
     MemeberDetailComponent,
     MemberEditComponent,
-    PhotoEditorComponent,
-    DateAgoPipe
+    PhotoEditorComponent
   ],
   imports: [
     CommonModule,
@@ -35,7 +34,8 @@ import { ButtonsModule } from 'ngx-bootstrap/buttons';
     NgSelectModule,
     FileUploadModule,
     PaginationModule.forRoot(),
-    ButtonsModule.forRoot()
+    ButtonsModule.forRoot(),
+    CustomPipesModule
   ],
   providers: [
     MemberDetailResolver,
