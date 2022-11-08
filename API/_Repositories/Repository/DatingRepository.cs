@@ -49,6 +49,19 @@ namespace API._Repositories.Repository
             return user;
         }
 
+        public async Task<IEnumerable<int>> GetUserLikes(int userid, bool likers)
+        {
+            var user = await _dataContext.Users.Include(u => u.likers).Include(u => u.likees).FirstOrDefaultAsync(u => u.id == userid);
+            if (likers)
+            {
+                return user.likers.Where(u => u.likeeid == userid).Select(x => x.liker_id);
+            }
+            else
+            {
+                return user.likees.Where(u => u.liker_id == userid).Select(x => x.likeeid);
+            }
+        }
+
         public async Task<PaginationUtilities<User>> GetUsers(PaginationParams paginationParams, UserFilter userFilter, User user)
         {
             var predicate = PredicateBuilder.New<User>(true);
@@ -58,6 +71,7 @@ namespace API._Repositories.Repository
                 predicate.And(u => u.gender == userFilter.gender);
             }
             predicate.And(u => u.id != userFilter.user_id);
+
             // filter age
             if (userFilter.min_age != 18 || userFilter.max_age != 99)
             {
@@ -78,6 +92,11 @@ namespace API._Repositories.Repository
                 {
                     users.OrderByDescending(u => u.last_active);
                 }
+            }
+            if (userFilter.likers || userFilter.likees)
+            {
+                var userLiker = await GetUserLikes(userFilter.user_id, userFilter.likers);
+                users = users.Where(u => userLiker.Contains(u.id));
             }
             return await PaginationUtilities<User>.CreateAsync(users, paginationParams.pageNumber, paginationParams.PageSize);
         }

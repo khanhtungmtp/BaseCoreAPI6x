@@ -15,5 +15,6 @@ namespace API._Repositories.Interfaces
         Task<Photo> GetPhoto(int id);
         Task<Photo> GetMainPhotoForUser(int userid);
         Task<Like> GetLike(int userid, int recipientid);
+        Task<IEnumerable<int>> GetUserLikes(int userid, bool likers);
     }
 }
