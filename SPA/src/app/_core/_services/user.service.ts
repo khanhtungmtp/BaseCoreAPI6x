@@ -15,10 +15,12 @@ export class UserService {
   baseUrl: string = environment.apiUrl + 'User/'
   userSource = new BehaviorSubject<User>({} as User)
   currentUser = this.userSource.asObservable();
+
   constructor(
     private http: HttpClient
   ) { }
-  getUsers(paginationParam?: PaginationParams, userFilter?: UserFilter) {
+
+  getUsers(paginationParam?: PaginationParams, userFilter?: UserFilter, likeParam?: string) {
     let paginatedResult: PaginationResult<User[]> = <PaginationResult<User[]>>{};
     let params = new HttpParams();
     if (paginationParam?.pageNumber != null && paginationParam.pageSize != null) {
@@ -28,6 +30,14 @@ export class UserService {
       // or append('gender', userFilter.gender)
       params = params.appendAll({ ...userFilter });
     }
+    if (likeParam === 'Likers') {
+      params = params.append('likers', true);
+    }
+    if (likeParam === 'Likees') {
+      params = params.append('likees', true);
+    }
+    console.log(params);
+
     return this.http.get<User[]>(this.baseUrl, { observe: 'response', params: params }).pipe(
       map(response => {
         paginatedResult.result = response.body as User[];
@@ -45,6 +55,10 @@ export class UserService {
 
   updateUser(id: number, user: User) {
     return this.http.put<User>(this.baseUrl + id, user);
+  }
+
+  sendLike(userid: number, recipient: number) {
+    return this.http.post(this.baseUrl + userid + '/like/' + recipient, {});
   }
 
 }

@@ -46,7 +46,7 @@ namespace API.Controllers
             }
             var users = await _datingRepository.GetUsers(paginationParams, userFilter, user);
             var usersToReturn = _mapper.Map<IEnumerable<UserForListDto>>(users);
-            Response.AddPagination(users.CurrentPage, users.PageSize, users.TotalCount, users.TotalPages);
+            Response.AddPagination(users.PageNumber, users.PageSize, users.TotalItems, users.TotalPages);
             return Ok(usersToReturn);
         }
 

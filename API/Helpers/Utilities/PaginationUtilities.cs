@@ -5,15 +5,15 @@ namespace API.Helpers.Utilities
 {
     public class PaginationUtilities<T> : List<T>
     {
-        public int CurrentPage { get; set; }
+        public int PageNumber { get; set; }
         public int TotalPages { get; set; }
         public int PageSize { get; set; }
-        public int TotalCount { get; set; }
+        public int TotalItems { get; set; }
 
         public PaginationUtilities(List<T> items, int count, int pageNumber, int pageSize)
         {
-            TotalCount = count;
-            CurrentPage = pageNumber;
+            TotalItems = count;
+            PageNumber = pageNumber;
             PageSize = pageSize;
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
             this.AddRange(items);
@@ -40,16 +40,16 @@ namespace API.Helpers.Utilities
 
     public class PaginationHeader
     {
-        public int CurrentPage { get; set; }
-        public int ItemsPerPage { get; set; }
+        public int PageNumber { get; set; }
+        public int PageSize { get; set; }
         public int TotalItems { get; set; }
         public int TotalPages { get; set; }
-        public PaginationHeader(int currentPage, int itemsPerPage, int totalItems, int totalPages)
+        public PaginationHeader(int pageNumber, int pageSize, int totalItems, int totalPages)
         {
-            this.CurrentPage = currentPage;
-            this.ItemsPerPage = itemsPerPage;
-            this.TotalItems = totalItems;
-            this.TotalPages = totalPages;
+            PageNumber = pageNumber;
+            PageSize = pageSize;
+            TotalItems = totalItems;
+            TotalPages = totalPages;
         }
     }
 }

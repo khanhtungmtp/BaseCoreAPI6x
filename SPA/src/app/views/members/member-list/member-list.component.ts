@@ -17,10 +17,13 @@ export class MemberListComponent implements OnInit {
   user: User = JSON.parse(localStorage.getItem(LocalStorageContains.USER) as string);
   userFilter: UserFilter = <UserFilter>{
     min_age: 18,
-    max_age: 60
+    max_age: 60,
+    gender: this.user.gender === 'Male' ? 'Female' : 'Male'
   }
-  pagination: PaginationUtilities
-  paginationParams: PaginationParams
+  pagination: PaginationUtilities = <PaginationUtilities>{
+    pageNumber: 1,
+    pageSize: 12,
+  }
   genderList = [
     { key: 'male', value: 'Male' },
     { key: 'female', value: 'Female' },
@@ -40,41 +43,30 @@ export class MemberListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.loadUsers();
-    this.userFilter.gender = this.user.gender == 'Male' ? 'Female' : 'Male';
+    this.getUsers();
+
   }
 
   resetFilter() {
     this.userFilter.min_age = 18;
     this.userFilter.max_age = 60;
-    this.userFilter.gender = this.user.gender == 'Male' ? 'Female' : 'Male';
-    this.loadUsers();
-  }
-
-  loadUsers() {
-    this.notiflix.showLoading();
-    this.route.data.subscribe({
-      next: (data) => {
-        this.users = data['users'].result
-        this.pagination = data['users'].pagination
-        this.notiflix.hideLoading();
-      }, error: () => {
-        this.notiflix.error(MessageConstants.SYSTEM_ERROR_MSG);
-        this.notiflix.hideLoading();
-      }
-    })
+    this.userFilter.gender = this.user.gender === 'Male' ? 'Female' : 'Male';
+    this.getUsers();
   }
 
   pageChanged(event: any) {
-    this.pagination.currentPage = event.page;
+    console.log(event);
+
+    this.pagination.pageNumber = event.page;
     this.getUsers();
 
   }
   getUsers() {
-    this.notiflix.showLoading();
-    this.paginationParams = { pageNumber: this.pagination.currentPage, pageSize: this.pagination.itemsPerPage }
-    this.userService.getUsers(this.paginationParams, this.userFilter).subscribe({
+    // this.notiflix.showLoading();
+    this.userService.getUsers(this.pagination, this.userFilter).subscribe({
       next: (res) => {
+        console.log(res);
+
         this.users = res.result;
         this.pagination = res.pagination;
         this.notiflix.hideLoading();
