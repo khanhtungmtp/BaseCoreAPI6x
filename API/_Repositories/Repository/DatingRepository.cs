@@ -49,20 +49,25 @@ namespace API._Repositories.Repository
             return user;
         }
 
-        public async Task<IEnumerable<int>> GetUserLikes(int userid, bool likers)
+        public async Task<IEnumerable<int>> ListUserLikes(int userid, bool likers)
         {
-            var user = await _dataContext.Users.Include(u => u.likers).Include(u => u.likees).FirstOrDefaultAsync(u => u.id == userid);
+            var user = await _dataContext.Users
+            .Include(u => u.likers)
+            .Include(u => u.likees)
+            .FirstOrDefaultAsync(u => u.id == userid);
             if (likers)
             {
-                return user.likers.Where(u => u.likeeid == userid).Select(x => x.liker_id);
+                // return user.likees.Where(u => u.liker_id == userid).Select(x => x.likeeid);
+                return user.likers.Select(x => x.liker_id);
             }
             else
             {
+                // return user.likers.Where(u => u.likeeid == userid).Select(x => x.liker_id);
                 return user.likees.Where(u => u.liker_id == userid).Select(x => x.likeeid);
             }
         }
 
-        public async Task<PaginationUtilities<User>> GetUsers(PaginationParams paginationParams, UserFilter userFilter, User user)
+        public async Task<PaginationUtilities<User>> GetUsers(PaginationParams paginationParams, UserFilter userFilter)
         {
             var predicate = PredicateBuilder.New<User>(true);
             // neu co chon gioi tinh
@@ -80,7 +85,8 @@ namespace API._Repositories.Repository
                 var maxDob = DateTime.Today.AddYears(-userFilter.min_age);
                 predicate.And(u => u.date_of_birth >= minDob && u.date_of_birth <= maxDob);
             }
-            var users = _dataContext.Users.Include(p => p.photos).OrderByDescending(u => u.last_active).Where(predicate);
+            var users = _dataContext.Users.Include(p => p.photos).Where(predicate);
+
             // sorting created, last active
             if (!string.IsNullOrEmpty(userFilter.order_by))
             {
@@ -93,10 +99,21 @@ namespace API._Repositories.Repository
                     users.OrderByDescending(u => u.last_active);
                 }
             }
-            if (userFilter.likers || userFilter.likees)
+            return await PaginationUtilities<User>.CreateAsync(users, paginationParams.pageNumber, paginationParams.PageSize);
+        }
+
+        public async Task<PaginationUtilities<User>> GetUsersLike(PaginationParams paginationParams, UserLikes userLikes)
+        {
+            var users = _dataContext.Users.Include(p => p.photos).Where(u => u.id != userLikes.user_id);
+            if (userLikes.likers)
             {
-                var userLiker = await GetUserLikes(userFilter.user_id, userFilter.likers);
+                var userLiker = await ListUserLikes(userLikes.user_id, userLikes.likers);
                 users = users.Where(u => userLiker.Contains(u.id));
+            }
+            if (userLikes.likees)
+            {
+                var userLikees = await ListUserLikes(userLikes.user_id, userLikes.likers);
+                users = users.Where(u => userLikees.Contains(u.id));
             }
             return await PaginationUtilities<User>.CreateAsync(users, paginationParams.pageNumber, paginationParams.PageSize);
         }

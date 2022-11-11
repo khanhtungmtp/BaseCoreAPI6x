@@ -1,12 +1,12 @@
-<div class="container mt-4">
+<div class="container mt-4" *ngIf="user">
     <div class="row">
-        <h1>{{user.known_as}} profile</h1>
+        <h1>{{user.known_as || 'user'}} profile</h1>
     </div>
     <div class="row">
         <div class="col-sm-4">
             <div class="card">
                 <img class="card-img-top img-thumbnail" src="{{user.photo_url || '../../assets/user_default.png'}}"
-                    alt="{{user.known_as}}">
+                    alt="{{user.known_as || 'user'}}">
                 <div class="card-body">
                     <div>
                         <strong>Location:</strong>
@@ -36,7 +36,7 @@
         <div class="col-sm-8">
             <div class="tab-panel">
                 <tabset class="member-tabset">
-                    <tab heading="Aboult {{user.known_as}}">
+                    <tab heading="Aboult {{user.known_as || 'user'}}">
                         <h4>Description</h4>
                         <p>{{user.introduction}}</p>
                         <h4>Looking for</h4>
@@ -50,7 +50,8 @@
                         <!-- <gallery imageSize="cover" [thumbWidth]="120" [thumbHeight]="50" [thumb]="true" [items]="items" [imageSize]="'contain'"></gallery> -->
                         <carousel [interval]="0" class="carousel-dark">
                             <slide *ngFor="let photo of user.photos; let index=index">
-                                <img [src]="photo.url" alt="{{photo.description}}" class="w-50 d-block m-auto">
+                                <img [src]="photo.url ||  '../../assets/user_default.png'"
+                                    alt="{{photo.description}} || " class="w-50 d-block m-auto">
                             </slide>
                         </carousel>
 

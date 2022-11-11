@@ -20,7 +20,28 @@ export class UserService {
     private http: HttpClient
   ) { }
 
-  getUsers(paginationParam?: PaginationParams, userFilter?: UserFilter, likeParam?: string) {
+  getUsersLike(paginationParam?: PaginationParams, likeParam?: any) {
+    let paginatedResult: PaginationResult<User[]> = <PaginationResult<User[]>>{};
+    let params = new HttpParams();
+    if (paginationParam?.pageNumber != null && paginationParam.pageSize != null) {
+      params = params.appendAll({ ...paginationParam });
+    }
+    if (likeParam === 'Likers') {
+      params = params.append('likers', true);
+    }
+    if (likeParam === 'Likees') {
+      params = params.append('likees', true);
+    }
+    return this.http.get<User[]>(this.baseUrl + 'GetUserLikes', { observe: 'response', params: params }).pipe(map(response => {
+      paginatedResult.result = response.body as User[];
+      if (response.headers.get('pagination') != null) {
+        paginatedResult.pagination = JSON.parse(response.headers.get('pagination') as string);
+      }
+      return paginatedResult;
+    }))
+  }
+
+  getUsers(paginationParam?: PaginationParams, userFilter?: UserFilter, likeParam?: any) {
     let paginatedResult: PaginationResult<User[]> = <PaginationResult<User[]>>{};
     let params = new HttpParams();
     if (paginationParam?.pageNumber != null && paginationParam.pageSize != null) {
@@ -36,8 +57,6 @@ export class UserService {
     if (likeParam === 'Likees') {
       params = params.append('likees', true);
     }
-    console.log(params);
-
     return this.http.get<User[]>(this.baseUrl, { observe: 'response', params: params }).pipe(
       map(response => {
         paginatedResult.result = response.body as User[];

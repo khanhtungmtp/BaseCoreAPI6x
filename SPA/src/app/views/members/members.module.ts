@@ -37,9 +37,11 @@ import { CustomPipesModule } from 'src/app/_core/_helpers/pipes/custom-pipes.mod
     ButtonsModule.forRoot(),
     CustomPipesModule
   ],
+  exports: [
+    MemberCardComponent
+  ],
   providers: [
     MemberDetailResolver,
-    MemberListResolver,
     UserService
   ]
 })

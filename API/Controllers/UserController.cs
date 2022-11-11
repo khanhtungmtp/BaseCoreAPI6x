@@ -44,10 +44,24 @@ namespace API.Controllers
             {
                 userFilter.gender = user.gender;
             }
-            var users = await _datingRepository.GetUsers(paginationParams, userFilter, user);
-            var usersToReturn = _mapper.Map<IEnumerable<UserForListDto>>(users);
+            var users = await _datingRepository.GetUsers(paginationParams, userFilter);
+            var usersToReturn = _mapper.Map<IEnumerable<UserForDetailedDto>>(users);
             Response.AddPagination(users.PageNumber, users.PageSize, users.TotalItems, users.TotalPages);
             return Ok(usersToReturn);
+        }
+
+        [HttpGet]
+        [Route("GetUserLikes")]
+        public async Task<IActionResult> GetUserLikes([FromQuery] PaginationParams pagination, [FromQuery] UserLikes userLikes)
+        {
+            var user_id = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            // var user = await _datingRepository.GetUser(user_id);
+            userLikes.user_id = user_id;
+            var users = await _datingRepository.GetUsersLike(pagination, userLikes);
+            var usersToReturn = _mapper.Map<IEnumerable<UserForDetailedDto>>(users);
+            Response.AddPagination(users.PageNumber, users.PageSize, users.TotalItems, users.TotalPages);
+            return Ok(usersToReturn);
+
         }
 
         [HttpPut("{id}")]

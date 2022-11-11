@@ -1,3 +1,4 @@
+import { MembersModule } from './views/members/members.module';
 import { LocalStorageContains } from './_core/_constants/localStorageContains';
 import { AuthGuard } from './_core/_guards/auth/auth.guard';
 import { RouterModule } from '@angular/router';
@@ -22,7 +23,7 @@ import { PreventUnsavedChanges } from './_core/_guards/profile/prevent-unsaved-c
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TokenInterceptorProvider } from './_core/_helpers/utilities/token-interceptor';
 import { CustomPipesModule } from './_core/_helpers/pipes/custom-pipes.module';
-
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 export function tokenGetter() {
   return localStorage.getItem(LocalStorageContains.TOKEN);
 }
@@ -44,6 +45,8 @@ export function tokenGetter() {
     BsDatepickerModule.forRoot(),
     BsDropdownModule.forRoot(),
     RouterModule.forRoot(routes),
+    PaginationModule.forRoot(),
+    // MembersModule,
     CustomPipesModule,
     JwtModule.forRoot({
       config: {

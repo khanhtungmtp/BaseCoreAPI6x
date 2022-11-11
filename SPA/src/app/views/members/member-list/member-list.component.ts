@@ -44,7 +44,6 @@ export class MemberListComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUsers();
-
   }
 
   resetFilter() {
@@ -55,8 +54,6 @@ export class MemberListComponent implements OnInit {
   }
 
   pageChanged(event: any) {
-    console.log(event);
-
     this.pagination.pageNumber = event.page;
     this.getUsers();
 
@@ -65,8 +62,6 @@ export class MemberListComponent implements OnInit {
     // this.notiflix.showLoading();
     this.userService.getUsers(this.pagination, this.userFilter).subscribe({
       next: (res) => {
-        console.log(res);
-
         this.users = res.result;
         this.pagination = res.pagination;
         this.notiflix.hideLoading();
