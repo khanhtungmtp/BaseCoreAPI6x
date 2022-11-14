@@ -21,6 +21,8 @@ namespace API.Models
         public ICollection<Photo> photos { get; set; }
         public ICollection<Like> likers { get; set; }
         public ICollection<Like> likees { get; set; } // nguoi nhan
+        public ICollection<Message> message_sent { get; set; }
+        public ICollection<Message> message_received { get; set; }
 
 
     }
