@@ -29,12 +29,12 @@ namespace API.Migrations
                     b.Property<int>("liker_id")
                         .HasColumnType("int");
 
-                    b.Property<int>("likeeid")
+                    b.Property<int>("likee_id")
                         .HasColumnType("int");
 
-                    b.HasKey("liker_id", "likeeid");
+                    b.HasKey("liker_id", "likee_id");
 
-                    b.HasIndex("likeeid");
+                    b.HasIndex("likee_id");
 
                     b.ToTable("Like");
                 });
@@ -62,7 +62,7 @@ namespace API.Migrations
                     b.Property<bool>("recipient_deleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("recipientid")
+                    b.Property<int>("recipient_id")
                         .HasColumnType("int");
 
                     b.Property<int>("send_id")
@@ -71,14 +71,14 @@ namespace API.Migrations
                     b.Property<bool>("sender_deleted")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("senderid")
+                    b.Property<int?>("sender_id")
                         .HasColumnType("int");
 
                     b.HasKey("id");
 
-                    b.HasIndex("recipientid");
+                    b.HasIndex("recipient_id");
 
-                    b.HasIndex("senderid");
+                    b.HasIndex("sender_id");
 
                     b.ToTable("messages");
                 });
@@ -168,27 +168,11 @@ namespace API.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("API.Models.ValueTestModel", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
-
-                    b.Property<string>("name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("id");
-
-                    b.ToTable("ValueTestModels");
-                });
-
             modelBuilder.Entity("API.Models.Like", b =>
                 {
                     b.HasOne("API.Models.User", "likee")
                         .WithMany("likers")
-                        .HasForeignKey("likeeid")
+                        .HasForeignKey("likee_id")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -207,13 +191,13 @@ namespace API.Migrations
                 {
                     b.HasOne("API.Models.User", "recipient")
                         .WithMany("message_received")
-                        .HasForeignKey("recipientid")
+                        .HasForeignKey("recipient_id")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("API.Models.User", "sender")
                         .WithMany("message_sent")
-                        .HasForeignKey("senderid")
+                        .HasForeignKey("sender_id")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("recipient");

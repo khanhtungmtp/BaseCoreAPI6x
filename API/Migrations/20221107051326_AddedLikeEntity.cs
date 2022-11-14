@@ -59,25 +59,25 @@ namespace API.Migrations
                 oldType: "datetime2",
                 oldNullable: true);
 
-            // migrationBuilder.AddColumn<string>(
-            //     name: "public_id",
-            //     table: "Photos",
-            //     type: "nvarchar(max)",
-            //     nullable: true);
+            migrationBuilder.AddColumn<string>(
+                name: "public_id",
+                table: "Photos",
+                type: "nvarchar(max)",
+                nullable: true);
 
             migrationBuilder.CreateTable(
                 name: "Like",
                 columns: table => new
                 {
                     liker_id = table.Column<int>(type: "int", nullable: false),
-                    likeeid = table.Column<int>(type: "int", nullable: false)
+                    likee_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Like", x => new { x.liker_id, x.likeeid });
+                    table.PrimaryKey("PK_Like", x => new { x.liker_id, x.likee_id });
                     table.ForeignKey(
-                        name: "FK_Like_Users_likeeid",
-                        column: x => x.likeeid,
+                        name: "FK_Like_Users_likee_id",
+                        column: x => x.likee_id,
                         principalTable: "Users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
@@ -90,9 +90,9 @@ namespace API.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Like_likeeid",
+                name: "IX_Like_likee_id",
                 table: "Like",
-                column: "likeeid");
+                column: "likee_id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

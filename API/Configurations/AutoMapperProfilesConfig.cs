@@ -1,4 +1,5 @@
 using API.Dtos;
+using API.Dtos.Message;
 using API.Dtos.Photo;
 using API.Dtos.User;
 using API.Helpers.Utilities;
@@ -37,6 +38,7 @@ namespace API.Configurations
             CreateMap<Photo, PhotoForReturnDto>();
             CreateMap<PhotoForCreationDto, Photo>().ReverseMap();
             CreateMap<RegisterUserDto, User>();
+            CreateMap<MessageForCreationDto, Message>().ReverseMap();
         }
     }
 }

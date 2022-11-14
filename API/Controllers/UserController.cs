@@ -93,7 +93,7 @@ namespace API.Controllers
             like = new Like
             {
                 liker_id = userid,
-                likeeid = recipientid
+                likee_id = recipientid
             };
 
             _datingRepository.Add<Like>(like);

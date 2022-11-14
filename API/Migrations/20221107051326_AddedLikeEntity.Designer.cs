@@ -29,12 +29,12 @@ namespace API.Migrations
                     b.Property<int>("liker_id")
                         .HasColumnType("int");
 
-                    b.Property<int>("likeeid")
+                    b.Property<int>("likee_id")
                         .HasColumnType("int");
 
-                    b.HasKey("liker_id", "likeeid");
+                    b.HasKey("liker_id", "likee_id");
 
-                    b.HasIndex("likeeid");
+                    b.HasIndex("likee_id");
 
                     b.ToTable("Like");
                 });
@@ -124,27 +124,11 @@ namespace API.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("API.Models.ValueTestModel", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
-
-                    b.Property<string>("name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("id");
-
-                    b.ToTable("ValueTestModels");
-                });
-
             modelBuilder.Entity("API.Models.Like", b =>
                 {
                     b.HasOne("API.Models.User", "likee")
                         .WithMany("likers")
-                        .HasForeignKey("likeeid")
+                        .HasForeignKey("likee_id")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

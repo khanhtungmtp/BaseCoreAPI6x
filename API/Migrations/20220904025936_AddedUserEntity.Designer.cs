@@ -49,22 +49,6 @@ namespace API.Migrations
                     b.ToTable("users");
                 });
 
-            modelBuilder.Entity("API.Models.ValueTestModel", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
-
-                    b.Property<string>("name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("id");
-
-                    b.ToTable("valueTestModels");
-                });
 #pragma warning restore 612, 618
         }
     }

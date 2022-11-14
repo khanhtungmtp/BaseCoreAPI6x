@@ -10,28 +10,12 @@ namespace API.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropPrimaryKey(
-                name: "PK_valueTestModels",
-                table: "valueTestModels");
-
-            migrationBuilder.DropPrimaryKey(
                 name: "PK_users",
                 table: "users");
 
             migrationBuilder.RenameTable(
-                name: "valueTestModels",
-                newName: "ValueTestModels");
-
-            migrationBuilder.RenameTable(
                 name: "users",
                 newName: "Users");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "name",
-                table: "ValueTestModels",
-                type: "nvarchar(max)",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
 
             migrationBuilder.AlterColumn<string>(
                 name: "username",
@@ -116,11 +100,6 @@ namespace API.Migrations
                 table: "Users",
                 type: "nvarchar(max)",
                 nullable: true);
-
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_ValueTestModels",
-                table: "ValueTestModels",
-                column: "id");
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_Users",
@@ -162,10 +141,6 @@ namespace API.Migrations
                 name: "Photos");
 
             migrationBuilder.DropPrimaryKey(
-                name: "PK_ValueTestModels",
-                table: "ValueTestModels");
-
-            migrationBuilder.DropPrimaryKey(
                 name: "PK_Users",
                 table: "Users");
 
@@ -210,22 +185,8 @@ namespace API.Migrations
                 table: "Users");
 
             migrationBuilder.RenameTable(
-                name: "ValueTestModels",
-                newName: "valueTestModels");
-
-            migrationBuilder.RenameTable(
                 name: "Users",
                 newName: "users");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "name",
-                table: "valueTestModels",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "",
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)",
-                oldNullable: true);
 
             migrationBuilder.AlterColumn<string>(
                 name: "username",
@@ -256,11 +217,6 @@ namespace API.Migrations
                 oldClrType: typeof(byte[]),
                 oldType: "varbinary(max)",
                 oldNullable: true);
-
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_valueTestModels",
-                table: "valueTestModels",
-                column: "id");
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_users",

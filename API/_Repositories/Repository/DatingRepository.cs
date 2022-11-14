@@ -27,7 +27,7 @@ namespace API._Repositories.Repository
 
         public async Task<Like> GetLike(int userid, int recipientid)
         {
-            var likes = await _dataContext.Like.FirstOrDefaultAsync(l => l.liker_id == userid && l.likeeid == recipientid);
+            var likes = await _dataContext.Like.FirstOrDefaultAsync(l => l.liker_id == userid && l.likee_id == recipientid);
             return likes;
         }
 
@@ -63,7 +63,7 @@ namespace API._Repositories.Repository
             else
             {
                 // return user.likers.Where(u => u.likeeid == userid).Select(x => x.liker_id);
-                return user.likees.Where(u => u.liker_id == userid).Select(x => x.likeeid);
+                return user.likees.Where(u => u.liker_id == userid).Select(x => x.likee_id);
             }
         }
 
@@ -121,6 +121,21 @@ namespace API._Repositories.Repository
         public async Task<bool> SaveAll()
         {
             return await _dataContext.SaveChangesAsync() > 0;
+        }
+
+        public async Task<Message> GetMessage(int id)
+        {
+            return await _dataContext.Messages.FirstOrDefaultAsync(m => m.id == id);
+        }
+
+        public Task<PaginationUtilities<Message>> GetMessagesForUser()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Message>> GetMessagesThread(int user_id, int recipientid)
+        {
+            throw new NotImplementedException();
         }
     }
 }
