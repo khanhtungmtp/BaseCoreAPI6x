@@ -69,5 +69,16 @@ namespace API.Controllers
             Response.AddPagination(messageForReturn.PageNumber, messageForReturn.PageSize, messageForReturn.TotalItems, messageForReturn.TotalPages);
             return Ok(messages);
         }
+
+        [HttpGet("thread/{recipientid}")]
+        // [Route("GetMessagesThread")]
+        public async Task<IActionResult> GetMessagesThread(int userid, int recipientid)
+        {
+            if (userid != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+            var message = await _repo.GetMessagesThread(userid, recipientid);
+            var messageReturn = _mapper.Map<IEnumerable<MessageToReturnDto>>(message);
+            return Ok(messageReturn);
+        }
     }
 }

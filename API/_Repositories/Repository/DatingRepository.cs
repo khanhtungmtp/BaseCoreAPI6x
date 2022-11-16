@@ -129,9 +129,15 @@ namespace API._Repositories.Repository
             return await _dataContext.Messages.FirstOrDefaultAsync(m => m.id == id);
         }
 
-        public Task<IEnumerable<Message>> GetMessagesThread(int user_id, int recipientid)
+        public async Task<IEnumerable<Message>> GetMessagesThread(int user_id, int recipientid)
         {
-            throw new NotImplementedException();
+            var messages = _dataContext.Messages
+            .Include(u => u.sender).ThenInclude(p => p.photos)
+            .Include(r => r.recipient).ThenInclude(p => p.photos)
+            .Where(u => u.recipientid == user_id && u.senderid == recipientid || u.recipientid == recipientid && u.senderid == user_id)
+            .OrderByDescending(o => o.message_sent)
+            .ToListAsync();
+            return await messages;
         }
 
         public async Task<PaginationUtilities<Message>> GetMessagesForUser(PaginationParams paginationParams, MessageParams messageParams)
