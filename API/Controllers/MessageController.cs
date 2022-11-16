@@ -24,6 +24,7 @@ namespace API.Controllers
 
         }
         [HttpGet]
+        [Route("GetMessage")]
         public async Task<IActionResult> GetMessage(int userid, int message_id)
         {
             var user_id = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
@@ -38,7 +39,35 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateMessage(int userid, MessageForCreationDto messageForCreationDto)
         {
+            var user_id = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            if (user_id != userid)
+                return Unauthorized();
+            messageForCreationDto.senderid = user_id;
+            var userRecipient = await _repo.GetUser(messageForCreationDto.recipientid);
+            if (userRecipient == null)
+                return BadRequest("User recipient not found");
+            var message = _mapper.Map<Message>(messageForCreationDto);
+            _repo.Add<Message>(message);
 
+            if (await _repo.SaveAll())
+            {
+                var messageForReturn = _mapper.Map<MessageForCreationDto>(message);
+                return Created(nameof(GetMessage), messageForReturn);
+            }
+            throw new Exception("Creating a message failed on save");
+        }
+
+        [HttpGet]
+        [Route("GetMessageForUser")]
+        public async Task<IActionResult> GetMessageForUser(int userid, [FromQuery] PaginationParams paginationParams, [FromQuery] MessageParams messageParams)
+        {
+            if (userid != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+            messageParams.userid = userid;
+            var messageForReturn = await _repo.GetMessagesForUser(paginationParams, messageParams);
+            var messages = _mapper.Map<IEnumerable<MessageToReturnDto>>(messageForReturn);
+            Response.AddPagination(messageForReturn.PageNumber, messageForReturn.PageSize, messageForReturn.TotalItems, messageForReturn.TotalPages);
+            return Ok(messages);
         }
     }
 }

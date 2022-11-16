@@ -1,19 +1,18 @@
 
-namespace API.Models
+namespace API.Dtos.Message
 {
-    public class Message
+    public class MessageToReturnDto
     {
         public int id { get; set; }
         public int senderid { get; set; }
-        public User sender { get; set; }
+        public string sender_known_as { get; set; }
+        public string sender_photo_url { get; set; }
         public int recipientid { get; set; }
-        public User recipient { get; set; }
+        public string recipient_known_as { get; set; }
+        public string recipient_photo_url { get; set; }
         public string content { get; set; }
         public bool is_read { get; set; }
         public DateTime? date_read { get; set; }
         public DateTime message_sent { get; set; }
-        public bool sender_deleted { get; set; }
-        public bool recipient_deleted { get; set; }
-
     }
 }

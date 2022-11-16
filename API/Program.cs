@@ -2,7 +2,7 @@ using System.Net;
 using API.Configurations;
 using API.Helpers.Utilities;
 using Microsoft.AspNetCore.Diagnostics;
-
+using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 // add databaseconfig
 builder.Services.AddDatabaseConfig(builder.Configuration);
@@ -26,6 +26,9 @@ builder.Services.AddAuthenticationConfig(builder.Configuration);
 builder.Services.AddScoped<LogUserActivity>();
 // add middleware error global
 builder.Services.AddTransient<ExceptionHandlingMiddleware>();
+// add config json 
+builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

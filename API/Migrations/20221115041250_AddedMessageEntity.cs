@@ -15,9 +15,8 @@ namespace API.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    send_id = table.Column<int>(type: "int", nullable: false),
-                    sender_id = table.Column<int>(type: "int", nullable: true),
-                    recipient_id = table.Column<int>(type: "int", nullable: false),
+                    senderid = table.Column<int>(type: "int", nullable: false),
+                    recipientid = table.Column<int>(type: "int", nullable: false),
                     content = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     is_read = table.Column<bool>(type: "bit", nullable: false),
                     date_read = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -27,30 +26,30 @@ namespace API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_messages", x => x.id);
+                    table.PrimaryKey("PK_Messages", x => x.id);
                     table.ForeignKey(
-                        name: "FK_messages_Users_recipient_id",
-                        column: x => x.recipient_id,
+                        name: "FK_Messages_Users_recipientid",
+                        column: x => x.recipientid,
                         principalTable: "Users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_messages_Users_sender_id",
-                        column: x => x.sender_id,
+                        name: "FK_Messages_Users_senderid",
+                        column: x => x.senderid,
                         principalTable: "Users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_messages_recipient_id",
+                name: "IX_Messages_recipientid",
                 table: "Messages",
-                column: "recipient_id");
+                column: "recipientid");
 
             migrationBuilder.CreateIndex(
-                name: "IX_messages_sender_id",
+                name: "IX_Messages_senderid",
                 table: "Messages",
-                column: "sender_id");
+                column: "senderid");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

@@ -39,6 +39,11 @@ namespace API.Configurations
             CreateMap<PhotoForCreationDto, Photo>().ReverseMap();
             CreateMap<RegisterUserDto, User>();
             CreateMap<MessageForCreationDto, Message>().ReverseMap();
+            CreateMap<Message, MessageToReturnDto>()
+            .ForMember(p => p.sender_photo_url, opt => opt.MapFrom(u => u.sender.photos.FirstOrDefault(p => p.is_main).url))
+            .ForMember(p => p.recipient_photo_url, opt => opt.MapFrom(u => u.recipient.photos.FirstOrDefault(p => p.is_main).url))
+            .ForMember(u => u.sender_known_as, opt => opt.MapFrom(u => u.sender.known_as))
+            .ForMember(u => u.recipient_known_as, opt => opt.MapFrom(u => u.recipient.known_as));
         }
     }
 }

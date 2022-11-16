@@ -1,6 +1,7 @@
 
 using API._Repositories.Interfaces;
 using API.Data;
+using API.Dtos.Message;
 using API.Dtos.user;
 using API.Helpers.Utilities;
 using API.Models;
@@ -128,14 +129,30 @@ namespace API._Repositories.Repository
             return await _dataContext.Messages.FirstOrDefaultAsync(m => m.id == id);
         }
 
-        public Task<PaginationUtilities<Message>> GetMessagesForUser()
+        public Task<IEnumerable<Message>> GetMessagesThread(int user_id, int recipientid)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Message>> GetMessagesThread(int user_id, int recipientid)
+        public async Task<PaginationUtilities<Message>> GetMessagesForUser(PaginationParams paginationParams, MessageParams messageParams)
         {
-            throw new NotImplementedException();
+            var messages = _dataContext.Messages
+            .Include(u => u.sender).ThenInclude(p => p.photos)
+            .Include(r => r.recipient).ThenInclude(p => p.photos).AsQueryable();
+            switch (messageParams.message_container)
+            {
+                case "inbox":
+                    messages = messages.Where(u => u.recipientid == messageParams.userid && u.recipient_deleted == false);
+                    break;
+                case "outbox":
+                    messages = messages.Where(u => u.senderid == messageParams.userid && u.sender_deleted == false);
+                    break;
+                default:
+                    messages = messages.Where(u => u.recipientid == messageParams.userid && u.is_read == false);
+                    break;
+            }
+            messages.OrderByDescending(o => o.message_sent);
+            return await PaginationUtilities<Message>.CreateAsync(messages, paginationParams.pageNumber, paginationParams.PageSize);
         }
     }
 }

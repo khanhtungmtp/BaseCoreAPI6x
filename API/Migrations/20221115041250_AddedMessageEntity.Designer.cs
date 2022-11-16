@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221114014646_AddedMessageEntity")]
+    [Migration("20221115041250_AddedMessageEntity")]
     partial class AddedMessageEntity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,25 +62,22 @@ namespace API.Migrations
                     b.Property<bool>("recipient_deleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("recipient_id")
-                        .HasColumnType("int");
-
-                    b.Property<int>("send_id")
+                    b.Property<int>("recipientid")
                         .HasColumnType("int");
 
                     b.Property<bool>("sender_deleted")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("sender_id")
+                    b.Property<int>("senderid")
                         .HasColumnType("int");
 
                     b.HasKey("id");
 
-                    b.HasIndex("recipient_id");
+                    b.HasIndex("recipientid");
 
-                    b.HasIndex("sender_id");
+                    b.HasIndex("senderid");
 
-                    b.ToTable("messages");
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("API.Models.Photo", b =>
@@ -191,14 +188,15 @@ namespace API.Migrations
                 {
                     b.HasOne("API.Models.User", "recipient")
                         .WithMany("message_received")
-                        .HasForeignKey("recipient_id")
+                        .HasForeignKey("recipientid")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("API.Models.User", "sender")
                         .WithMany("message_sent")
-                        .HasForeignKey("sender_id")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("senderid")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("recipient");
 
