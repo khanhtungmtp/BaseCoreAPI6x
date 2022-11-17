@@ -59,7 +59,7 @@ export class MemberListComponent implements OnInit {
 
   }
   getUsers() {
-    // this.notiflix.showLoading();
+    this.notiflix.showLoading();
     this.userService.getUsers(this.pagination, this.userFilter).subscribe({
       next: (res) => {
         this.users = res.result;
