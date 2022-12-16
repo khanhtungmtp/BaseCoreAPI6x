@@ -29,7 +29,7 @@
             </thead>
             <tbody>
                 <tr *ngFor="let message of messages" [routerLink]="['/members', 
-                messageContainer == 'Outbox' ? message.recipientid : message.senderid]">
+                messageContainer == 'Outbox' ? message.recipientid : message.senderid]" [queryParams]="{tab: 3}">
                     <td>{{message.content}}</td>
                     <td>
                         <div *ngIf="messageContainer != 'Outbox'">

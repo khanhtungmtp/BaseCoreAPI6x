@@ -1,3 +1,4 @@
+import { ActivatedRoute } from '@angular/router';
 import { PaginationUtilities } from './../../_core/_helpers/utilities/pagination-utilities';
 import { MessageService } from './../../_core/_services/message.service';
 import { Component, OnInit } from '@angular/core';
@@ -22,11 +23,12 @@ export class MessagesComponent implements OnInit {
   messageContainer: string = 'unread';
   constructor(
     private messageService: MessageService,
-    private notiflix: NgxNotiflixService
+    private notiflix: NgxNotiflixService,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
-    this.getMessageForUser();
+    this.getMessageForUser(this.messageContainer);
   }
 
   getMessageForUser(messageContainer?: string) {

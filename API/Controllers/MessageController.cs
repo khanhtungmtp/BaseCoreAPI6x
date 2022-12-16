@@ -40,7 +40,8 @@ namespace API.Controllers
         public async Task<IActionResult> CreateMessage(int userid, MessageForCreationDto messageForCreationDto)
         {
             var user_id = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            if (user_id != userid)
+            var sender = await _repo.GetUser(userid);
+            if (user_id != sender.id)
                 return Unauthorized();
             messageForCreationDto.senderid = user_id;
             var userRecipient = await _repo.GetUser(messageForCreationDto.recipientid);
@@ -51,7 +52,7 @@ namespace API.Controllers
 
             if (await _repo.SaveAll())
             {
-                var messageForReturn = _mapper.Map<MessageForCreationDto>(message);
+                var messageForReturn = _mapper.Map<MessageToReturnDto>(message);
                 return Created(nameof(GetMessage), messageForReturn);
             }
             throw new Exception("Creating a message failed on save");

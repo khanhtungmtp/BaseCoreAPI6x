@@ -7,7 +7,8 @@
                     (click)="redirectDetail(user)"><i class="fa fa-user"></i></button></li>
             <li class="list-inline-item"><button class="btn btn-danger" (click)="sendLike(user.id)"><i
                         class="fa fa-heart"></i></button></li>
-            <li class="list-inline-item"><button class="btn btn-danger"><i class="fa fa-envelope"></i></button></li>
+            <li class="list-inline-item"><button [routerLink]="['/members/', user.id]" [queryParams]="{tab: 3}"
+                    class="btn btn-danger"><i class="fa fa-envelope"></i></button></li>
         </ul>
     </div>
 

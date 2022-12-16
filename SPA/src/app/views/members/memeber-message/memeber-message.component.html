@@ -1,0 +1,57 @@
+<div class="card">
+  <div class="card-body">
+    <div *ngIf="messages.length === 0">
+      <p>No message yet... say hi my using the box below</p>
+    </div>
+    <ul class="chat">
+      <li *ngFor="let message of messages">
+        <!-- to them -->
+        <div *ngIf="message.senderid === recipientid">
+          <span class="chat-img float-start">
+            <img src="{{message.sender_photo_url}}" alt="{{message.sender_known_as}}" class="rounded-circle">
+          </span>
+          <div class="chat-body">
+            <div class="header">
+              <strong class="primary-font">{{message.sender_known_as}}</strong>
+              <small class="text-muted float-end">
+                <span class="fa fa-clock-o">{{message.message_sent | dateAgo}}</span>
+              </small>
+              <p>{{message.content}}</p>
+            </div>
+          </div>
+        </div>
+        <!-- to me -->
+        <div *ngIf="message.senderid !== recipientid">
+          <span class="chat-img float-end">
+            <img src="{{message.sender_photo_url}}" alt="{{message.sender_known_as}}" class="rounded-circle">
+          </span>
+          <div class="chat-body">
+            <div class="header">
+              <small class="text-muted float-start">
+                <span class="fa fa-clock-o">{{message.message_sent | dateAgo}}</span>
+                <span *ngIf="!message.is_read" class="text-danger">(unread)</span>
+                <span *ngIf="message.is_read" class="text-success">(Read {{message.date_read |
+                  dateAgo}})
+                </span>
+              </small>
+              <br>
+              <!-- <strong class="primary-font float-end">{{message.sender_known_as}}</strong> -->
+            </div>
+            <p>{{message.content}}</p>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="card-footer">
+    <form #messageForm="ngForm" (ngSubmit)="messageForm.valid && sendMessage()">
+      <div class="input-group">
+        <input type="text" [(ngModel)]="newMessages.content" class="form-control imput-sm"
+          placeholder="send a private message" name="content" required>
+        <div class="input-group-append">
+          <button class="btn btn-primary" [disabled]="!messageForm.valid">Send</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

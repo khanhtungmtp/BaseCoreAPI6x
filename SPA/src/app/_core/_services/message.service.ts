@@ -35,4 +35,12 @@ export class MessageService {
       })
     );
   }
+
+  getMesageThread(userid: number, recipientid: number) {
+    return this.http.get<Message[]>(this.baseUrl + userid + '/Message/thread/' + recipientid);
+  }
+
+  createMessage(userid: number, message: Message) {
+    return this.http.post(this.baseUrl + userid + '/Message', message);
+  }
 }

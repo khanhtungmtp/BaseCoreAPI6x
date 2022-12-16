@@ -17,13 +17,15 @@ import { FileUploadModule } from 'ng2-file-upload';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { CustomPipesModule } from 'src/app/_core/_helpers/pipes/custom-pipes.module';
+import { MemeberMessageComponent } from './memeber-message/memeber-message.component';
 @NgModule({
   declarations: [
     MemberCardComponent,
     MemberListComponent,
     MemeberDetailComponent,
     MemberEditComponent,
-    PhotoEditorComponent
+    PhotoEditorComponent,
+    MemeberMessageComponent
   ],
   imports: [
     CommonModule,

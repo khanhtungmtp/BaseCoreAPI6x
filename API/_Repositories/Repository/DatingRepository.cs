@@ -134,7 +134,8 @@ namespace API._Repositories.Repository
             var messages = _dataContext.Messages
             .Include(u => u.sender).ThenInclude(p => p.photos)
             .Include(r => r.recipient).ThenInclude(p => p.photos)
-            .Where(u => u.recipientid == user_id && u.senderid == recipientid || u.recipientid == recipientid && u.senderid == user_id)
+            .Where(u => u.recipientid == user_id && u.senderid == recipientid && u.sender_deleted == false
+             || u.recipientid == recipientid && u.senderid == user_id && u.recipient_deleted == false)
             .OrderByDescending(o => o.message_sent)
             .ToListAsync();
             return await messages;
@@ -154,7 +155,7 @@ namespace API._Repositories.Repository
                     messages = messages.Where(u => u.senderid == messageParams.userid && u.sender_deleted == false);
                     break;
                 default:
-                    messages = messages.Where(u => u.recipientid == messageParams.userid && u.is_read == false);
+                    messages = messages.Where(u => u.recipientid == messageParams.userid && u.recipient_deleted == false && u.is_read == false);
                     break;
             }
             messages.OrderByDescending(o => o.message_sent);
