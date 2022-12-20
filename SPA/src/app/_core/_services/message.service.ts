@@ -43,4 +43,12 @@ export class MessageService {
   createMessage(userid: number, message: Message) {
     return this.http.post(this.baseUrl + userid + '/Message', message);
   }
+
+  deleteMessage(id: number, userid: number) {
+    return this.http.delete(this.baseUrl + userid + '/Message/' + id, {});
+  }
+
+  markAsRead(id: number, userid: number) {
+    this.http.post(this.baseUrl + userid + '/Message/' + id, {}).subscribe();
+  }
 }

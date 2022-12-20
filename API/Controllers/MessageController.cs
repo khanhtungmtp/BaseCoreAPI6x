@@ -81,5 +81,37 @@ namespace API.Controllers
             var messageReturn = _mapper.Map<IEnumerable<MessageToReturnDto>>(message);
             return Ok(messageReturn);
         }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteMessage(int id, int userid)
+        {
+            if (userid != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+            var message = await _repo.GetMessage(id);
+            if (message.senderid == userid)
+                message.sender_deleted = true;
+            if (message.recipientid == userid)
+                message.recipient_deleted = true;
+            if (message.recipient_deleted && message.sender_deleted)
+                _repo.Delete(message);
+            if (await _repo.SaveAll())
+            {
+                return NoContent();
+            }
+            throw new Exception("Error deleting the message");
+        }
+
+        [HttpPost("{id}")]
+        public async Task<IActionResult> markAsRead(int id, int userid)
+        {
+            if (userid != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+            var message = await _repo.GetMessage(id);
+            if (message.recipientid != userid)
+                return Unauthorized();
+            message.is_read = true;
+            message.date_read = DateTime.Now;
+            await _repo.SaveAll();
+            return NoContent();
+        }
     }
 }

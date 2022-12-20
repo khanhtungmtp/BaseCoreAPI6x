@@ -5,6 +5,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { User } from 'src/app/_core/_models/user';
 import { LocalStorageContains } from 'src/app/_core/_constants/localStorageContains';
 import { NgxNotiflixService } from 'src/app/_core/_services/ngx-notiflix.service';
+import { tap } from 'rxjs';
 
 
 @Component({
@@ -40,14 +41,24 @@ export class MemeberMessageComponent implements OnInit {
   }
 
   getMessagesThread() {
-    this.messageService.getMesageThread(this.user.id, this.recipientid).subscribe({
-      next: (res) => {
-        this.messages = res
-      },
-      error: () => {
-        this.notiflix.error(MessageConstants.UN_KNOWN_ERROR);
-      }
-    })
+    this.messageService.getMesageThread(this.user.id, this.recipientid)
+      .pipe(
+        tap(messages => {
+          for (let i = 0; i < messages.length; i++) {
+            if (messages[i].is_read === false && messages[i].recipientid == this.user.id) {
+              this.messageService.markAsRead(messages[i].id, this.user.id);
+            }
+          }
+        })
+      )
+      .subscribe({
+        next: (res) => {
+          this.messages = res
+        },
+        error: () => {
+          this.notiflix.error(MessageConstants.UN_KNOWN_ERROR);
+        }
+      })
   }
 
   sendMessage() {
@@ -62,7 +73,6 @@ export class MemeberMessageComponent implements OnInit {
       complete: () => this.notiflix.hideLoading()
     })
   }
-
 
 
 }

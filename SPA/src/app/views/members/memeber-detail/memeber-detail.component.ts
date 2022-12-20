@@ -12,7 +12,7 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs';
 })
 
 export class MemeberDetailComponent implements OnInit {
-  @ViewChild('memberTabs', { static: false }) memberTabs: TabsetComponent;
+  @ViewChild('memberTab') memberTabs?: TabsetComponent;
   user: User;
 
   constructor(
@@ -28,8 +28,6 @@ export class MemeberDetailComponent implements OnInit {
     this.route.queryParams.subscribe({
       next: (res) => {
         let tabId = parseInt(res['tab']);
-        console.log(this.memberTabs);
-
         if (this.memberTabs?.tabs[tabId]) {
           this.memberTabs.tabs[tabId].active = true;
         }
