@@ -4,7 +4,7 @@ import { User } from './../../../_core/_models/user';
 import { UserService } from './../../../_core/_services/user.service';
 import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TabsetComponent } from 'ngx-bootstrap/tabs';
+import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
 @Component({
   selector: 'app-memeber-detail',
   templateUrl: './memeber-detail.component.html',
@@ -12,7 +12,8 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs';
 })
 
 export class MemeberDetailComponent implements OnInit {
-  @ViewChild('memberTab') memberTabs?: TabsetComponent;
+  @ViewChild('memberTabs', { static: true }) memberTabs?: TabsetComponent;
+  activeTab?: TabDirective;
   user: User;
 
   constructor(
@@ -27,10 +28,8 @@ export class MemeberDetailComponent implements OnInit {
     this.route.data.subscribe(data => this.user = data['user']);
     this.route.queryParams.subscribe({
       next: (res) => {
-        let tabId = parseInt(res['tab']);
-        if (this.memberTabs?.tabs[tabId]) {
-          this.memberTabs.tabs[tabId].active = true;
-        }
+        let tabId = res['tab'];
+        tabId && this.selectTab(tabId)
         this.notiflix.hideLoading()
       },
       error: () => this.notiflix.error('cannot get params'),
@@ -43,10 +42,16 @@ export class MemeberDetailComponent implements OnInit {
     this.router.navigate(['members']);
   }
 
-  selectTab(tabId: number) {
-    if (this.memberTabs?.tabs[tabId]) {
-      this.memberTabs.tabs[tabId].active = true;
+  selectTab(heading: string) {
+    if (this.memberTabs) {
+      this.memberTabs.tabs.find(x => x.heading === heading)!.active = true
     }
+  }
+
+  onTabActivated(data: TabDirective) {
+    this.activeTab = data;
+    console.log(this.activeTab);
+
   }
 
 }

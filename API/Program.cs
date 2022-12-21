@@ -3,6 +3,8 @@ using API.Configurations;
 using API.Helpers.Utilities;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Text.Json.Serialization;
+using API.SignalR;
+
 var builder = WebApplication.CreateBuilder(args);
 // add databaseconfig
 builder.Services.AddDatabaseConfig(builder.Configuration);
@@ -56,7 +58,7 @@ else
 }
 
 // use cors allow
-app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowCredentials().AllowAnyOrigin());
 // middleware global
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 // use auth
@@ -66,5 +68,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<PresenceHub>("hubs/presence");
 
 app.Run();

@@ -28,25 +28,25 @@
         <div class="card-footer">
           <div class="btn-group d-flex">
             <button class="btn btn-primary w-100">Like</button>
-            <button class="btn btn-success w-100" (click)="selectTab(3)">Message</button>
+            <button class="btn btn-success w-100" (click)="selectTab('Messages')">Message</button>
           </div>
         </div>
       </div>
     </div>
     <div class="col-sm-8">
       <div class="tab-panel">
-        <tabset class="member-tabset" #memberTab>
-          <tab heading="Aboult {{user.known_as || 'user'}}">
+        <tabset class="member-tabset" #memberTabs>
+          <tab heading="Aboult {{user.known_as || 'user'}}" (selectTab)="onTabActivated($event)">
             <h4>Description</h4>
             <p>{{user.introduction}}</p>
             <h4>Looking for</h4>
             <p>{{user.looking_for}}</p>
           </tab>
-          <tab heading="Interests">
+          <tab heading="Interests" (selectTab)="onTabActivated($event)">
             <h4>Interests</h4>
             <p>{{user.interests}}</p>
           </tab>
-          <tab heading="Photos">
+          <tab heading="Photos" (selectTab)="onTabActivated($event)">
             <!-- <gallery imageSize="cover" [thumbWidth]="120" [thumbHeight]="50" [thumb]="true" [items]="items" [imageSize]="'contain'"></gallery> -->
             <carousel [interval]="0" class="carousel-dark">
               <slide *ngFor="let photo of user.photos; let index=index">
@@ -56,7 +56,7 @@
             </carousel>
 
           </tab>
-          <tab heading="Messages">
+          <tab heading="Messages" (selectTab)="onTabActivated($event)">
             <h4>Messages</h4>
             <app-memeber-message [recipientid]="user.id"></app-memeber-message>
           </tab>
