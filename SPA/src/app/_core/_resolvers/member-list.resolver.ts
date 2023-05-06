@@ -5,12 +5,12 @@ import { catchError } from 'rxjs/operators';
 import { NgxNotiflixService } from '../_services/ngx-notiflix.service';
 import { UserService } from '../_services/user.service';
 import { Injectable } from '@angular/core';
-import { Resolve, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { User } from '../_models/user';
 import { empty, Observable } from 'rxjs';
 import { PaginationParams, PaginationResult } from '../_helpers/utilities/pagination-utilities';
 @Injectable()
-export class MemberListResolver implements Resolve<PaginationResult<User[]>> {
+export class MemberListResolver  {
     paginationParams: PaginationParams = <PaginationParams>{
         pageNumber: 1,
         pageSize: 6

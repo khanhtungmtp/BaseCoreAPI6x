@@ -3,11 +3,11 @@ import { catchError } from 'rxjs/operators';
 import { NgxNotiflixService } from './../_services/ngx-notiflix.service';
 import { UserService } from './../_services/user.service';
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { User } from '../_models/user';
 import { empty, Observable } from 'rxjs';
 @Injectable()
-export class MemberDetailResolver implements Resolve<User> {
+export class MemberDetailResolver  {
     constructor(
         private userService: UserService,
         private router: Router,
