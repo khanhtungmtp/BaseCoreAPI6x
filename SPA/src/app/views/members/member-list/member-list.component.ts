@@ -22,7 +22,7 @@ export class MemberListComponent implements OnInit {
   }
   pagination: PaginationUtilities = <PaginationUtilities>{
     pageNumber: 1,
-    pageSize: 12,
+    pageSize: 6,
   }
   genderList = [
     { key: 'male', value: 'Male' },
@@ -63,6 +63,8 @@ export class MemberListComponent implements OnInit {
     this.userService.getUsers(this.pagination, this.userFilter).subscribe({
       next: (res) => {
         this.users = res.result;
+        console.log(this.users);
+
         this.pagination = res.pagination;
         this.notiflix.hideLoading();
       }, error: () => {

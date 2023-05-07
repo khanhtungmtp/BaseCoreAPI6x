@@ -12,7 +12,7 @@ import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
 })
 
 export class MemeberDetailComponent implements OnInit {
-  @ViewChild('memberTabs', { static: true }) memberTabs?: TabsetComponent;
+  @ViewChild('memberTabs', { static: false }) memberTabs?: TabsetComponent;
   activeTab?: TabDirective;
   user: User;
 

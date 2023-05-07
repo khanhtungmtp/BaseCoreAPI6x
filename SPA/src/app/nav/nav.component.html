@@ -3,11 +3,13 @@
   <nav class="navbar navbar-expand-md navbar-dark bg-danger">
     <div class="container">
       <a class="navbar-brand" [routerLink]="['/']">BaseCore</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
-        aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarCollapse" aria-controls="navbarCollapse"
+        aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div [class]="loggedIn() ? 'collapse navbar-collapse' : ''" id="navbarCollapse">
+      <div [class]="loggedIn() ? 'collapse navbar-collapse' : ''"
+        id="navbarCollapse">
         <ul class="navbar-nav me-auto" *ngIf="loggedIn()">
           <li class="nav-item" routerLinkActive="active">
             <a class="nav-link" [routerLink]="['/members']">Matches</a>
@@ -21,26 +23,31 @@
         </ul>
 
         <div class="dropdown text-end " *ngIf="loggedIn()">
-          <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown"
-            aria-expanded="false">
+          <a href="#"
+            class="d-block link-dark text-decoration-none dropdown-toggle"
+            data-bs-toggle="dropdown" aria-expanded="false">
             <!-- <img src="https://randomuser.me/api/portraits/men/96.jpg" alt="mdo" width="32" height="32" class="rounded-circle"> -->
-            <img src="{{photo_url || '../../assets/user_default.png'}}" alt="mdo" width="32" height="32"
-              class="rounded-circle">
+            <img src="{{photo_url || '../../assets/user_default.png'}}"
+              alt="mdo" width="32" height="32" class="rounded-circle">
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" (click)="editProfile(this.authService.currentUser)">{{
-                authService.decodedToken?.name | UpperCaseFistLetter}}</a></li>
+            <li><a class="dropdown-item"
+                (click)="editProfile(this.authService.currentUser)">{{
+                authService.decodedToken?.unique_name |
+                UpperCaseFistLetter}}</a></li>
             <li>
               <hr class="dropdown-divider">
             </li>
-            <li><a class="dropdown-item" href="#" (click)="logOut()">Sign out</a></li>
+            <li><a class="dropdown-item" href="#" (click)="logOut()">Sign
+                out</a></li>
           </ul>
         </div>
-        <form #loginForm="ngForm" class="d-flex text-end" role="search" (ngSubmit)="login()" *ngIf="!loggedIn()">
-          <input class="form-control me-2" type="text" name="username" placeholder="UserName" required
-            [(ngModel)]="loginForms.username">
-          <input class="form-control me-2" type="text" name="password" placeholder="Password" required
-            [(ngModel)]="loginForms.password">
+        <form #loginForm="ngForm" class="d-flex text-end" role="search"
+          (ngSubmit)="login()" *ngIf="!loggedIn()">
+          <input class="form-control me-2" type="text" name="username"
+            placeholder="UserName" required [(ngModel)]="loginForms.username">
+          <input class="form-control me-2" type="text" name="password"
+            placeholder="Password" required [(ngModel)]="loginForms.password">
           <button class="btn btn-outline-success" type="submit">Login</button>
         </form>
       </div>
