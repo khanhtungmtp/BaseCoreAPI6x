@@ -2,7 +2,7 @@
   <!-- Fixed navbar -->
   <nav class="navbar navbar-expand-md navbar-dark bg-danger">
     <div class="container">
-      <a class="navbar-brand" [routerLink]="['/']">BaseCore</a>
+      <a class="navbar-brand" [routerLink]="['/']">Angular 16</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
         data-bs-target="#navbarCollapse" aria-controls="navbarCollapse"
         aria-expanded="false" aria-label="Toggle navigation">
@@ -42,12 +42,14 @@
                 out</a></li>
           </ul>
         </div>
-        <form #loginForm="ngForm" class="d-flex text-end" role="search"
-          (ngSubmit)="login()" *ngIf="!loggedIn()">
+        <form #loginForm="ngForm" autocomplete="off" class="d-flex text-end"
+          role="search" (ngSubmit)="login()" *ngIf="!loggedIn()">
           <input class="form-control me-2" type="text" name="username"
-            placeholder="UserName" required [(ngModel)]="loginForms.username">
-          <input class="form-control me-2" type="text" name="password"
-            placeholder="Password" required [(ngModel)]="loginForms.password">
+            autocomplete="off" placeholder="UserName" required
+            [(ngModel)]="loginForms.username">
+          <input class="form-control me-2" type="password" name="password"
+            autocomplete="off" placeholder="Password" required
+            [(ngModel)]="loginForms.password">
           <button class="btn btn-outline-success" type="submit">Login</button>
         </form>
       </div>

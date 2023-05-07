@@ -63,8 +63,6 @@ export class MemberListComponent implements OnInit {
     this.userService.getUsers(this.pagination, this.userFilter).subscribe({
       next: (res) => {
         this.users = res.result;
-        console.log(this.users);
-
         this.pagination = res.pagination;
         this.notiflix.hideLoading();
       }, error: () => {

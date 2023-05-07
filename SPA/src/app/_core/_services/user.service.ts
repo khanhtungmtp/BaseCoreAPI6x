@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { User } from '../_models/user';
 import { PaginationParams, PaginationResult } from '../_helpers/utilities/pagination-utilities';
+import { OperationResult } from '../_helpers/utilities/operationResult';
 
 @Injectable({
   providedIn: 'root'
@@ -77,7 +78,7 @@ export class UserService {
   }
 
   sendLike(userid: number, recipient: number) {
-    return this.http.post(this.baseUrl + userid + '/like/' + recipient, {});
+    return this.http.post<OperationResult>(this.baseUrl + userid + '/like/' + recipient, {});
   }
 
 }

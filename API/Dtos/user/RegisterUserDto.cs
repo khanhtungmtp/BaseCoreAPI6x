@@ -12,7 +12,7 @@ namespace API.Dtos.User
         [Required]
         public string username { get; set; }
         [Required]
-        [StringLength(8, MinimumLength = 4, ErrorMessage = "You must specify password between 4 and 8 characters")]
+        [StringLength(32, MinimumLength = 4, ErrorMessage = "You must specify password between 8 and 32 characters")]
         public string password { get; set; }
         [Required]
         public string gender { get; set; }

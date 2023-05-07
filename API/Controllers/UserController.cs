@@ -88,7 +88,9 @@ namespace API.Controllers
             var like = await _datingRepository.GetLike(userid, recipient.id);
             if (like != null)
             {
-                return BadRequest("You already like this user");
+                _datingRepository.Delete(like);
+                if (await _datingRepository.SaveAll())
+                    return Ok(new OperationResult { Message = "Unliked" });
             };
             like = new Like
             {
@@ -98,9 +100,7 @@ namespace API.Controllers
 
             _datingRepository.Add<Like>(like);
             if (await _datingRepository.SaveAll())
-            {
-                return Ok();
-            }
+                return Ok(new OperationResult { Message = "Liked" });
             return BadRequest("Failed to like user");
         }
 

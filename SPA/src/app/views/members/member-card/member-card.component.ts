@@ -25,8 +25,8 @@ export class MemberCardComponent implements OnInit {
 
   sendLike(recipient: number) {
     this.userService.sendLike(this.userLogin.id, recipient).subscribe({
-      next: () => {
-        this.notiflix.success('You have liked: ' + this.user.username);
+      next: (res) => {
+        this.notiflix.success(`You have ${res.message}: ` + this.user.username);
       },
       error: (err) => {
         this.notiflix.error(err);

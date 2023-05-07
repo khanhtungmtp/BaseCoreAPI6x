@@ -1,10 +1,9 @@
-import { MessageConstants } from './../../../_core/_constants/message.enum';
 import { NgxNotiflixService } from './../../../_core/_services/ngx-notiflix.service';
 import { User } from './../../../_core/_models/user';
-import { UserService } from './../../../_core/_services/user.service';
-import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
+import { UserService } from 'src/app/_core/_services/user.service';
 @Component({
   selector: 'app-memeber-detail',
   templateUrl: './memeber-detail.component.html',
@@ -12,24 +11,26 @@ import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
 })
 
 export class MemeberDetailComponent implements OnInit {
-  @ViewChild('memberTabs', { static: false }) memberTabs?: TabsetComponent;
-  activeTab?: TabDirective;
+  @ViewChild('memberTabs', { static: false }) memberTabs: TabsetComponent;
+  activeTab: TabDirective;
   user: User;
-
+  tabId: number
   constructor(
     private userService: UserService,
     private route: ActivatedRoute,
     private notiflix: NgxNotiflixService,
     private router: Router
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
     this.notiflix.showLoading();
-    this.route.data.subscribe(data => this.user = data['user']);
+    let id = this.route.snapshot.paramMap.get('id')
+    if (id)
+      this.getUserInfo(+id); // ép về int
     this.route.queryParams.subscribe({
       next: (res) => {
-        let tabId = res['tab'];
-        tabId && this.selectTab(tabId)
+        this.tabId = res['tab'];
         this.notiflix.hideLoading()
       },
       error: () => this.notiflix.error('cannot get params'),
@@ -37,21 +38,36 @@ export class MemeberDetailComponent implements OnInit {
     })
 
   }
+  ngAfterContentChecked(): void {
+    this.selectTab(this.tabId)
+
+  }
+
+  getUserInfo(id: number) {
+    this.userService.getUser(id).subscribe({
+      next: (res) => {
+        if (!res)
+          this.back()
+        this.user = res;
+        this.notiflix.hideLoading()
+      },
+      error: () => {
+        this.notiflix.hideLoading()
+      }
+    })
+  }
 
   back() {
     this.router.navigate(['members']);
   }
 
-  selectTab(heading: string) {
-    if (this.memberTabs) {
-      this.memberTabs.tabs.find(x => x.heading === heading)!.active = true
-    }
+  selectTab(tabId: number) {
+    if (this.memberTabs && this.memberTabs.tabs[tabId])
+      this.memberTabs.tabs[tabId].active = true;
   }
 
   onTabActivated(data: TabDirective) {
     this.activeTab = data;
-    console.log(this.activeTab);
-
   }
 
 }

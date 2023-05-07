@@ -11,8 +11,8 @@ namespace API.Models
         public string gender { get; set; }
         public DateTime date_of_birth { get; set; }
         public string known_as { get; set; }
-        public DateTime created { get; set; }
-        public DateTime last_active { get; set; }
+        public DateTime created { get; set; } = DateTime.Now;
+        public DateTime last_active { get; set; } = DateTime.Now;
         public string introduction { get; set; }
         public string looking_for { get; set; }
         public string interests { get; set; }

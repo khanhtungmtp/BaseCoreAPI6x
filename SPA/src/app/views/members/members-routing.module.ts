@@ -15,7 +15,7 @@ const routes: Routes = [
     data: {
       title: 'Detail member'
     },
-    resolve: { user: MemberDetailResolver }
+    //resolve: { user: MemberDetailResolver }
   }
 ];
 

@@ -8,54 +8,97 @@ import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { MessageConstants } from '../_core/_constants/message.enum';
 import { AuthService } from '../_core/_services/auth.service';
 import { NgxNotiflixService } from '../_core/_services/ngx-notiflix.service';
+import Validation from '../_core/_helpers/utilities/validation';
+import { FunctionUtility } from '../_core/_helpers/utilities/function-utility';
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
+  registerForm: FormGroup<{
+    country: FormControl<string | null>;
+    password: FormControl<string | null>;
+    gender: FormControl<string | null>;
+    city: FormControl<string | null>;
+    date_of_birth: FormControl<string | null>;
+    confirmPassword: FormControl<string | null>;
+    known_as: FormControl<string | null>;
+    username: FormControl<string | null>
+  }> = new FormGroup({
+    gender: new FormControl(''),
+    username: new FormControl(''),
+    known_as: new FormControl(''),
+    date_of_birth: new FormControl(),
+    city: new FormControl(''),
+    country: new FormControl(''),
+    password: new FormControl(''),
+    confirmPassword: new FormControl('')
+  });
   user: UserForRegister = <UserForRegister>{};
   loginModel: LoginModel;
-  registerForm: FormGroup;
+  submitted: boolean = false;
   bsConfig: Partial<BsDatepickerConfig>
   @Output() cancelRegister = new EventEmitter();
+
   constructor(
     private authService: AuthService,
     private snotiflix: NgxNotiflixService,
-    private fb: FormBuilder,
-    private router: Router
-  ) { }
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private func: FunctionUtility
+  ) {
+  }
 
   ngOnInit() {
     this.bsConfig = {
       containerClass: 'theme-red',
-      dateInputFormat: 'YYYY-MM-DD, h:mm:ss a'
+      dateInputFormat: 'YYYY-MM-DD'
     }
     this.registerForms();
   }
 
   registerForms() {
-    this.registerForm = this.fb.group({
-      gender: ['male'],
-      username: new FormControl('', Validators.required),
-      known_as: ['', Validators.required],
-      date_of_birth: [null, Validators.required],
-      city: ['', Validators.required],
-      country: ['', Validators.required],
-      password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(32)]),
-      confirmpassword: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(32)])
-    },
-      { validator: this.passwordMatchValidator }
-    )
+    this.registerForm = this.formBuilder.group(
+      {
+        gender: ['male'],
+        username: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(6),
+            Validators.maxLength(20),
+          ],
+        ],
+        known_as: ['', Validators.required],
+        date_of_birth: ['', [Validators.required]],
+        city: [''],
+        country: [''],
+        password: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(6),
+            Validators.maxLength(40)
+          ]
+        ],
+        confirmPassword: ['', Validators.required]
+      },
+      {
+        validators: [Validation.match('password', 'confirmPassword')]
+      }
+    );
   }
 
-  passwordMatchValidator(fg: AbstractControl) {
-    return fg.get('password')?.value === fg.get('confirmpassword')?.value ? null : { notmatched: true }
+  get f(): { [key: string]: AbstractControl } {
+    return this.registerForm.controls;
   }
 
   register() {
+    this.submitted = true;
     if (this.registerForm.valid) {
-      this.user = Object.assign({}, this.registerForm.value);
+      this.user = Object.assign({}, this.registerForm.value as UserForRegister);
       this.authService.register(this.user).subscribe({
         next: () => {
           this.snotiflix.success(MessageConstants.CREATED_OK_MSG);
@@ -65,8 +108,8 @@ export class RegisterComponent implements OnInit {
         complete: () => {
           // đăng ký xong đăng nhập luôn
           this.loginModel = {
-            username: this.registerForm.get('username')?.value,
-            password: this.registerForm.get('password')?.value
+            username: this.registerForm.get('username')?.value as string,
+            password: this.registerForm.get('password')?.value as string
           }
           this.authService.login(this.loginModel).subscribe({
             next: () => {
@@ -82,6 +125,7 @@ export class RegisterComponent implements OnInit {
     }
 
   }
+
   cancel() {
     this.cancelRegister.emit(false)
   }
