@@ -93,11 +93,11 @@ namespace API._Repositories.Repository
             {
                 if (userFilter.order_by == "created")
                 {
-                    users.OrderByDescending(u => u.created);
+                    users = users.OrderByDescending(u => u.created);
                 }
                 else
                 {
-                    users.OrderByDescending(u => u.last_active);
+                    users = users.OrderByDescending(u => u.last_active);
                 }
             }
             return await PaginationUtilities<User>.CreateAsync(users, paginationParams.pageNumber, paginationParams.PageSize);
