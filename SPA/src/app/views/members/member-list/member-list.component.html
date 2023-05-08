@@ -5,21 +5,21 @@
 <div class="container mt-3">
   <form class="d-flex flex-row align-items-center flex-wrap" novalidate
     #form="ngForm" (submit)="getUsers()">
-    <label class="my-1 me-2" for="min_age">Age to</label>
+    <label class="my-1 me-2" for="min_age">Age From</label>
     <ng-select [(ngModel)]="userFilter.min_age" name="min_age"
-      [dropdownPosition]="'bottom'" [clearable]="false" style="width: 120px;">
+      [dropdownPosition]="'bottom'" [clearable]="false" class="params">
       <ng-option *ngFor="let ageMin of ageList()"
         [value]="ageMin">{{ageMin}}</ng-option>
     </ng-select>
-    <label class="ms-2 me-2" for="max_age">Age from</label>
+    <label class="ms-2 me-2" for="max_age">Age to</label>
     <ng-select [(ngModel)]="userFilter.max_age" [clearable]="false"
-      [dropdownPosition]="'bottom'" name="max_age" style="width: 120px;">
+      [dropdownPosition]="'bottom'" name="max_age" class="params">
       <ng-option *ngFor="let ageMax of ageList()"
         [value]="ageMax">{{ageMax}}</ng-option>
     </ng-select>
     <label class="ms-2 me-2" for="gender">Gender</label>
     <ng-select [(ngModel)]="userFilter.gender" name="gender" [clearable]="false"
-      [dropdownPosition]="'bottom'" style="width: 120px;">
+      [dropdownPosition]="'bottom'" class="params">
       <ng-option *ngFor="let gender of genderList"
         [value]="gender.key">{{gender.value}}</ng-option>
     </ng-select>
@@ -40,7 +40,7 @@
   <br>
   <div class="row">
     <div *ngFor="let user of users" class="col-lg-2 col-md-3 col-sm-6">
-      <app-member-card [user]="user"></app-member-card>
+      <app-member-card [user]="user" [params]="searchParam"></app-member-card>
     </div>
   </div>
 </div>

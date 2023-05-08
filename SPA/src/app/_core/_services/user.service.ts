@@ -2,11 +2,12 @@ import { UserFilter } from './../_models/user';
 import { map } from 'rxjs/operators';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { User } from '../_models/user';
 import { PaginationParams, PaginationResult } from '../_helpers/utilities/pagination-utilities';
 import { OperationResult } from '../_helpers/utilities/operationResult';
+import { SearchParams } from '../_models/dating';
 
 @Injectable({
   providedIn: 'root'
@@ -14,9 +15,12 @@ import { OperationResult } from '../_helpers/utilities/operationResult';
 
 export class UserService {
   baseUrl: string = environment.apiUrl + 'User/'
+  // rxjs
   userSource = new BehaviorSubject<User>({} as User)
   currentUser = this.userSource.asObservable();
-
+  // sinal angular 16
+  searchParam: SearchParams = <SearchParams>{};
+  searchInput = signal<SearchParams>(this.searchParam);
   constructor(
     private http: HttpClient
   ) { }
@@ -48,16 +52,13 @@ export class UserService {
     if (paginationParam?.pageNumber != null && paginationParam.pageSize != null) {
       params = params.appendAll({ ...paginationParam });
     }
-    if (userFilter != null) {
-      // or append('gender', userFilter.gender)
+    if (userFilter != null)
       params = params.appendAll({ ...userFilter });
-    }
-    if (likeParam === 'Likers') {
+    if (likeParam === 'Likers')
       params = params.append('likers', true);
-    }
-    if (likeParam === 'Likees') {
+    if (likeParam === 'Likees')
       params = params.append('likees', true);
-    }
+
     return this.http.get<User[]>(this.baseUrl, { observe: 'response', params: params }).pipe(
       map(response => {
         paginatedResult.result = response.body as User[];
