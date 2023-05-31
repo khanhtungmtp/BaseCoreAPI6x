@@ -18,7 +18,7 @@ export class MemberListComponent implements OnInit, AfterContentChecked {
   userFilter: UserFilter = <UserFilter>{
     min_age: DatingContains.MIN_AGE,
     max_age: DatingContains.MAX_AGE,
-    gender: this.user.gender === 'Male' ? 'Female' : 'Male',
+    gender: this.user.gender === 'male' ? 'female' : 'male',
     order_by: 'last_active'
   }
   users: User[] = [];
@@ -47,15 +47,6 @@ export class MemberListComponent implements OnInit, AfterContentChecked {
     }
     return ageArr;
   }
-  ngAfterContentChecked(): void {
-    // lấy những parameter mới nhất khi changes
-    this.searchParam = <SearchParams>{
-      min_age: this.userFilter.min_age,
-      max_age: this.userFilter.max_age,
-      gender: this.userFilter.gender,
-      order_by: this.userFilter.order_by
-    };
-  }
 
   constructor(
     private userService: UserService,
@@ -69,17 +60,32 @@ export class MemberListComponent implements OnInit, AfterContentChecked {
     })
   }
 
+  trackByidFn(index: number, item: User) {
+    return index;
+  }
+
   ngOnInit(): void {
     // using computed function
     // if (Object.values(this.getParamSearch()).length != 0)
     //   this.userFilter = this.getParamSearch();
     this.getUsers();
+
+  }
+
+  ngAfterContentChecked(): void {
+    // lấy những parameter mới nhất khi changes
+    this.searchParam = <SearchParams>{
+      min_age: this.userFilter.min_age,
+      max_age: this.userFilter.max_age,
+      gender: this.userFilter.gender,
+      order_by: this.userFilter.order_by
+    };
   }
 
   resetFilter() {
     this.userFilter.min_age = DatingContains.MIN_AGE;
     this.userFilter.max_age = DatingContains.MAX_AGE;
-    this.userFilter.gender = this.user.gender === 'Male' ? 'Female' : 'Male';
+    this.userFilter.gender = this.user.gender === 'male' ? 'female' : 'male';
     this.userFilter.order_by = 'last_active';
     this.getUsers();
   }

@@ -15,7 +15,8 @@ import { UserService } from 'src/app/_core/_services/user.service';
 export class MemberEditComponent implements OnInit {
   user: User = <User>{}
   userid: number;
-  photo_url: string = '../../assets/user.png';
+  photo_url: string = '../../../../assets/user.png';
+  defaultImage: string = '../../../../assets/user_default.png';
   @ViewChild('editFrofile') editFrofile: NgForm
 
   @HostListener('window:beforeunload', ['$event'])

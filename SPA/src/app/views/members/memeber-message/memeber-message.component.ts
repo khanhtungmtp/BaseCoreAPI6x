@@ -30,7 +30,7 @@ export class MemeberMessageComponent implements OnInit {
     date_read: undefined,
     message_sent: new Date(),
   };
-
+  defaultImage: string = '../../../../assets/user_default.png';
   constructor(
     private messageService: MessageService,
     private notiflix: NgxNotiflixService

@@ -11,7 +11,7 @@ namespace API.Models
         public string content { get; set; }
         public bool is_read { get; set; }
         public DateTime? date_read { get; set; }
-        public DateTime message_sent { get; set; }
+        public DateTime message_sent { get; set; } = DateTime.Now;
         public bool sender_deleted { get; set; }
         public bool recipient_deleted { get; set; }
 

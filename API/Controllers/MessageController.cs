@@ -48,6 +48,7 @@ namespace API.Controllers
             if (userRecipient == null)
                 return BadRequest("User recipient not found");
             var message = _mapper.Map<Message>(messageForCreationDto);
+            message.message_sent = DateTime.Now;
             _repo.Add<Message>(message);
 
             if (await _repo.SaveAll())

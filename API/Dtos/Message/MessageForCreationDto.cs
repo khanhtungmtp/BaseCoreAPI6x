@@ -7,9 +7,5 @@ namespace API.Dtos.Message
         public int recipientid { get; set; }
         public DateTime message_sent { get; set; }
         public string content { get; set; }
-        public MessageForCreationDto()
-        {
-            message_sent = DateTime.Now;
-        }
     }
 }
