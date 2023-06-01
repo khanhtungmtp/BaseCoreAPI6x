@@ -41,7 +41,7 @@ namespace API.Controllers
         {
             var user_id = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var sender = await _repo.GetUser(userid);
-            if (user_id != sender.id)
+            if (user_id != sender.Id)
                 return Unauthorized();
             messageForCreationDto.senderid = user_id;
             var userRecipient = await _repo.GetUser(messageForCreationDto.recipientid);

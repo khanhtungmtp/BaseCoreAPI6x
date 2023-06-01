@@ -1,10 +1,9 @@
 [
   {
-    "id": 1,
-    "username": "admin",
+    "Id": 1,
+    "Username": "admin",
     "gender": "female",
     "date_of_birth": "1994-02-21",
-    "password": "1234",
     "known_as": "Lola",
     "created": "2017-08-02",
     "last_active": "2017-08-02",
@@ -22,11 +21,10 @@
     ]
   },
   {
-    "id": 2,
-    "username": "tung",
+    "Id": 2,
+    "Username": "tung",
     "gender": "female",
     "date_of_birth": "1979-04-19",
-    "password": "1234",
     "known_as": "Dorothy",
     "created": "2017-01-21",
     "last_active": "2017-01-21",

@@ -1,13 +1,10 @@
+using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 
 namespace API.Models
 {
-    public class User
+    public class User : IdentityUser<int>
     {
-        public int id { get; set; }
-        public string username { get; set; }
-        public byte[] password_hash { get; set; }
-        public byte[] password_salt { get; set; }
         public string gender { get; set; }
         public DateTime date_of_birth { get; set; }
         public string known_as { get; set; }
@@ -23,7 +20,7 @@ namespace API.Models
         public ICollection<Like> likees { get; set; } // nguoi nhan
         public ICollection<Message> message_sent { get; set; }
         public ICollection<Message> message_received { get; set; }
-
+        public ICollection<UserRole> UserRoles { get; set; }
 
     }
 }

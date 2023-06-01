@@ -9,5 +9,6 @@ namespace API._Repositories.Interfaces
         Task<User> Login(string username, string password);
         Task<bool> UserExits(string username);
         Task<User> GetUser(int id);
+        Task<string> CreateToken(User user);
     }
 }

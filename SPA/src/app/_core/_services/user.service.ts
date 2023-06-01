@@ -1,4 +1,4 @@
-import { UserFilter } from './../_models/user';
+import { UserFilter, UserLogin } from './../_models/user';
 import { map } from 'rxjs/operators';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -16,7 +16,7 @@ import { SearchParams } from '../_models/dating';
 export class UserService {
   baseUrl: string = environment.apiUrl + 'User/'
   // rxjs
-  userSource = new BehaviorSubject<User>({} as User)
+  userSource = new BehaviorSubject<UserLogin>({} as UserLogin)
   currentUser = this.userSource.asObservable();
   // sinal angular 16
   searchParam: SearchParams = <SearchParams>{};

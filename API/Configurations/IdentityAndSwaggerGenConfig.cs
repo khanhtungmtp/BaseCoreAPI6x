@@ -1,11 +1,21 @@
+using API.Data;
+using API.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 
 namespace API.Configurations
 {
-    public static class SwaggerGenConfig
+    public static class IdentityAndSwaggerGenConfig
     {
-        public static void AddSwaggerGenConfiguration(this IServiceCollection services) {
+        public static IServiceCollection AddIdentityAndSwaggerGenConfig(this IServiceCollection services, IConfiguration configuration)
+        {
             if (services == null) throw new ArgumentNullException(nameof(services));
+            // add identity
+            services.AddIdentityCore<User>(opt => opt.Password.RequireNonAlphanumeric = false)
+            .AddRoles<Role>()
+            .AddRoleManager<RoleManager<Role>>()
+            .AddEntityFrameworkStores<DataContext>();
+            // add swagger
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
@@ -31,6 +41,7 @@ namespace API.Configurations
                     }
                 });
             });
+            return services;
         }
     }
 }

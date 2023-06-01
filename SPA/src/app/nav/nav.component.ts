@@ -3,10 +3,9 @@ import { AuthService } from './../_core/_services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { NgxNotiflixService } from '../_core/_services/ngx-notiflix.service';
 import { MessageConstants } from '../_core/_constants/message.enum';
-import { User } from '../_core/_models/user';
+import { UserLogin } from '../_core/_models/user';
 import { UserService } from '../_core/_services/user.service';
 import { LoginModel } from '../_core/_models/auth/login-model';
-import { LocalStorageContains } from '../_core/_constants/localStorageContains';
 
 @Component({
   selector: 'app-nav',
@@ -39,7 +38,7 @@ export class NavComponent implements OnInit {
 
 
 
-  editProfile(user: User) {
+  editProfile(user: UserLogin) {
     this.userService.userSource.next(user);
     this.router.navigate(['member/edit']);
   }

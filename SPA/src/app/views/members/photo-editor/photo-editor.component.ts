@@ -64,7 +64,7 @@ export class PhotoEditorComponent implements OnInit {
         // update image profile if new user change image first
         if (photo.is_main) {
           this.authService.changeMemberPhoto(res.url);
-          this.authService.currentUser.photo_url = res.url;
+          this.authService.currentUser.photoUrl = res.url;
           localStorage.setItem(LocalStorageContains.USER, JSON.stringify(this.authService.currentUser));
         }
       }
@@ -84,7 +84,7 @@ export class PhotoEditorComponent implements OnInit {
         photo.is_main = true;
         // update lai thong tin hinh anh, user current khi set main
         this.authService.changeMemberPhoto(photo.url);
-        this.authService.currentUser.photo_url = photo.url;
+        this.authService.currentUser.photoUrl = photo.url;
         localStorage.setItem(LocalStorageContains.USER, JSON.stringify(this.authService.currentUser));
         //  this.getMemberPhotoChanges.emit(photo.url);
         this.notiflix.success('Successfully set to Main');

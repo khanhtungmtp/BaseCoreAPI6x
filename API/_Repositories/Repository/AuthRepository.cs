@@ -1,30 +1,37 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using API._Repositories.Interfaces;
 using API.Data;
 using API.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace API._Repositories.Repository
 {
     public class AuthRepository : IAuthRepository
     {
         private readonly DataContext _dataContext;
-        public AuthRepository(DataContext dataContext)
+        private readonly UserManager<User> _userManager;
+        private readonly IConfiguration _configuration;
+        public AuthRepository(UserManager<User> userManager, DataContext dataContext, IConfiguration configuration)
         {
+            _configuration = configuration;
+            _userManager = userManager;
             _dataContext = dataContext;
         }
 
         public async Task<User> GetUser(int id)
         {
-            var user = await _dataContext.Users.Include(p => p.photos).FirstOrDefaultAsync(u => u.id == id);
+            var user = await _dataContext.Users.Include(p => p.photos).FirstOrDefaultAsync(u => u.Id == id);
             return user;
         }
 
         public async Task<User> Login(string username, string password)
         {
-            var user = await _dataContext.Users.FirstOrDefaultAsync(x => x.username == username);
+            var user = await _dataContext.Users.FirstOrDefaultAsync(x => x.UserName == username);
             if (user == null)
-                return null;
-            if (!VeryPasswordHash(password, user.password_hash, user.password_salt))
                 return null;
 
             return user;
@@ -46,10 +53,6 @@ namespace API._Repositories.Repository
 
         public async Task<User> Register(User user, string password)
         {
-            byte[] passwordHash, passwordSalt;
-            CreatePasswordHash(password, out passwordHash, out passwordSalt);
-            user.password_hash = passwordHash;
-            user.password_salt = passwordSalt;
             await _dataContext.Users.AddAsync(user);
             await _dataContext.SaveChangesAsync();
             return user;
@@ -66,10 +69,31 @@ namespace API._Repositories.Repository
 
         public async Task<bool> UserExits(string username)
         {
-            var user = await _dataContext.Users.AnyAsync(x => x.username == username);
+            var user = await _userManager.Users.AnyAsync(x => x.UserName == username);
             if (user)
                 return true;
             return false;
+        }
+
+        public async Task<string> CreateToken(User user)
+        {
+            var claims = new List<Claim>{
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.UserName)
+            };
+            var roles = await _userManager.GetRolesAsync(user);
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.Now.AddDays(1),
+                SigningCredentials = creds
+            };
+            var tokenHanler = new JwtSecurityTokenHandler();
+            var token = tokenHanler.CreateToken(tokenDescriptor);
+            return tokenHanler.WriteToken(token);
         }
     }
 }

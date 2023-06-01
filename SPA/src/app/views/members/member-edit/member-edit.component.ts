@@ -36,7 +36,7 @@ export class MemberEditComponent implements OnInit {
   ngOnInit(): void {
     this.userService.currentUser.subscribe({
       next: (res) => {
-        if (Object.keys(res).length != 0) {
+        if (res) {
           this.userid = res.id
         } else {
           this.router.navigate(['/']);

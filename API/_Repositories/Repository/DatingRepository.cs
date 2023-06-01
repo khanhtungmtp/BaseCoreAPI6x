@@ -46,7 +46,7 @@ namespace API._Repositories.Repository
 
         public async Task<User> GetUser(int id)
         {
-            var user = await _dataContext.Users.Include(p => p.photos).FirstOrDefaultAsync(u => u.id == id);
+            var user = await _dataContext.Users.Include(p => p.photos).FirstOrDefaultAsync(u => u.Id == id);
             return user;
         }
 
@@ -55,7 +55,7 @@ namespace API._Repositories.Repository
             var user = await _dataContext.Users
             .Include(u => u.likers)
             .Include(u => u.likees)
-            .FirstOrDefaultAsync(u => u.id == userid);
+            .FirstOrDefaultAsync(u => u.Id == userid);
             if (likers)
             {
                 // return user.likees.Where(u => u.liker_id == userid).Select(x => x.likeeid);
@@ -76,7 +76,7 @@ namespace API._Repositories.Repository
             {
                 predicate.And(u => u.gender == userFilter.gender);
             }
-            predicate.And(u => u.id != userFilter.user_id);
+            predicate.And(u => u.Id != userFilter.user_id);
 
             // filter age
             if (userFilter.min_age != 18 || userFilter.max_age != 99)
@@ -105,16 +105,16 @@ namespace API._Repositories.Repository
 
         public async Task<PaginationUtilities<User>> GetUsersLike(PaginationParams paginationParams, UserLikes userLikes)
         {
-            var users = _dataContext.Users.Include(p => p.photos).Where(u => u.id != userLikes.user_id);
+            var users = _dataContext.Users.Include(p => p.photos).Where(u => u.Id != userLikes.user_id);
             if (userLikes.likers)
             {
                 var userLiker = await ListUserLikes(userLikes.user_id, userLikes.likers);
-                users = users.Where(u => userLiker.Contains(u.id));
+                users = users.Where(u => userLiker.Contains(u.Id));
             }
             if (userLikes.likees)
             {
                 var userLikees = await ListUserLikes(userLikes.user_id, userLikes.likers);
-                users = users.Where(u => userLikees.Contains(u.id));
+                users = users.Where(u => userLikees.Contains(u.Id));
             }
             return await PaginationUtilities<User>.CreateAsync(users, paginationParams.pageNumber, paginationParams.PageSize);
         }

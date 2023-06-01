@@ -3,10 +3,13 @@ using System.Security.Claims;
 using System.Text;
 using API._Repositories.Interfaces;
 using API.Dtos;
+using API.Dtos.user;
 using API.Dtos.User;
 using API.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace API.Controllers
@@ -18,58 +21,66 @@ namespace API.Controllers
         public readonly IAuthRepository _authRepository;
         public readonly IConfiguration _Configuration;
         private readonly IMapper _mapper;
-        public AuthController(IAuthRepository authRepository, IConfiguration configuration, IMapper mapper)
+        private readonly UserManager<User> _userManager;
+        private readonly RoleManager<Role> _roleManager;
+        public AuthController(UserManager<User> userManager, RoleManager<Role> roleManager, IAuthRepository authRepository, IConfiguration configuration, IMapper mapper)
         {
+            _userManager = userManager;
+            _roleManager = roleManager;
             _Configuration = configuration;
             _authRepository = authRepository;
             _mapper = mapper;
         }
         [HttpPost("Register")]
-        public async Task<IActionResult> Register(RegisterUserDto param)
+        public async Task<ActionResult<UserDto>> Register(RegisterUserDto param)
         {
             param.username = param.username.ToLower();
             if (await _authRepository.UserExits(param.username))
                 return BadRequest("username already exists");
             var userMapped = _mapper.Map<User>(param);
-            var createdUser = await _authRepository.Register(userMapped, param.password);
-            var userToReturn = _mapper.Map<UserForDetailedDto>(createdUser);
-            return CreatedAtRoute("GetUser", new { controller = "User", id = createdUser.id }, userToReturn);
+            var createdUser = await _userManager.CreateAsync(userMapped, param.password);
+            if (!createdUser.Succeeded) return BadRequest(createdUser.Errors);
+            // Add the Admin role to the database
+            IdentityResult roleResult = null;
+            bool adminRoleExists = await _roleManager.RoleExistsAsync("Admin");
+            if (!adminRoleExists)
+            {
+                roleResult = await _roleManager.CreateAsync(new Role { Name = "Admin" });
+            }
+
+            // Select the user, and then add the admin role to the user
+            // User user = await _userManager.FindByNameAsync("sysadmin");
+            if (!await _userManager.IsInRoleAsync(userMapped, "Admin"))
+            {
+                var userResult = await _userManager.AddToRoleAsync(userMapped, "Admin");
+            }
+            //var roleResult = await _userManager.AddToRoleAsync(userMapped, "Admin");
+            if (roleResult != null) return BadRequest(roleResult.Errors);
+            return new UserDto
+            {
+                Username = userMapped.UserName,
+                Token = await _authRepository.CreateToken(userMapped),
+                KnownAs = userMapped.known_as,
+                Gender = userMapped.gender
+            };
         }
 
         [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromBody] LoginUserParam param)
+        public async Task<ActionResult<UserDto>> Login([FromBody] LoginUserParam param)
         {
-            var user = await _authRepository.Login(param.username.ToLower(), param.password);
-            var getUser = await _authRepository.GetUser(user.id);
-            var userDetail = _mapper.Map<UserForLogedIn>(getUser);
-            var userToReturn = new UserForLogedIn
+            var userName = await _userManager.Users.Include(p => p.photos).SingleOrDefaultAsync(x => x.UserName.ToLower() == param.username.ToLower());
+            if (userName == null) return Unauthorized("Invalid Username");
+            var userPassword = await _userManager.CheckPasswordAsync(userName, param.password);
+            if (!userPassword) return Unauthorized("Invalid Password");
+            return new UserDto
             {
-                id = userDetail.id,
-                username = userDetail.username,
-                gender = userDetail.gender,
-                photo_url = userDetail.photo_url
+                Id = userName.Id,
+                Username = userName.UserName,
+                Gender = userName.gender,
+                PhotoUrl = userName.photos != null ? userName.photos.FirstOrDefault(x => x.is_main)?.url : "",
+                KnownAs = userName.known_as,
+                Token = await _authRepository.CreateToken(userName)
             };
-            if (user == null)
-                return Unauthorized();
-            var claims = new[] {
-                new Claim(ClaimTypes.NameIdentifier, user.id.ToString()),
-                new Claim(ClaimTypes.Name, param.username)
-            };
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_Configuration.GetSection("AppSettings:Token").Value));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(1),
-                SigningCredentials = creds
-            };
-            var tokenHanler = new JwtSecurityTokenHandler();
-            var token = tokenHanler.CreateToken(tokenDescriptor);
-            return Ok(new
-            {
-                token = tokenHanler.WriteToken(token),
-                user = userToReturn
-            });
         }
     }
 }

@@ -85,7 +85,7 @@ namespace API.Controllers
             var recipient = await _datingRepository.GetUser(recipientid);
             if (recipient == null)
                 return NotFound();
-            var like = await _datingRepository.GetLike(userid, recipient.id);
+            var like = await _datingRepository.GetLike(userid, recipient.Id);
             if (like != null)
             {
                 _datingRepository.Delete(like);

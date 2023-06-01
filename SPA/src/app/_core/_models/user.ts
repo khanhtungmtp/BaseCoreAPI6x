@@ -17,6 +17,15 @@ export interface User {
   photos: Photo[];
 }
 
+export interface UserLogin {
+  id: number;
+  username: string;
+  token: string;
+  photoUrl: string | null;
+  knownAs: string;
+  gender: string;
+}
+
 export interface UserForRegister {
   username: string;
   password: string;

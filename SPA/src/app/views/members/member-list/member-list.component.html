@@ -23,13 +23,13 @@
       <ng-option *ngFor="let gender of genderList"
         [value]="gender.key">{{gender.value}}</ng-option>
     </ng-select>
-    <button type="submit" class="btn btn-primary ms-2">Apply Filters</button>
+    <button type="submit" class="btn  btn-create ms-2">Apply Filters</button>
     <button type="button" class="btn btn-info ms-1"
       (click)="resetFilter()">Reset Filter</button>
     <div class="col">
       <div class="btn-group float-right ms-5">
         <button type="button" name="orderBy" (click)="getUsers()"
-          [(ngModel)]="userFilter.order_by" class="btn btn-primary"
+          [(ngModel)]="userFilter.order_by" class="btn btn-create"
           btnRadio="last_active">Last Active</button>
         <button type="button" name="orderBy" (click)="getUsers()"
           [(ngModel)]="userFilter.order_by" class="btn btn-warning"

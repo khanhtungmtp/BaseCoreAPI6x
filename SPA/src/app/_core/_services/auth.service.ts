@@ -1,4 +1,4 @@
-import { User, UserForRegister } from './../_models/user';
+import { UserForRegister, UserLogin } from './../_models/user';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
@@ -7,7 +7,6 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { LocalStorageContains } from '../_constants/localStorageContains';
 import { BehaviorSubject } from 'rxjs';
 import { LoginModel } from '../_models/auth/login-model';
-import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root'
 })
@@ -17,10 +16,9 @@ export class AuthService {
   decodedToken: any;
   photoUrl = new BehaviorSubject<string>('../../assets/user.png');
   currentPhotoUrl = this.photoUrl.asObservable();
-  public currentUser: User
+  public currentUser: UserLogin
   constructor(
-    private http: HttpClient,
-    private router: Router
+    private http: HttpClient
   ) {
   }
 
@@ -34,11 +32,10 @@ export class AuthService {
         const user = response;
         if (user) {
           localStorage.setItem(LocalStorageContains.TOKEN, user.token);
-          localStorage.setItem(LocalStorageContains.USER, JSON.stringify(user.user));
+          localStorage.setItem(LocalStorageContains.USER, JSON.stringify(user));
           this.decodedToken = this.jwtHelper.decodeToken(user.token);
-          // localStorage.setItem(LocalStorageContains.NAME, this.decodedToken?.unique_name)
-          this.currentUser = user.user;
-          this.changeMemberPhoto(this.currentUser.photo_url as string);
+          this.currentUser = user;
+          this.changeMemberPhoto(this.currentUser.photoUrl as string);
         }
       })
     );

@@ -3,6 +3,10 @@ using API.Configurations;
 using API.Helpers.Utilities;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Text.Json.Serialization;
+using API.Data;
+using Microsoft.AspNetCore.Identity;
+using API.Models;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 // add databaseconfig
@@ -18,7 +22,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 // add Swapger config with jwt
-builder.Services.AddSwaggerGenConfiguration();
+builder.Services.AddIdentityAndSwaggerGenConfig(builder.Configuration);
 // RepositoryAccessor and Service
 builder.Services.AddDependencyInjectionConfig();
 // add auth
