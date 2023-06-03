@@ -42,17 +42,17 @@ namespace API.Controllers
             if (!createdUser.Succeeded) return BadRequest(createdUser.Errors);
             // Add the Admin role to the database
             IdentityResult roleResult = null;
-            bool adminRoleExists = await _roleManager.RoleExistsAsync("Admin");
+            bool adminRoleExists = await _roleManager.RoleExistsAsync("Member");
             if (!adminRoleExists)
             {
-                roleResult = await _roleManager.CreateAsync(new Role { Name = "Admin" });
+                roleResult = await _roleManager.CreateAsync(new Role { Name = "Member" });
             }
 
-            // Select the user, and then add the admin role to the user
-            // User user = await _userManager.FindByNameAsync("sysadmin");
-            if (!await _userManager.IsInRoleAsync(userMapped, "Admin"))
+            // Select the user, and then add the Member role to the user
+            // User user = await _userManager.FindByNameAsync("sysMember");
+            if (!await _userManager.IsInRoleAsync(userMapped, "Member"))
             {
-                var userResult = await _userManager.AddToRoleAsync(userMapped, "Admin");
+                var userResult = await _userManager.AddToRoleAsync(userMapped, "Member");
             }
             //var roleResult = await _userManager.AddToRoleAsync(userMapped, "Admin");
             if (roleResult != null) return BadRequest(roleResult.Errors);

@@ -25,8 +25,7 @@ export class MemberCardComponent implements OnInit {
     private notiflix: NgxNotiflixService,
     private router: Router
   ) {
-    effect(() => console.log('member-card-list', this.test())
-    )
+    //effect(() => console.log('member-card-list', this.test())    )
   }
 
   ngOnInit(): void { }
@@ -49,7 +48,6 @@ export class MemberCardComponent implements OnInit {
       gender: this.params.gender,
       order_by: this.params.order_by
     }
-    //  this.userService.userSource.next(user);
     this.userService.searchInput.set(this.searchParam);
     this.router.navigate(['/members/' + user.id]);
   }
