@@ -1,8 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-
-import { LocalStorageContains } from '../_core/_constants/localStorageContains';
-import { User } from '../_core/_models/user';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -15,7 +12,6 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
   }
 
   registerToggle() {

@@ -1,7 +1,7 @@
 import { Router } from '@angular/router';
-import { NgxNotiflixService } from './../../../_core/_services/ngx-notiflix.service';
+import { NgxNotiflixService } from 'src/app/_core/_services/ngx-notiflix.service';
 import { UserService } from 'src/app/_core/_services/user.service';
-import { User } from './../../../_core/_models/user';
+import { User } from 'src/app/_core/_models/user';
 import { Component, Input, OnInit, computed, effect } from '@angular/core';
 import { LocalStorageContains } from 'src/app/_core/_constants/localStorageContains';
 import { SearchParams } from 'src/app/_core/_models/dating';
@@ -25,7 +25,6 @@ export class MemberCardComponent implements OnInit {
     private notiflix: NgxNotiflixService,
     private router: Router
   ) {
-    //effect(() => console.log('member-card-list', this.test())    )
   }
 
   ngOnInit(): void { }

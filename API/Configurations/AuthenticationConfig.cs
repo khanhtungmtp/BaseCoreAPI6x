@@ -41,6 +41,13 @@ namespace API.Configurations
                     }
                 };
             });
+
+            // add roles
+            services.AddAuthorization(opt =>
+            {
+                opt.AddPolicy("RequiredAdminRole", policy => policy.RequireRole("Admin"));
+                opt.AddPolicy("MemberRole", policy => policy.RequireRole("Member"));
+            });
         }
     }
 }

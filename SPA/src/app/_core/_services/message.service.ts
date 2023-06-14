@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Message } from '../_models/message';
 import { map } from 'rxjs';
+import { OperationResult } from '../_helpers/utilities/operationResult';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,6 @@ export class MessageService {
   getMessageForUser(userid: number, param?: PaginationParams, messageContainer?: string) {
     let paginatedResult: PaginationResult<Message[]> = <PaginationResult<Message[]>>{};
     let params = new HttpParams()
-    // .set('message_container', messageContainer);
     if (param?.pageNumber != null && param.pageSize != null) {
       params = params.appendAll({ ...param });
     }
@@ -41,14 +41,14 @@ export class MessageService {
   }
 
   createMessage(userid: number, message: Message) {
-    return this.http.post(this.baseUrl + userid + '/Message', message);
+    return this.http.post<OperationResult>(this.baseUrl + userid + '/Message', message);
   }
 
-  deleteMessage(id: number, userid: number) {
-    return this.http.delete(this.baseUrl + userid + '/Message/' + id, {});
+  deleteMessage(userid: number, message_id: number) {
+    return this.http.delete(this.baseUrl + userid + '/Message/' + message_id, {});
   }
 
-  markAsRead(id: number, userid: number) {
+  markAsRead(userid: number, id: number) {
     this.http.post(this.baseUrl + userid + '/Message/' + id, {}).subscribe();
   }
 }

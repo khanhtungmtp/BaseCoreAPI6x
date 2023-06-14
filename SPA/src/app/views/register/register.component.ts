@@ -1,15 +1,15 @@
 import { Router } from '@angular/router';
-import { LoginModel } from './../_core/_models/auth/login-model';
-import { UserForRegister } from './../_core/_models/user';
+import { LoginModel } from 'src/app/_core/_models/auth/login-model';
+import { UserForRegister } from 'src/app/_core/_models/user';
 
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { MessageConstants } from '../_core/_constants/message.enum';
-import { AuthService } from '../_core/_services/auth.service';
-import { NgxNotiflixService } from '../_core/_services/ngx-notiflix.service';
-import Validation from '../_core/_helpers/utilities/validation';
-import { FunctionUtility } from '../_core/_helpers/utilities/function-utility';
+import { MessageConstants } from 'src/app/_core/_constants/message.enum';
+import { AuthService } from 'src/app/_core/_services/auth.service';
+import { NgxNotiflixService } from 'src/app/_core/_services/ngx-notiflix.service';
+import Validation from 'src/app/_core/_helpers/utilities/validation';
+import { FunctionUtility } from 'src/app/_core/_helpers/utilities/function-utility';
 
 @Component({
   selector: 'app-register',

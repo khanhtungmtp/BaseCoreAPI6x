@@ -1,18 +1,15 @@
 
 using API.Dtos.Message;
-using API.Dtos.user;
+using API.Dtos.User;
 using API.Helpers.Utilities;
 using API.Models;
 
-namespace API._Repositories.Interfaces
+namespace API._Services.Interfaces
 {
-    public interface IDatingRepository
+    public interface IDatingServices
     {
-        void Add<T>(T entity) where T : class;
-        void Delete<T>(T entity) where T : class;
-        Task<bool> SaveAll();
         Task<PaginationUtilities<User>> GetUsers(PaginationParams paginationParams, UserFilter userFilter);
-        Task<PaginationUtilities<User>> GetUsersLike(PaginationParams paginationParams, UserLikes userFilter);
+        Task<PaginationUtilities<User>> GetUsersLike(PaginationParams paginationParams, UserLikes userLikes);
         Task<User> GetUser(int id);
         Task<Photo> GetPhoto(int id);
         Task<Photo> GetMainPhotoForUser(int userid);

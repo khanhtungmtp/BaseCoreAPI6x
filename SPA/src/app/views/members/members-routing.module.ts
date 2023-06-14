@@ -1,4 +1,3 @@
-import { MemberDetailResolver } from 'src/app/_core/_resolvers/member-detail.resolver';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MemberListComponent } from './member-list/member-list.component';
@@ -14,8 +13,7 @@ const routes: Routes = [
     component: MemeberDetailComponent,
     data: {
       title: 'Detail member'
-    },
-    //resolve: { user: MemberDetailResolver }
+    }
   }
 ];
 

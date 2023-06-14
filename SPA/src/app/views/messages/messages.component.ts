@@ -1,13 +1,11 @@
-import { ActivatedRoute } from '@angular/router';
-import { PaginationUtilities } from './../../_core/_helpers/utilities/pagination-utilities';
-import { MessageService } from './../../_core/_services/message.service';
+import { PaginationUtilities } from 'src/app/_core/_helpers/utilities/pagination-utilities';
+import { MessageService } from 'src/app/_core/_services/message.service';
 import { Component, OnInit } from '@angular/core';
 import { LocalStorageContains } from 'src/app/_core/_constants/localStorageContains';
 import { User } from 'src/app/_core/_models/user';
 import { Message } from 'src/app/_core/_models/message';
 import { NgxNotiflixService } from 'src/app/_core/_services/ngx-notiflix.service';
 import { MessageConstants } from 'src/app/_core/_constants/message.enum';
-import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-messages',
@@ -24,9 +22,7 @@ export class MessagesComponent implements OnInit {
   messageContainer: string = 'unread';
   constructor(
     private messageService: MessageService,
-    private notiflix: NgxNotiflixService,
-    private route: ActivatedRoute
-  ) { }
+    private notiflix: NgxNotiflixService) { }
 
   ngOnInit(): void {
     this.getMessageForUser(this.messageContainer);
@@ -50,11 +46,12 @@ export class MessagesComponent implements OnInit {
       });
   }
 
-  deleteMessage(id: number) {
+  deleteMessage(message_id: number) {
+    console.log('message_id: ', message_id);
     this.notiflix.confirm('Delete this message ?', 'Are you sure you want to delete this message', () => {
-      this.messageService.deleteMessage(id, this.user.id).subscribe({
+      this.messageService.deleteMessage(this.user.id, message_id).subscribe({
         next: () => {
-          this.messages.splice(this.messages.findIndex(m => m.id == id), 1);
+          this.messages.splice(this.messages.findIndex(m => m.id == message_id), 1);
           this.notiflix.success('Message has been deleted');
           this.notiflix.hideLoading();
         },

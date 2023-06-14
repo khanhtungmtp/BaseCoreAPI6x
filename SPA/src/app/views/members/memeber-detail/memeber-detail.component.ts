@@ -1,6 +1,6 @@
-import { NgxNotiflixService } from './../../../_core/_services/ngx-notiflix.service';
-import { User } from './../../../_core/_models/user';
-import { AfterContentChecked, Component, OnInit, ViewChild, computed, effect } from '@angular/core';
+import { NgxNotiflixService } from 'src/app/_core/_services/ngx-notiflix.service';
+import { User } from 'src/app/_core/_models/user';
+import { AfterContentChecked, Component, OnInit, ViewChild, computed } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
 import { UserService } from 'src/app/_core/_services/user.service';
@@ -26,13 +26,12 @@ export class MemeberDetailComponent implements OnInit, AfterContentChecked {
     private notiflix: NgxNotiflixService,
     private router: Router
   ) {
-    effect(() => console.log('detail', this.test())
-    )
+
   }
 
   ngOnInit(): void {
+    this.selectTab(this.tabId)
     this.notiflix.showLoading();
-    this.getSearchParam();
     let id = this.route.snapshot.paramMap.get('id')
     if (id)
       this.getUserInfo(+id); // ép về int
@@ -48,14 +47,11 @@ export class MemeberDetailComponent implements OnInit, AfterContentChecked {
   }
   ngAfterContentChecked(): void {
     this.selectTab(this.tabId)
-
   }
 
-  getSearchParam() {
-
-  }
 
   getUserInfo(id: number) {
+    this.notiflix.showLoading();
     this.userService.getUser(id).subscribe({
       next: (res) => {
         if (!res)
@@ -63,7 +59,9 @@ export class MemeberDetailComponent implements OnInit, AfterContentChecked {
         this.user = res;
         this.notiflix.hideLoading()
       },
-      error: () => {
+      error: (e) => {
+        this.notiflix.error(e)
+        this.back()
         this.notiflix.hideLoading()
       }
     })

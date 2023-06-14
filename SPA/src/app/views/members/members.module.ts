@@ -6,8 +6,6 @@ import { CommonModule } from '@angular/common';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { MembersRoutingModule } from './members-routing.module';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
-import { MemberDetailResolver } from 'src/app/_core/_resolvers/member-detail.resolver';
-import { MemberListResolver } from 'src/app/_core/_resolvers/member-list.resolver';
 import { MemberCardComponent } from './member-card/member-card.component';
 import { MemeberDetailComponent } from './memeber-detail/memeber-detail.component';
 import { UserService } from 'src/app/_core/_services/user.service';
@@ -43,7 +41,6 @@ import { MemeberMessageComponent } from './memeber-message/memeber-message.compo
     MemberCardComponent
   ],
   providers: [
-    MemberDetailResolver,
     UserService
   ]
 })

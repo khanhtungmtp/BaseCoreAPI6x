@@ -1,11 +1,12 @@
-import { MessageConstants } from './../../../_core/_constants/message.enum';
-import { Message } from './../../../_core/_models/message';
-import { MessageService } from './../../../_core/_services/message.service';
+import { MessageConstants } from 'src/app/_core/_constants/message.enum';
+import { Message } from 'src/app/_core/_models/message';
+import { MessageService } from 'src/app/_core/_services/message.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { User } from 'src/app/_core/_models/user';
 import { LocalStorageContains } from 'src/app/_core/_constants/localStorageContains';
 import { NgxNotiflixService } from 'src/app/_core/_services/ngx-notiflix.service';
 import { tap } from 'rxjs';
+import { OperationResult } from 'src/app/_core/_helpers/utilities/operationResult';
 
 
 @Component({
@@ -64,8 +65,8 @@ export class MemeberMessageComponent implements OnInit {
   sendMessage() {
     this.newMessages.recipientid = this.recipientid;
     this.messageService.createMessage(this.user.id, this.newMessages).subscribe({
-      next: (res: any) => {
-        this.messages.unshift(res);
+      next: (res: OperationResult) => {
+        this.messages.unshift(res.data);
         this.newMessages.content = '';
         this.notiflix.hideLoading()
       },

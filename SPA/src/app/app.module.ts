@@ -1,4 +1,3 @@
-import { MembersModule } from './views/members/members.module';
 import { LocalStorageContains } from './_core/_constants/localStorageContains';
 import { AuthGuard } from './_core/_guards/auth/auth.guard';
 import { RouterModule } from '@angular/router';
@@ -7,11 +6,10 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
-import { NavComponent } from './nav/nav.component';
+import { NavComponent } from './views/nav/nav.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from './_core/_services/auth.service';
-import { HomeComponent } from './home/home.component';
-import { RegisterComponent } from './register/register.component';
+import { RegisterComponent } from './views/register/register.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ListsComponent } from './views/lists/lists.component';
@@ -24,6 +22,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TokenInterceptorProvider } from './_core/_helpers/utilities/token-interceptor';
 import { CustomPipesModule } from './_core/_helpers/pipes/custom-pipes.module';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { HomeComponent } from './views/home/home.component';
 export function tokenGetter() {
   return localStorage.getItem(LocalStorageContains.TOKEN);
 }
@@ -31,10 +30,10 @@ export function tokenGetter() {
   declarations: [
     AppComponent,
     NavComponent,
-    HomeComponent,
     RegisterComponent,
     ListsComponent,
-    MessagesComponent
+    MessagesComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
@@ -46,7 +45,6 @@ export function tokenGetter() {
     BsDropdownModule.forRoot(),
     RouterModule.forRoot(routes),
     PaginationModule.forRoot(),
-    // MembersModule,
     CustomPipesModule,
     JwtModule.forRoot({
       config: {

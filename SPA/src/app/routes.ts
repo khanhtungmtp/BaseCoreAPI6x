@@ -1,12 +1,11 @@
 import { PreventUnsavedChanges } from './_core/_guards/profile/prevent-unsaved-changes-guard';
-import { AuthGuard } from './_core/_guards/auth/auth.guard';
 import { ListsComponent } from './views/lists/lists.component';
 import { MessagesComponent } from './views/messages/messages.component';
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule, inject } from '@angular/core';
-import { HomeComponent } from './home/home.component';
 import { MemberEditComponent } from './views/members/member-edit/member-edit.component';
 import { AuthService } from './_core/_services/auth.service';
+import { HomeComponent } from './views/home/home.component';
 
 
 export const routes: Routes = [
@@ -14,7 +13,6 @@ export const routes: Routes = [
   {
     path: '',
     runGuardsAndResolvers: 'always',
-    //canActivate: [AuthGuard],
     canActivate: [() => inject(AuthService).loggedIn()],
     children: [
       {
@@ -23,7 +21,8 @@ export const routes: Routes = [
       },
       { path: 'messages', component: MessagesComponent },
       { path: 'lists', component: ListsComponent },
-      { path: 'member/edit', component: MemberEditComponent, canDeactivate: [PreventUnsavedChanges] }
+      { path: 'member/edit', component: MemberEditComponent, canDeactivate: [PreventUnsavedChanges] },
+      { path: 'admin', loadChildren: () => import('./views/admin/admin.module').then(m => m.AdminModule) }
     ]
   },
   { path: '**', redirectTo: '', pathMatch: 'full' }

@@ -1,8 +1,7 @@
 import { AuthService } from 'src/app/_core/_services/auth.service';
 import { NgxNotiflixService } from 'src/app/_core/_services/ngx-notiflix.service';
-import { Notify } from 'notiflix';
-import { PhotoService } from './../../../_core/_services/photo.service';
-import { Photo } from './../../../_core/_models/photo';
+import { PhotoService } from 'src/app/_core/_services/photo.service';
+import { Photo } from 'src/app/_core/_models/photo';
 import { Component, Input, OnInit } from '@angular/core';
 import { FileUploader } from 'ng2-file-upload';
 import { environment } from 'src/environments/environment';

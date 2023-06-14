@@ -24,6 +24,7 @@ export interface UserLogin {
   photoUrl: string | null;
   knownAs: string;
   gender: string;
+  roles: string[]
 }
 
 export interface UserForRegister {

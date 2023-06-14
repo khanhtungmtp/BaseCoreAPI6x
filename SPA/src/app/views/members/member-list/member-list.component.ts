@@ -1,9 +1,9 @@
-import { LocalStorageContains } from './../../../_core/_constants/localStorageContains';
-import { PaginationUtilities } from './../../../_core/_helpers/utilities/pagination-utilities';
-import { MessageConstants } from '../../../_core/_constants/message.enum';
-import { NgxNotiflixService } from '../../../_core/_services/ngx-notiflix.service';
-import { User, UserFilter } from '../../../_core/_models/user';
-import { UserService } from '../../../_core/_services/user.service';
+import { LocalStorageContains } from 'src/app/_core/_constants/localStorageContains';
+import { PaginationUtilities } from 'src/app/_core/_helpers/utilities/pagination-utilities';
+import { MessageConstants } from 'src/app/_core/_constants/message.enum';
+import { NgxNotiflixService } from 'src/app/_core/_services/ngx-notiflix.service';
+import { User, UserFilter } from 'src/app/_core/_models/user';
+import { UserService } from 'src/app/_core/_services/user.service';
 import { AfterContentChecked, Component, OnInit, computed, effect } from '@angular/core';
 import { SearchParams } from 'src/app/_core/_models/dating';
 import { DatingContains } from 'src/app/_core/_constants/datingContains';

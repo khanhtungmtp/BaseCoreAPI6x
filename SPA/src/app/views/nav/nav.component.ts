@@ -1,11 +1,11 @@
 import { Router } from '@angular/router';
-import { AuthService } from './../_core/_services/auth.service';
+import { AuthService } from 'src/app/_core/_services/auth.service';
 import { Component, OnInit } from '@angular/core';
-import { NgxNotiflixService } from '../_core/_services/ngx-notiflix.service';
-import { MessageConstants } from '../_core/_constants/message.enum';
-import { UserLogin } from '../_core/_models/user';
-import { UserService } from '../_core/_services/user.service';
-import { LoginModel } from '../_core/_models/auth/login-model';
+import { NgxNotiflixService } from 'src/app/_core/_services/ngx-notiflix.service';
+import { MessageConstants } from 'src/app/_core/_constants/message.enum';
+import { UserLogin } from 'src/app/_core/_models/user';
+import { UserService } from 'src/app/_core/_services/user.service';
+import { LoginModel } from 'src/app/_core/_models/auth/login-model';
 
 @Component({
   selector: 'app-nav',

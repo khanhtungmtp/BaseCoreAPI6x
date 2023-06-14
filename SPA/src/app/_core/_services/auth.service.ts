@@ -27,18 +27,23 @@ export class AuthService {
   }
 
   login(model: LoginModel) {
-    return this.http.post<LoginModel>(this.baseUrl + 'Login', model).pipe(
-      map((response: any) => {
+    return this.http.post<UserLogin>(this.baseUrl + 'Login', model).pipe(
+      map((response: UserLogin) => {
         const user = response;
         if (user) {
+          this.decodedToken = this.jwtHelper.decodeToken(user.token);
+          user.roles = [];
           localStorage.setItem(LocalStorageContains.TOKEN, user.token);
           localStorage.setItem(LocalStorageContains.USER, JSON.stringify(user));
-          this.decodedToken = this.jwtHelper.decodeToken(user.token);
           this.currentUser = user;
           this.changeMemberPhoto(this.currentUser.photoUrl as string);
         }
       })
     );
+  }
+
+  getDecodedToken(token: string) {
+    return JSON.parse(token)
   }
 
   logOut() {
