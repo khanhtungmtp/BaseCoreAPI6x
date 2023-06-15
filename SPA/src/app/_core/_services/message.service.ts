@@ -48,7 +48,7 @@ export class MessageService {
     return this.http.delete(this.baseUrl + userid + '/Message/' + message_id, {});
   }
 
-  markAsRead(userid: number, id: number) {
-    this.http.post(this.baseUrl + userid + '/Message/' + id, {}).subscribe();
+  markAsRead(userid: number, message_id: number) {
+    this.http.post(this.baseUrl + userid + '/Message/' + message_id, {}).subscribe();
   }
 }

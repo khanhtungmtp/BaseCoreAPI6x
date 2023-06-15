@@ -3,10 +3,6 @@ using API.Configurations;
 using API.Helpers.Utilities;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Text.Json.Serialization;
-using API.Data;
-using Microsoft.AspNetCore.Identity;
-using API.Models;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 // add databaseconfig
@@ -50,7 +46,7 @@ else
         builder.Run(async context =>
         {
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            var error = context.Features.Get<IExceptionHandlerFeature>();
+            IExceptionHandlerFeature error = context.Features.Get<IExceptionHandlerFeature>();
             if (error != null)
             {
                 context.Response.AddAplicationError(error.Error.Message);

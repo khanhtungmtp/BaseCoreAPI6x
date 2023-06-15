@@ -7,6 +7,9 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { LocalStorageContains } from '../_constants/localStorageContains';
 import { BehaviorSubject } from 'rxjs';
 import { LoginModel } from '../_models/auth/login-model';
+import { NgxNotiflixService } from './ngx-notiflix.service';
+import { MessageConstants } from '../_constants/message.enum';
+import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root'
 })
@@ -18,7 +21,9 @@ export class AuthService {
   currentPhotoUrl = this.photoUrl.asObservable();
   public currentUser: UserLogin
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private notiflix: NgxNotiflixService,
+    private router: Router
   ) {
   }
 
@@ -32,7 +37,6 @@ export class AuthService {
         const user = response;
         if (user) {
           this.decodedToken = this.jwtHelper.decodeToken(user.token);
-          user.roles = [];
           localStorage.setItem(LocalStorageContains.TOKEN, user.token);
           localStorage.setItem(LocalStorageContains.USER, JSON.stringify(user));
           this.currentUser = user;
@@ -61,6 +65,18 @@ export class AuthService {
     else {
       return false;
     }
+  }
+
+  isAdmin() {
+    if (!this.loggedIn()) {
+      this.notiflix.error(MessageConstants.PLEASE_LOGIN);
+      return false;
+      this.router.navigate(['/'])
+    }
+    const user = localStorage.getItem(LocalStorageContains.USER) ? JSON.parse(localStorage.getItem(LocalStorageContains.USER) as string) : '';
+    if (user.roles.includes('Admin'))
+      return true;
+    return false;
   }
 
   register(user: UserForRegister) {

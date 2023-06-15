@@ -31,22 +31,22 @@ namespace API._Services.Services
         }
         public async Task<string> CreateToken(User user)
         {
-            var claims = new List<Claim>{
+            List<Claim> claims = new List<Claim>{
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.UserName)
             };
-            var roles = await _userManager.GetRolesAsync(user);
+            IList<string> roles = await _userManager.GetRolesAsync(user);
             claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-            var tokenDescriptor = new SecurityTokenDescriptor
+            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
+            SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.Now.AddDays(1),
                 SigningCredentials = creds
             };
-            var tokenHanler = new JwtSecurityTokenHandler();
-            var token = tokenHanler.CreateToken(tokenDescriptor);
+            JwtSecurityTokenHandler tokenHanler = new JwtSecurityTokenHandler();
+            SecurityToken token = tokenHanler.CreateToken(tokenDescriptor);
             return tokenHanler.WriteToken(token);
         }
 
@@ -58,10 +58,11 @@ namespace API._Services.Services
 
         public async Task<UserDto> Login(LoginUserParam param)
         {
-            var userName = await _userManager.Users.Include(p => p.photos).SingleOrDefaultAsync(x => x.UserName.ToLower() == param.username.ToLower());
+            User userName = await _userManager.Users.Include(p => p.photos).SingleOrDefaultAsync(x => x.UserName.ToLower() == param.username.ToLower());
             if (userName == null) throw new Exception("Invalid Username");
-            var userPassword = await _userManager.CheckPasswordAsync(userName, param.password);
+            bool userPassword = await _userManager.CheckPasswordAsync(userName, param.password);
             if (!userPassword) throw new Exception("Invalid Password");
+            IList<string> roles = await _userManager.GetRolesAsync(userName);
             return new UserDto
             {
                 Id = userName.Id,
@@ -69,7 +70,8 @@ namespace API._Services.Services
                 Gender = userName.gender,
                 PhotoUrl = userName.photos != null ? userName.photos.FirstOrDefault(x => x.is_main)?.url : "",
                 KnownAs = userName.known_as,
-                Token = await CreateToken(userName)
+                Token = await CreateToken(userName),
+                Roles = roles
             };
         }
 
@@ -78,8 +80,8 @@ namespace API._Services.Services
             param.username = param.username.ToLower();
             if (await UserExits(param.username))
                 throw new Exception("username already exists");
-            var userMapped = _mapper.Map<User>(param);
-            var createdUser = await _userManager.CreateAsync(userMapped, param.password);
+            User userMapped = _mapper.Map<User>(param);
+            IdentityResult createdUser = await _userManager.CreateAsync(userMapped, param.password);
             if (!createdUser.Succeeded) throw new Exception(createdUser.Errors.ToString());
             // Add the Admin role to the database
             IdentityResult roleResult = null;

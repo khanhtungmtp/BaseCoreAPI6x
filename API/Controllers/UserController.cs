@@ -43,7 +43,7 @@ namespace API.Controllers
         public async Task<IActionResult> GetUserLikes([FromQuery] PaginationParams pagination, [FromQuery] UserLikes userLikes)
         {
             PaginationUtilities<User> users = await _userServices.GetUserLikes(pagination, userLikes);
-            var usersToReturn = _mapper.Map<IEnumerable<UserForDetailedDto>>(users);
+            IEnumerable<UserForDetailedDto> usersToReturn = _mapper.Map<IEnumerable<UserForDetailedDto>>(users);
             Response.AddPagination(users.PageNumber, users.PageSize, users.TotalItems, users.TotalPages);
             return Ok(usersToReturn);
         }

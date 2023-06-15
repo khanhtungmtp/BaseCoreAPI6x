@@ -47,7 +47,7 @@ export class MemeberMessageComponent implements OnInit {
         tap(messages => {
           for (let i = 0; i < messages.length; i++) {
             if (messages[i].is_read === false && messages[i].recipientid == this.user.id) {
-              this.messageService.markAsRead(messages[i].id, this.user.id);
+              this.messageService.markAsRead(this.user.id, messages[i].id);
             }
           }
         })

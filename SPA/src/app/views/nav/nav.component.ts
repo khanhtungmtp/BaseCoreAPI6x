@@ -60,6 +60,10 @@ export class NavComponent implements OnInit {
     return this.authService.loggedIn();
   }
 
+  isAdmin() {
+    return this.authService.isAdmin();
+  }
+
   logOut() {
     this.authService.logOut();
     this.loginForms = {

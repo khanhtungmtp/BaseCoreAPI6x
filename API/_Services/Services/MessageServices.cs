@@ -89,15 +89,16 @@ namespace API._Services.Services
         {
             if (userid != GetUserCurrent())
                 throw new Exception("unauthorization");
-            var message = await _datingServices.GetMessagesThread(userid, recipientid);
+            IEnumerable<Message> message = await _datingServices.GetMessagesThread(userid, recipientid);
             return _mapper.Map<IEnumerable<MessageToReturnDto>>(message);
         }
 
-        public async Task<OperationResult> markAsRead(int message_id, int userid)
+        public async Task<OperationResult> markAsRead(int userid, int message_id)
         {
             if (userid != GetUserCurrent())
                 throw new Exception("unauthorization");
             Message message = await _datingServices.GetMessage(message_id);
+            if (message == null) throw new Exception("Cannot get message");
             if (message.recipientid != userid)
                 throw new Exception("unauthorization");
             message.is_read = true;

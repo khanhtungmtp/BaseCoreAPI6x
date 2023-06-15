@@ -110,13 +110,13 @@ namespace API._Services.Services
 
         public async Task<IEnumerable<Message>> GetMessagesThread(int user_id, int recipientid)
         {
-            var messages = _dataContext.Messages
-            .Include(u => u.sender).ThenInclude(p => p.photos)
-            .Include(r => r.recipient).ThenInclude(p => p.photos)
-            .Where(u => u.recipientid == user_id && u.senderid == recipientid && u.sender_deleted == false
-             || u.recipientid == recipientid && u.senderid == user_id && u.recipient_deleted == false)
-            .OrderByDescending(o => o.message_sent)
-            .ToListAsync();
+            Task<List<Message>> messages = _dataContext.Messages
+           .Include(u => u.sender).ThenInclude(p => p.photos)
+           .Include(r => r.recipient).ThenInclude(p => p.photos)
+           .Where(u => u.recipientid == user_id && u.senderid == recipientid && u.sender_deleted == false
+            || u.recipientid == recipientid && u.senderid == user_id && u.recipient_deleted == false)
+           .OrderByDescending(o => o.message_sent)
+           .ToListAsync();
             return await messages;
         }
 

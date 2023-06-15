@@ -6,16 +6,17 @@ namespace API.Helpers.Utilities
     {
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            try {
+            try
+            {
                 await next(context);
             }
-            catch(Exception error) 
+            catch (Exception error)
             {
-                var response = context.Response;
+                HttpResponse response = context.Response;
                 response.ContentType = "application/json";
-                switch(error)
+                switch (error)
                 {
-                    case ApplicationException e: 
+                    case ApplicationException e:
                         // custom application error
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
                         break;

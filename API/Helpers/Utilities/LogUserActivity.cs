@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using API._Repositories.Interfaces;
 using API._Services.Interfaces;
+using API.Models;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace API.Helpers.Utilities
@@ -15,10 +16,10 @@ namespace API.Helpers.Utilities
         }
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            var actionContext = await next();
-            var userid = int.Parse(actionContext.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var repo = actionContext.HttpContext.RequestServices.GetService<IDatingServices>();
-            var user = await repo.GetUser(userid);
+            ActionExecutedContext actionContext = await next();
+            int userid = int.Parse(actionContext.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            IDatingServices repo = actionContext.HttpContext.RequestServices.GetService<IDatingServices>();
+            User user = await repo.GetUser(userid);
             user.last_active = DateTime.Now;
             await _repo.SaveAll();
         }

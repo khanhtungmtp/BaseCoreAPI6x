@@ -59,7 +59,7 @@ namespace API.Controllers
             return Ok(await _messageServices.DeleteMessage(userid, message_id));
         }
 
-        [HttpPost("{id}")]
+        [HttpPost("{message_id}")]
         public async Task<IActionResult> markAsRead(int userid, int message_id)
         {
             return Ok(await _messageServices.markAsRead(userid, message_id));

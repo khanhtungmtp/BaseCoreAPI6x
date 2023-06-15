@@ -43,7 +43,7 @@ namespace API._Services.Services
             ImageUploadResult uploadResult = new ImageUploadResult();
             if (file.Length > 0)
             {
-                using (var stream = file.OpenReadStream())
+                using (Stream stream = file.OpenReadStream())
                 {
                     ImageUploadParams uploadParams = new ImageUploadParams()
                     {
@@ -108,15 +108,15 @@ namespace API._Services.Services
         {
             if (userid != GetUserCurrent())
                 throw new Exception("unauthorization");
-            var user = await _datingServices.GetUser(userid);
+            User user = await _datingServices.GetUser(userid);
             if (!user.photos.Any(p => p.id == photoid))
                 throw new Exception("unauthorization");
             // lấy hình trong csdl ra để kt hinh do la main chua
-            var photo = await _datingServices.GetPhoto(photoid);
+            Photo photo = await _datingServices.GetPhoto(photoid);
             if (photo.is_main)
                 throw new Exception("This is already the main photo");
             // current main photo selected
-            var currentMainPhoto = await _datingServices.GetMainPhotoForUser(userid);
+            Photo currentMainPhoto = await _datingServices.GetMainPhotoForUser(userid);
             currentMainPhoto.is_main = false;
             // update main cho hinh vua chon
             photo.is_main = true;

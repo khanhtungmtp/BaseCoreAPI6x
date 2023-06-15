@@ -47,7 +47,6 @@ export class MessagesComponent implements OnInit {
   }
 
   deleteMessage(message_id: number) {
-    console.log('message_id: ', message_id);
     this.notiflix.confirm('Delete this message ?', 'Are you sure you want to delete this message', () => {
       this.messageService.deleteMessage(this.user.id, message_id).subscribe({
         next: () => {

@@ -2,7 +2,7 @@ using API.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
+
 namespace API.Data
 {
     public class DataContext : IdentityDbContext<User, Role, int, IdentityUserClaim<int>, UserRole, IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>
@@ -15,6 +15,12 @@ namespace API.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            // builder.Entity<User>().ToTable("User");
+            // builder.Entity<Role>().ToTable("Role");
+            // builder.Entity<UserRole>().ToTable("UserRole");
+            // builder.Entity<IdentityUserClaim<string>>().ToTable("UserClaim");
+            // builder.Entity<IdentityUserLogin<string>>().ToTable("UserLogin");
+            // builder.Entity<IdentityUserToken<string>>().ToTable("UserToken");
 
             builder.Entity<User>()
             .HasMany(ur => ur.UserRoles)
