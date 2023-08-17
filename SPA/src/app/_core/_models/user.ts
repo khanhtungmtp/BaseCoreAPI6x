@@ -15,6 +15,7 @@ export interface User {
   country: string;
   photo_url: string;
   photos: Photo[];
+  roles: string[];
 }
 
 export interface UserLogin {

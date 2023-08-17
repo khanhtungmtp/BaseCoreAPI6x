@@ -11,7 +11,7 @@ namespace API.Configurations
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
             // add identity
-            services.AddIdentityCore<User>(opt => opt.Password.RequireNonAlphanumeric = false)
+            services.AddIdentityCore<User>(opt => opt.Password.RequireNonAlphanumeric = true)
             .AddRoles<Role>()
             .AddRoleManager<RoleManager<Role>>()
             .AddEntityFrameworkStores<DataContext>();

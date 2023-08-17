@@ -107,10 +107,10 @@ namespace API._Services.Services
         public async Task<OperationResult> SetMainPhoto(int userid, int photoid)
         {
             if (userid != GetUserCurrent())
-                throw new Exception("unauthorization");
+                throw new Exception("Unauthorization");
             User user = await _datingServices.GetUser(userid);
             if (!user.photos.Any(p => p.id == photoid))
-                throw new Exception("unauthorization");
+                throw new Exception("Unauthorization");
             // lấy hình trong csdl ra để kt hinh do la main chua
             Photo photo = await _datingServices.GetPhoto(photoid);
             if (photo.is_main)

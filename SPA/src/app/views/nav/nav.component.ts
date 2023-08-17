@@ -18,6 +18,7 @@ export class NavComponent implements OnInit {
     password: '',
   };
   photo_url: string;
+  isAdmin: string[] = ["Admin", "SuperAdmin"];
   constructor(
     public authService: AuthService,
     private notiflix: NgxNotiflixService,
@@ -35,8 +36,6 @@ export class NavComponent implements OnInit {
       }
     });
   }
-
-
 
   editProfile(user: UserLogin) {
     this.userService.userSource.next(user);
@@ -60,9 +59,9 @@ export class NavComponent implements OnInit {
     return this.authService.loggedIn();
   }
 
-  isAdmin() {
-    return this.authService.isAdmin();
-  }
+  // isAdmin() {
+  //   return this.authService.isAdmin();
+  // }
 
   logOut() {
     this.authService.logOut();

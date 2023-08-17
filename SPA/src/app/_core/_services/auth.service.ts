@@ -1,4 +1,4 @@
-import { UserForRegister, UserLogin } from './../_models/user';
+import { User, UserForRegister, UserLogin } from './../_models/user';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
@@ -19,6 +19,7 @@ export class AuthService {
   decodedToken: any;
   photoUrl = new BehaviorSubject<string>('../../assets/user.png');
   currentPhotoUrl = this.photoUrl.asObservable();
+  userSource = new BehaviorSubject<User | null>(null);
   public currentUser: UserLogin
   constructor(
     private http: HttpClient,
@@ -67,12 +68,17 @@ export class AuthService {
     }
   }
 
-  isAdmin() {
+  isLogin() {
     if (!this.loggedIn()) {
       this.notiflix.error(MessageConstants.PLEASE_LOGIN);
-      return false;
       this.router.navigate(['/'])
+      return false;
     }
+    return true;
+  }
+
+  isAdmin() {
+    this.isLogin();
     const user = localStorage.getItem(LocalStorageContains.USER) ? JSON.parse(localStorage.getItem(LocalStorageContains.USER) as string) : '';
     if (user.roles.includes('Admin'))
       return true;

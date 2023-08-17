@@ -23,6 +23,7 @@ import { TokenInterceptorProvider } from './_core/_helpers/utilities/token-inter
 import { CustomPipesModule } from './_core/_helpers/pipes/custom-pipes.module';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { HomeComponent } from './views/home/home.component';
+import { HasRoleDirective } from './_core/_directives/has-role.directive';
 export function tokenGetter() {
   return localStorage.getItem(LocalStorageContains.TOKEN);
 }
@@ -34,6 +35,7 @@ export function tokenGetter() {
     ListsComponent,
     MessagesComponent,
     HomeComponent,
+    HasRoleDirective,
   ],
   imports: [
     BrowserModule,

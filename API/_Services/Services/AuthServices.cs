@@ -52,8 +52,7 @@ namespace API._Services.Services
 
         public async Task<User> GetUser(int id)
         {
-            User user = await _dataContext.Users.Include(p => p.photos).FirstOrDefaultAsync(u => u.Id == id);
-            return user;
+            return await _dataContext.Users.Include(p => p.photos).FirstOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task<UserDto> Login(LoginUserParam param)
@@ -77,12 +76,17 @@ namespace API._Services.Services
 
         public async Task<UserDto> Register(RegisterUserDto param)
         {
+            string errorMessage = null;
             param.username = param.username.ToLower();
             if (await UserExits(param.username))
-                throw new Exception("username already exists");
+                throw new Exception("Username already exists");
             User userMapped = _mapper.Map<User>(param);
             IdentityResult createdUser = await _userManager.CreateAsync(userMapped, param.password);
-            if (!createdUser.Succeeded) throw new Exception(createdUser.Errors.ToString());
+            if (!createdUser.Succeeded)
+            {
+                errorMessage = string.Join(", ", createdUser.Errors.Select(e => e.Description));
+                throw new Exception(errorMessage);
+            }
             // Add the Admin role to the database
             IdentityResult roleResult = null;
             bool adminRoleExists = await _roleManager.RoleExistsAsync("Member");
@@ -98,7 +102,11 @@ namespace API._Services.Services
                 IdentityResult userResult = await _userManager.AddToRoleAsync(userMapped, "Member");
             }
 
-            if (roleResult != null) throw new Exception(roleResult.Errors.ToString());
+            if (roleResult != null)
+            {
+                errorMessage = string.Join(", ", roleResult.Errors.Select(e => e.Description));
+                throw new Exception(errorMessage);
+            }
             return new UserDto
             {
                 Username = userMapped.UserName,
@@ -110,10 +118,7 @@ namespace API._Services.Services
 
         public async Task<bool> UserExits(string username)
         {
-            bool user = await _userManager.Users.AnyAsync(x => x.UserName == username);
-            if (user)
-                return true;
-            return false;
+            return await _userManager.Users.AnyAsync(x => x.UserName == username);
         }
     }
 }

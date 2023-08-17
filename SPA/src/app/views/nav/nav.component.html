@@ -20,7 +20,7 @@
           <li class="nav-item" routerLinkActive="active">
             <a class="nav-link" [routerLink]="['/messages']">Messages</a>
           </li>
-          <li class="nav-item" routerLinkActive="active" *ngIf="isAdmin()">
+          <li class="nav-item" routerLinkActive="active" *appHasRole="isAdmin">
             <a class="nav-link" [routerLink]="['/admin']">Admin</a>
           </li>
         </ul>

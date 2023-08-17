@@ -19,26 +19,22 @@ namespace API._Services.Services
         }
         public async Task<Like> GetLike(int userid, int recipientid)
         {
-            Like likes = await _dataContext.Like.FirstOrDefaultAsync(l => l.liker_id == userid && l.likee_id == recipientid);
-            return likes;
+            return await _dataContext.Like.FirstOrDefaultAsync(l => l.liker_id == userid && l.likee_id == recipientid);
         }
 
         public async Task<Photo> GetMainPhotoForUser(int userid)
         {
-            Photo photo = await _dataContext.Photos.Where(u => u.userid == userid).FirstOrDefaultAsync(m => m.is_main);
-            return photo;
+            return await _dataContext.Photos.Where(u => u.userid == userid).FirstOrDefaultAsync(m => m.is_main);
         }
 
         public async Task<Photo> GetPhoto(int id)
         {
-            Photo photo = await _dataContext.Photos.FirstOrDefaultAsync(p => p.id == id);
-            return photo;
+            return await _dataContext.Photos.FirstOrDefaultAsync(p => p.id == id);
         }
 
         public async Task<User> GetUser(int id)
         {
-            User user = await _dataContext.Users.Include(p => p.photos).FirstOrDefaultAsync(u => u.Id == id);
-            return user;
+            return await _dataContext.Users.Include(p => p.photos).FirstOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task<IEnumerable<int>> ListUserLikes(int userid, bool likers)
@@ -110,14 +106,13 @@ namespace API._Services.Services
 
         public async Task<IEnumerable<Message>> GetMessagesThread(int user_id, int recipientid)
         {
-            Task<List<Message>> messages = _dataContext.Messages
-           .Include(u => u.sender).ThenInclude(p => p.photos)
-           .Include(r => r.recipient).ThenInclude(p => p.photos)
-           .Where(u => u.recipientid == user_id && u.senderid == recipientid && u.sender_deleted == false
-            || u.recipientid == recipientid && u.senderid == user_id && u.recipient_deleted == false)
-           .OrderByDescending(o => o.message_sent)
-           .ToListAsync();
-            return await messages;
+            return await _dataContext.Messages
+         .Include(u => u.sender).ThenInclude(p => p.photos)
+         .Include(r => r.recipient).ThenInclude(p => p.photos)
+         .Where(u => u.recipientid == user_id && u.senderid == recipientid && u.sender_deleted == false
+          || u.recipientid == recipientid && u.senderid == user_id && u.recipient_deleted == false)
+         .OrderByDescending(o => o.message_sent)
+         .ToListAsync();
         }
 
         public async Task<PaginationUtilities<Message>> GetMessagesForUser(PaginationParams paginationParams, MessageParams messageParams)

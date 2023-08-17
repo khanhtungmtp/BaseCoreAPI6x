@@ -15,12 +15,16 @@ namespace API.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            // builder.Entity<User>().ToTable("User");
-            // builder.Entity<Role>().ToTable("Role");
-            // builder.Entity<UserRole>().ToTable("UserRole");
-            // builder.Entity<IdentityUserClaim<string>>().ToTable("UserClaim");
-            // builder.Entity<IdentityUserLogin<string>>().ToTable("UserLogin");
-            // builder.Entity<IdentityUserToken<string>>().ToTable("UserToken");
+
+            // Tìm và đổi tên các bảng với tiền tố "AspNet"
+            foreach (var entity in builder.Model.GetEntityTypes())
+            {
+                string tableName = builder.Entity(entity.Name).Metadata.GetTableName();
+                if (tableName.StartsWith("AspNet"))
+                {
+                    builder.Entity(entity.Name).ToTable(tableName.Substring(6));
+                }
+            }
 
             builder.Entity<User>()
             .HasMany(ur => ur.UserRoles)
@@ -56,6 +60,8 @@ namespace API.Data
             .HasOne(u => u.recipient)
             .WithMany(m => m.message_received)
             .OnDelete(DeleteBehavior.Restrict);
+
+            //base.OnModelCreating(builder);
         }
     }
 }

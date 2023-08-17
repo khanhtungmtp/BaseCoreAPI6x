@@ -13,7 +13,7 @@ export const routes: Routes = [
   {
     path: '',
     runGuardsAndResolvers: 'always',
-    canActivate: [() => inject(AuthService).loggedIn()],
+    canActivate: [() => inject(AuthService).isLogin()],
     children: [
       {
         path: 'members',
@@ -22,7 +22,7 @@ export const routes: Routes = [
       { path: 'messages', component: MessagesComponent },
       { path: 'lists', component: ListsComponent },
       { path: 'member/edit', component: MemberEditComponent, canDeactivate: [PreventUnsavedChanges] },
-      { path: 'admin', loadChildren: () => import('./views/admin/admin.module').then(m => m.AdminModule) }
+      { path: 'admin', loadChildren: () => import('./views/admin/admin.module').then(m => m.AdminModule), canActivate: [() => inject(AuthService).isAdmin()] }
     ]
   },
   { path: '**', redirectTo: '', pathMatch: 'full' }

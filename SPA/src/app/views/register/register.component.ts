@@ -102,8 +102,8 @@ export class RegisterComponent implements OnInit {
       this.authService.register(this.user).subscribe({
         next: () => {
           this.snotiflix.success(MessageConstants.CREATED_OK_MSG);
-        }, error: () => {
-          this.snotiflix.error(MessageConstants.CREATED_ERROR_MSG);
+        }, error: (e) => {
+          this.snotiflix.error(e);
         },
         complete: () => {
           // đăng ký xong đăng nhập luôn
