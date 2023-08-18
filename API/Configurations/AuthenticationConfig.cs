@@ -31,7 +31,6 @@ namespace API.Configurations
                 {
                     OnMessageReceived = context =>
                     {
-
                         StringValues accessToken = context.Request.Query["access_token"];
                         PathString path = context.HttpContext.Request.Path;
                         if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))

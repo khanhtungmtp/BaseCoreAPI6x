@@ -33,18 +33,17 @@ export class UserManagementComponent implements OnInit {
     this.getUsersWithRoles();
   }
   getUsersWithRoles() {
+    this.snotiflix.showLoading();
     this.service.getUserWithRole().subscribe({
       next: (res) => {
-        console.log('res: ', res);
         this.users = res
       },
       error: (e) => {
         this.snotiflix.error(e);
       }
-    })
+    }).add(() => this.snotiflix.hideLoading())
   }
   openRolesModal(user: ListRoles) {
-    console.log('user: ', user);
     const config: ModalOptions = {
       initialState: {
         username: user.userName,

@@ -10,6 +10,7 @@ import { LoginModel } from '../_models/auth/login-model';
 import { NgxNotiflixService } from './ngx-notiflix.service';
 import { MessageConstants } from '../_constants/message.enum';
 import { Router } from '@angular/router';
+import { PresenceService } from './presence.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -24,7 +25,8 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private notiflix: NgxNotiflixService,
-    private router: Router
+    private router: Router,
+    private presence: PresenceService
   ) {
   }
 
@@ -42,6 +44,7 @@ export class AuthService {
           localStorage.setItem(LocalStorageContains.USER, JSON.stringify(user));
           this.currentUser = user;
           this.changeMemberPhoto(this.currentUser.photoUrl as string);
+          this.presence.createHubConnection(user);
         }
       })
     );
@@ -53,6 +56,7 @@ export class AuthService {
 
   logOut() {
     localStorage.clear();
+    this.presence.stopHubConnection();
   }
 
   loggedIn() {

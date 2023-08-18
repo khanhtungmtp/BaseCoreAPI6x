@@ -22,6 +22,7 @@ namespace API.Configurations
             services.AddScoped<IPhotoServices, PhotoServices>();
             services.AddScoped<IUserServices, UserServices>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSignalR();
         }
     }
 }

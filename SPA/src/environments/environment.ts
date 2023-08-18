@@ -14,6 +14,7 @@ export const environment = {
   imageUrl: `${baseUrl}/uploaded/images/`,
   videoUrl: `${baseUrl}/uploaded/video/`,
   fileUrl: `${baseUrl}/uploaded/files/`,
+  hubUrl: `${baseUrl}/hubs/`
 };
 
 /*
