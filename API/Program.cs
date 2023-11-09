@@ -61,11 +61,11 @@ else
 }
 
 // use cors allow
-app.UseCors(builder => builder
-    .AllowAnyHeader()
-    .AllowAnyMethod()
-    .AllowCredentials()
-    .WithOrigins("http://localhost:4200", "https://localhost:4200"));
+app.UseCors(o => o
+              .SetIsOriginAllowed(_ => true)
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials());
 // middleware global
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 // use auth
