@@ -29,9 +29,9 @@ export class MemberListComponent implements OnInit, AfterContentChecked {
     order_by: this.userFilter.order_by
   };
   // signal angular 16
-  // getParamSearch = computed(() => {
-  //   return this.userService.searchInput()
-  // })
+  getParamSearch = computed(() => {
+    return this.userService.searchInput()
+  })
   pagination: PaginationUtilities = <PaginationUtilities>{
     pageNumber: 1,
     pageSize: 6,
@@ -53,11 +53,13 @@ export class MemberListComponent implements OnInit, AfterContentChecked {
     private notiflix: NgxNotiflixService
   ) {
     // using effect function
-    effect(() => {
-      if (Object.values(this.userService.searchInput()).length != 0) {
-        this.userFilter = this.userService.searchInput()
-      }
-    })
+    // effect(() => {
+    //   console.log('this.userService.searchInput(): ', this.userService.searchInput());
+    //   if (Object.values(this.userService.searchInput()).length != 0) {
+    //     this.userFilter = this.userService.searchInput()
+
+    //   }
+    // })
   }
 
   trackByidFn(index: number, item: User) {
@@ -65,9 +67,10 @@ export class MemberListComponent implements OnInit, AfterContentChecked {
   }
 
   ngOnInit(): void {
+    console.log(' this.userFilter ngOnInit: ', this.userFilter);
     // using computed function
-    // if (Object.values(this.getParamSearch()).length != 0)
-    //   this.userFilter = this.getParamSearch();
+    if (Object.values(this.getParamSearch()).length != 0)
+      this.userFilter = this.getParamSearch();
     this.getUsers();
 
   }

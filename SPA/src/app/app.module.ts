@@ -24,6 +24,8 @@ import { CustomPipesModule } from './_core/_helpers/pipes/custom-pipes.module';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { HomeComponent } from './views/home/home.component';
 import { HasRoleDirective } from './_core/_directives/has-role.directive';
+import { NgxTrimInputDirective } from './_core/_directives/ngx-trim-input.directive';
+import { NumberOnlyDirective } from './_core/_directives/number-only.directive';
 export function tokenGetter() {
   return localStorage.getItem(LocalStorageContains.TOKEN);
 }
@@ -36,6 +38,8 @@ export function tokenGetter() {
     MessagesComponent,
     HomeComponent,
     HasRoleDirective,
+    NgxTrimInputDirective,
+    NumberOnlyDirective
   ],
   imports: [
     BrowserModule,
