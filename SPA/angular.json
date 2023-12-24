@@ -72,7 +72,8 @@
               "buildTarget": "SPA:build:production"
             },
             "development": {
-              "buildTarget": "SPA:build:development"
+              "buildTarget": "SPA:build:development",
+              "proxyConfig": "proxy.conf.js"
             }
           },
           "defaultConfiguration": "development"

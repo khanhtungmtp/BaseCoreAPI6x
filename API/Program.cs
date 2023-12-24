@@ -71,10 +71,15 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 // use auth
 app.UseAuthentication();
 app.UseHttpsRedirection();
-
+app.UseStaticFiles();
+app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllers();
 app.MapHub<PresenceHub>("hubs/presense");
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller}/{action=Index}/{id?}");
 
+app.MapFallbackToFile("index.html");
 app.Run();
