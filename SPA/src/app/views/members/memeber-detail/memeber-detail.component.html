@@ -1,0 +1,70 @@
+<div class="container mt-4" *ngIf="user">
+  <div class="row">
+    <h1>{{user.known_as || 'user'}} profile</h1>
+  </div>
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="card">
+        <img class="card-img-top img-thumbnail"
+          src="{{user.photo_url || '../../assets/user_default.png'}}"
+          alt="{{user.known_as || 'user'}}">
+        <div class="card-body">
+          <div>
+            <strong>Location:</strong>
+            <p>{{user.city}}, {{user.country}}</p>
+          </div>
+          <div>
+            <strong>Age:</strong>
+            <p>{{user.age}}</p>
+          </div>
+          <div>
+            <strong>Last active:</strong>
+            <p>{{user.last_active | dateAgo}}</p>
+          </div>
+          <div>
+            <strong>Member since:</strong>
+            <p>{{user.created | dateAgo}}</p>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="btn-group d-flex">
+            <button class="btn btn-primary w-100">Like</button>
+            <button class="btn btn-success w-100"
+              (click)="selectTab(3)">Message</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-8">
+      <div class="tab-panel">
+        <tabset class="member-tabset" #memberTabs>
+          <tab heading="Aboult {{user.known_as || 'user'}}"
+            (selectTab)="onTabActivated($event)">
+            <h4>Description</h4>
+            <p>{{user.introduction}}</p>
+            <h4>Looking for</h4>
+            <p>{{user.looking_for}}</p>
+          </tab>
+          <tab heading="Interests" (selectTab)="onTabActivated($event)">
+            <h4>Interests</h4>
+            <p>{{user.interests}}</p>
+          </tab>
+          <tab heading="Photos" (selectTab)="onTabActivated($event)">
+            <!-- <gallery imageSize="cover" [thumbWidth]="120" [thumbHeight]="50" [thumb]="true" [items]="items" [imageSize]="'contain'"></gallery> -->
+            <carousel [interval]="0" class="carousel-dark">
+              <slide *ngFor="let photo of user.photos; let index=index">
+                <img [src]="photo.url ||  '../../assets/user_default.png'"
+                  alt="{{photo.description}} || " class="w-50 d-block m-auto">
+              </slide>
+            </carousel>
+
+          </tab>
+          <tab heading="Messages" (selectTab)="onTabActivated($event)">
+            <h4>Messages</h4>
+            <app-memeber-message [recipientid]="user.id"></app-memeber-message>
+          </tab>
+        </tabset>
+      </div>
+    </div>
+  </div>
+</div>
