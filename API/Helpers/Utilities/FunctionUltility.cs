@@ -16,18 +16,36 @@ namespace API.Helpers.Utilities
 
         public static void AddAplicationError(this HttpResponse response, string message)
         {
-            response.Headers.Add("Aplication-Error", message);
-            response.Headers.Add("Access-Control-Expose-Headers", "Aplication-Error");
-            response.Headers.Add("Access-Control-Allow-Origin", "*");
+            IHeaderDictionary headers = response.Headers;
+            headers.Append("Aplication-Error", message);
+            headers.Append("Access-Control-Expose-Headers", "Aplication-Error");
+            headers.Append("Access-Control-Allow-Origin", "*");
         }
 
         public static void AddPagination(this HttpResponse response, int pageNumber, int PageSize, int totalItems, int totalPages)
         {
-            PaginationHeader paginationHeader = new PaginationHeader(pageNumber, PageSize, totalItems, totalPages);
-            JsonSerializerSettings camelCaseFormatter = new JsonSerializerSettings();
-            camelCaseFormatter.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            response.Headers.Add("Pagination", JsonConvert.SerializeObject(paginationHeader, camelCaseFormatter));
-            response.Headers.Add("Access-Control-Expose-Headers", "Pagination");
+            IHeaderDictionary headers = response.Headers;
+            PaginationHeader paginationHeader = new(pageNumber, PageSize, totalItems, totalPages);
+            JsonSerializerSettings camelCaseFormatter = new(){
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+             headers.Append("Pagination", JsonConvert.SerializeObject(paginationHeader, camelCaseFormatter));
+             headers.Append("Access-Control-Expose-Headers", "Pagination");
+        }
+
+        //https://stackoverflow.com/questions/7726714/trim-all-string-properties
+        public static TSelf TrimStringProperties<TSelf>(this TSelf input)
+        {
+            var stringProperties = input.GetType().GetProperties()
+                .Where(p => p.PropertyType == typeof(string));
+
+            foreach (var stringProperty in stringProperties)
+            {
+                string currentValue = (string)stringProperty.GetValue(input, null);
+                if (currentValue != null)
+                    stringProperty.SetValue(input, currentValue.Trim(), null);
+            }
+            return input;
         }
 
     }

@@ -3,8 +3,9 @@ import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { ListRoles } from 'src/app/_core/_models/admin/roles';
 import { AdminService } from 'src/app/_core/_services/admin.service';
 import { RolesModalComponent } from '../roles-modal/roles-modal.component';
-import { MessageConstants } from 'src/app/_core/_constants/message.enum';
-import { NgxNotiflixService } from 'src/app/_core/_services/ngx-notiflix.service';
+import { CaptionConstants, MessageConstants } from 'src/app/_core/_constants/message.enum';
+import { NgSnotifyService } from 'src/app/_core/_services/ng-snotify.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-user-management',
@@ -25,23 +26,22 @@ export class UserManagementComponent implements OnInit {
   bsModelRef: BsModalRef<RolesModalComponent> = new BsModalRef<RolesModalComponent>()
   constructor(private service: AdminService,
     private modalService: BsModalService,
-    private snotiflix: NgxNotiflixService) {
-
-
+    private snotify: NgSnotifyService,
+    private spinner: NgxSpinnerService) {
   }
   ngOnInit(): void {
     this.getUsersWithRoles();
   }
   getUsersWithRoles() {
-    this.snotiflix.showLoading();
+    this.spinner.show();
     this.service.getUserWithRole().subscribe({
       next: (res) => {
         this.users = res
       },
       error: (e) => {
-        this.snotiflix.error(e);
+        this.snotify.error(CaptionConstants.ERROR,e);
       }
-    }).add(() => this.snotiflix.hideLoading())
+    }).add(() => this.spinner.hide())
   }
   openRolesModal(user: ListRoles) {
     const config: ModalOptions = {
@@ -60,10 +60,10 @@ export class UserManagementComponent implements OnInit {
           this.service.updateUserWithRoles(user.userName, selectedRoles!).subscribe({
             next: (roles) => {
               user.roleName = roles;
-              this.snotiflix.success(MessageConstants.UPDATED_OK_MSG);
+              this.snotify.success(CaptionConstants.SUCCESS,MessageConstants.UPDATED_OK_MSG);
             },
             error: (e) => {
-              this.snotiflix.error(e);
+              this.snotify.error(CaptionConstants.ERROR, e);
             }
           })
         }

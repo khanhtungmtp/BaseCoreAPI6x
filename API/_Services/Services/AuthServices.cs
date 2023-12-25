@@ -11,7 +11,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-
+using API.Helpers.Utilities;
 namespace API._Services.Services
 {
     public class AuthServices : IAuthServices
@@ -31,21 +31,21 @@ namespace API._Services.Services
         }
         public async Task<string> CreateToken(User user)
         {
-            List<Claim> claims = new List<Claim>{
+            List<Claim> claims = new(){
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.UserName)
             };
             IList<string> roles = await _userManager.GetRolesAsync(user);
             claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
-            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
-           SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
-            SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
+            SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
+            SigningCredentials creds = new(key, SecurityAlgorithms.HmacSha512);
+            SecurityTokenDescriptor tokenDescriptor = new()
             {
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.Now.AddDays(1),
                 SigningCredentials = creds
             };
-            JwtSecurityTokenHandler tokenHanler = new JwtSecurityTokenHandler();
+            JwtSecurityTokenHandler tokenHanler = new();
             SecurityToken token = tokenHanler.CreateToken(tokenDescriptor);
             return tokenHanler.WriteToken(token);
         }
@@ -76,6 +76,7 @@ namespace API._Services.Services
 
         public async Task<UserDto> Register(RegisterUserDto param)
         {
+            param = FunctionUltility.TrimStringProperties(param);
             string errorMessage = null;
             param.username = param.username.ToLower();
             if (await UserExits(param.username))

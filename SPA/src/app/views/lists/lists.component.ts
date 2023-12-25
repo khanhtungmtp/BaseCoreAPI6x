@@ -2,7 +2,9 @@ import { User } from './../../_core/_models/user';
 import { PaginationUtilities } from './../../_core/_helpers/utilities/pagination-utilities';
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/_core/_services/user.service';
-import { NgxNotiflixService } from 'src/app/_core/_services/ngx-notiflix.service';
+import { NgSnotifyService } from 'src/app/_core/_services/ng-snotify.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { CaptionConstants } from 'src/app/_core/_constants/message.enum';
 
 @Component({
   selector: 'app-lists',
@@ -18,7 +20,8 @@ export class ListsComponent implements OnInit {
   users: User[] = [];
   constructor(
     private userService: UserService,
-    private notiflix: NgxNotiflixService,
+    private snotify: NgSnotifyService,
+    private spinner: NgxSpinnerService
   ) { }
 
   ngOnInit(): void {
@@ -32,15 +35,15 @@ export class ListsComponent implements OnInit {
       this.likesParam = likesParam
     }
 
-    this.notiflix.showLoading();
+    this.spinner.show();
     this.userService.getUsersLike(this.pagination, this.likesParam).subscribe({
       next: (res) => {
         this.users = res.result;
         this.pagination = res.pagination;
-        this.notiflix.hideLoading();
+        this.spinner.hide();
       }, error: (err) => {
-        this.notiflix.error(err);
-        this.notiflix.hideLoading();
+        this.snotify.error(CaptionConstants.ERROR, err);
+        this.spinner.hide();
       }
     })
   }

@@ -1,12 +1,14 @@
 import { LocalStorageContains } from 'src/app/_core/_constants/localStorageContains';
 import { PaginationUtilities } from 'src/app/_core/_helpers/utilities/pagination-utilities';
-import { MessageConstants } from 'src/app/_core/_constants/message.enum';
-import { NgxNotiflixService } from 'src/app/_core/_services/ngx-notiflix.service';
+import { MessageConstants, CaptionConstants } from 'src/app/_core/_constants/message.enum';
+
 import { User, UserFilter } from 'src/app/_core/_models/user';
 import { UserService } from 'src/app/_core/_services/user.service';
 import { AfterContentChecked, Component, OnInit, computed, effect } from '@angular/core';
 import { SearchParams } from 'src/app/_core/_models/dating';
 import { DatingContains } from 'src/app/_core/_constants/datingContains';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NgSnotifyService } from 'src/app/_core/_services/ng-snotify.service';
 
 @Component({
   selector: 'app-member-list',
@@ -50,7 +52,8 @@ export class MemberListComponent implements OnInit, AfterContentChecked {
 
   constructor(
     private userService: UserService,
-    private notiflix: NgxNotiflixService
+    private snotify: NgSnotifyService,
+    private spinner: NgxSpinnerService,
   ) {
     // using effect function
     // effect(() => {
@@ -98,15 +101,15 @@ export class MemberListComponent implements OnInit, AfterContentChecked {
     this.getUsers();
   }
   getUsers() {
-    this.notiflix.showLoading();
+    this.spinner.show();
     this.userService.getUsers(this.pagination, this.userFilter).subscribe({
       next: (res) => {
         this.users = res.result;
         this.pagination = res.pagination;
-        this.notiflix.hideLoading();
+        this.spinner.hide();
       }, error: () => {
-        this.notiflix.error(MessageConstants.SYSTEM_ERROR_MSG);
-        this.notiflix.hideLoading();
+        this.snotify.error(CaptionConstants.ERROR,MessageConstants.SYSTEM_ERROR_MSG);
+        this.spinner.hide();
       }
     })
   }

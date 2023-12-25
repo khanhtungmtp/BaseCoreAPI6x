@@ -1,11 +1,14 @@
 import { AuthService } from 'src/app/_core/_services/auth.service';
-import { NgxNotiflixService } from 'src/app/_core/_services/ngx-notiflix.service';
+
 import { PhotoService } from 'src/app/_core/_services/photo.service';
 import { Photo } from 'src/app/_core/_models/photo';
 import { Component, Input, OnInit } from '@angular/core';
 import { FileUploader } from 'ng2-file-upload';
 import { environment } from 'src/environments/environment';
 import { LocalStorageContains } from 'src/app/_core/_constants/localStorageContains';
+import { CaptionConstants } from 'src/app/_core/_constants/message.enum';
+import { NgSnotifyService } from 'src/app/_core/_services/ng-snotify.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-photo-editor',
@@ -23,7 +26,8 @@ export class PhotoEditorComponent implements OnInit {
   currentMain: Photo;
   constructor(
     private photoService: PhotoService,
-    private notiflix: NgxNotiflixService,
+    private snotify: NgSnotifyService,
+    private spinner: NgxSpinnerService,
     private authService: AuthService
   ) { }
 
@@ -86,30 +90,30 @@ export class PhotoEditorComponent implements OnInit {
         this.authService.currentUser.photoUrl = photo.url;
         localStorage.setItem(LocalStorageContains.USER, JSON.stringify(this.authService.currentUser));
         //  this.getMemberPhotoChanges.emit(photo.url);
-        this.notiflix.success('Successfully set to Main');
+        this.snotify.success(CaptionConstants.SUCCESS, 'Successfully set to Main');
       }, error: () => {
-        this.notiflix.error('Cannot set main photo');
+        this.snotify.error(CaptionConstants.ERROR, 'Cannot set main photo');
       }
     })
   }
 
   deletePhoto(photoid: number) {
-    this.notiflix.showLoading();
-    this.notiflix.confirm('Are you sure you want do delete this photo', 'Pictures after deletion will be lost forever',
+    this.spinner.show();
+    this.snotify.confirm('Are you sure you want do delete this photo', 'Pictures after deletion will be lost forever',
       () => {
         this.photoService.deletePhoto(this.user.id, photoid).subscribe({
           next: (res) => {
             this.photos.splice(this.photos.findIndex(p => p.id == photoid), 1);
-            this.notiflix.success('photo has been deleted');
-            this.notiflix.hideLoading();
+            (CaptionConstants.SUCCESS, 'photo has been deleted');
+            this.spinner.hide();
           },
           error: () => {
-            this.notiflix.error('Cannot delete photo');
-            this.notiflix.hideLoading();
+            this.snotify.error(CaptionConstants.ERROR, 'Cannot delete photo');
+            this.spinner.hide();
           }
         });
       }, () => {
-        this.notiflix.hideLoading();
+        this.spinner.hide();
       })
 
   }

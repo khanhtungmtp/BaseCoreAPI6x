@@ -2,10 +2,10 @@ import { LocalStorageContains } from './_core/_constants/localStorageContains';
 import { AuthGuard } from './_core/_guards/auth/auth.guard';
 import { RouterModule } from '@angular/router';
 import { GlobalHttpInterceptorProvider } from './_core/_helpers/utilities/global-http-interceptor';
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NavComponent } from './views/nav/nav.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from './_core/_services/auth.service';
@@ -26,6 +26,15 @@ import { HomeComponent } from './views/home/home.component';
 import { HasRoleDirective } from './_core/_directives/has-role.directive';
 import { NgxTrimInputDirective } from './_core/_directives/ngx-trim-input.directive';
 import { NumberOnlyDirective } from './_core/_directives/number-only.directive';
+import { GlobalErrorHandlerService } from './_core/_services/globalerrorhandler.service';
+import { SnotifyModule, SnotifyService, ToastDefaults } from 'ng-alt-snotify';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 export function tokenGetter() {
   return localStorage.getItem(LocalStorageContains.TOKEN);
 }
@@ -52,6 +61,16 @@ export function tokenGetter() {
     RouterModule.forRoot(routes),
     PaginationModule.forRoot(),
     CustomPipesModule,
+    SnotifyModule,
+    NgxSpinnerModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      },
+      defaultLanguage:'vi'
+    }),
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
@@ -63,7 +82,10 @@ export function tokenGetter() {
   providers: [
     AuthService,
     GlobalHttpInterceptorProvider,
+    { provide: 'SnotifyToastConfig', useValue: ToastDefaults },
+    { provide: ErrorHandler, useClass: GlobalErrorHandlerService },
     TokenInterceptorProvider,
+    SnotifyService,
     AuthGuard,
     PreventUnsavedChanges,
   ],

@@ -1,10 +1,13 @@
-import { NgxNotiflixService } from 'src/app/_core/_services/ngx-notiflix.service';
+
 import { User } from 'src/app/_core/_models/user';
 import { AfterContentChecked, Component, OnInit, ViewChild, computed } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
 import { UserService } from 'src/app/_core/_services/user.service';
 import { SearchParams } from 'src/app/_core/_models/dating';
+import { CaptionConstants } from 'src/app/_core/_constants/message.enum';
+import { NgSnotifyService } from 'src/app/_core/_services/ng-snotify.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 @Component({
   selector: 'app-memeber-detail',
   templateUrl: './memeber-detail.component.html',
@@ -23,7 +26,8 @@ export class MemeberDetailComponent implements OnInit, AfterContentChecked {
   constructor(
     private userService: UserService,
     private route: ActivatedRoute,
-    private notiflix: NgxNotiflixService,
+    private snotify: NgSnotifyService,
+    private spinner:NgxSpinnerService,
     private router: Router
   ) {
 
@@ -31,17 +35,17 @@ export class MemeberDetailComponent implements OnInit, AfterContentChecked {
 
   ngOnInit(): void {
     this.selectTab(this.tabId)
-    this.notiflix.showLoading();
+    this.spinner.show();
     let id = this.route.snapshot.paramMap.get('id')
     if (id)
       this.getUserInfo(+id); // ép về int
     this.route.queryParams.subscribe({
       next: (res) => {
         this.tabId = res['tab'];
-        this.notiflix.hideLoading()
+        this.spinner.hide();
       },
-      error: () => this.notiflix.error('cannot get params'),
-      complete: () => this.notiflix.hideLoading()
+      error: () => this.snotify.error(CaptionConstants.ERROR, 'cannot get params'),
+      complete: () => this.spinner.hide()
     })
 
   }
@@ -51,18 +55,18 @@ export class MemeberDetailComponent implements OnInit, AfterContentChecked {
 
 
   getUserInfo(id: number) {
-    this.notiflix.showLoading();
+    this.spinner.show();
     this.userService.getUser(id).subscribe({
       next: (res) => {
         if (!res)
           this.back()
         this.user = res;
-        this.notiflix.hideLoading()
+        this.spinner.hide();
       },
       error: (e) => {
-        this.notiflix.error(e)
+        this.snotify.error(CaptionConstants.ERROR, e)
         this.back()
-        this.notiflix.hideLoading()
+        this.spinner.hide();
       }
     })
   }

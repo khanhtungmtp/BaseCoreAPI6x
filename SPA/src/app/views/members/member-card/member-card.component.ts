@@ -1,10 +1,13 @@
 import { Router } from '@angular/router';
-import { NgxNotiflixService } from 'src/app/_core/_services/ngx-notiflix.service';
+
 import { UserService } from 'src/app/_core/_services/user.service';
 import { User } from 'src/app/_core/_models/user';
 import { Component, Input, OnInit, computed, effect } from '@angular/core';
 import { LocalStorageContains } from 'src/app/_core/_constants/localStorageContains';
 import { SearchParams } from 'src/app/_core/_models/dating';
+import { NgSnotifyService } from 'src/app/_core/_services/ng-snotify.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { CaptionConstants } from 'src/app/_core/_constants/message.enum';
 
 @Component({
   selector: 'app-member-card',
@@ -22,7 +25,8 @@ export class MemberCardComponent implements OnInit {
   userLogin: User = JSON.parse(localStorage.getItem(LocalStorageContains.USER) as string) ?? '';
   constructor(
     private userService: UserService,
-    private notiflix: NgxNotiflixService,
+    private snotify: NgSnotifyService,
+    private spinner:NgxSpinnerService,
     private router: Router
   ) {
   }
@@ -32,10 +36,10 @@ export class MemberCardComponent implements OnInit {
   sendLike(recipient: number) {
     this.userService.sendLike(this.userLogin.id, recipient).subscribe({
       next: (res) => {
-        this.notiflix.success(`You have ${res.message}: ` + this.user.username);
+        this.snotify.success(CaptionConstants.SUCCESS, `You have ${res.message}: ` + this.user.username);
       },
       error: (err) => {
-        this.notiflix.error(err);
+        this.snotify.error(CaptionConstants.ERROR,err);
       }
     })
   }

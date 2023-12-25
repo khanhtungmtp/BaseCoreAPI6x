@@ -26,6 +26,7 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/ng-alt-snotify/styles/material.scss",
               "src/styles.scss"
             ],
             "scripts": [

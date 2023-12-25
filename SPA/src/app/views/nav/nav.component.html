@@ -55,7 +55,20 @@
             [(ngModel)]="loginForms.password">
           <button class="btn btn-outline-success" type="submit">Login</button>
         </form>
+
       </div>
+      <ul>
+        <li class="btn-group">
+          <button type="button button-translate" class="btn px-0 zoom"
+            (click)="switchLang(langConstants.EN)">
+            <img class="img-translate" src="assets/lang/en.png" alt="EN">
+          </button>
+          <button type="button button-translate" class="btn px-0 mr-2 zoom"
+            (click)="switchLang(langConstants.VI)">
+            <img class="img-translate" src="assets/lang/vn.png" alt="VN">
+          </button>
+        </li>
+      </ul>
     </div>
   </nav>
 </header>

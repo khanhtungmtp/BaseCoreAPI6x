@@ -5,11 +5,11 @@ import { UserForRegister } from 'src/app/_core/_models/user';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { MessageConstants } from 'src/app/_core/_constants/message.enum';
+import { CaptionConstants, MessageConstants } from 'src/app/_core/_constants/message.enum';
 import { AuthService } from 'src/app/_core/_services/auth.service';
-import { NgxNotiflixService } from 'src/app/_core/_services/ngx-notiflix.service';
 import Validation from 'src/app/_core/_helpers/utilities/validation';
 import { FunctionUtility } from 'src/app/_core/_helpers/utilities/function-utility';
+import { NgSnotifyService } from 'src/app/_core/_services/ng-snotify.service';
 
 @Component({
   selector: 'app-register',
@@ -44,10 +44,9 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private snotiflix: NgxNotiflixService,
+    private snotify: NgSnotifyService,
     private formBuilder: FormBuilder,
-    private router: Router,
-    private func: FunctionUtility
+    private router: Router
   ) {
   }
 
@@ -101,9 +100,9 @@ export class RegisterComponent implements OnInit {
       this.user = Object.assign({}, this.registerForm.value as UserForRegister);
       this.authService.register(this.user).subscribe({
         next: () => {
-          this.snotiflix.success(MessageConstants.CREATED_OK_MSG);
+          this.snotify.success(CaptionConstants.SUCCESS,MessageConstants.CREATED_OK_MSG);
         }, error: (e) => {
-          this.snotiflix.error(e);
+          throw e;
         },
         complete: () => {
           // đăng ký xong đăng nhập luôn
@@ -113,11 +112,11 @@ export class RegisterComponent implements OnInit {
           }
           this.authService.login(this.loginModel).subscribe({
             next: () => {
-              this.snotiflix.success(MessageConstants.LOGGED_IN);
+              this.snotify.success(CaptionConstants.SUCCESS, MessageConstants.LOGGED_IN);
               this.router.navigate(['/members']);
             },
-            error: () => {
-              this.snotiflix.error(MessageConstants.LOGIN_FAILED);
+            error: (e) => {
+              throw e;
             }
           })
         }

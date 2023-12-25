@@ -7,10 +7,10 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { LocalStorageContains } from '../_constants/localStorageContains';
 import { BehaviorSubject } from 'rxjs';
 import { LoginModel } from '../_models/auth/login-model';
-import { NgxNotiflixService } from './ngx-notiflix.service';
-import { MessageConstants } from '../_constants/message.enum';
+import { CaptionConstants, MessageConstants } from '../_constants/message.enum';
 import { Router } from '@angular/router';
 import { PresenceService } from './presence.service';
+import { NgSnotifyService } from './ng-snotify.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -24,7 +24,7 @@ export class AuthService {
   public currentUser: UserLogin
   constructor(
     private http: HttpClient,
-    private notiflix: NgxNotiflixService,
+    private snotify: NgSnotifyService,
     private router: Router,
     private presence: PresenceService
   ) {
@@ -74,7 +74,7 @@ export class AuthService {
 
   isLogin() {
     if (!this.loggedIn()) {
-      this.notiflix.error(MessageConstants.PLEASE_LOGIN);
+      this.snotify.error(CaptionConstants.ERROR, MessageConstants.PLEASE_LOGIN);
       this.router.navigate(['/'])
       return false;
     }

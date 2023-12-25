@@ -1,12 +1,14 @@
-import { MessageConstants } from 'src/app/_core/_constants/message.enum';
+import { CaptionConstants, MessageConstants } from 'src/app/_core/_constants/message.enum';
 import { Message } from 'src/app/_core/_models/message';
 import { MessageService } from 'src/app/_core/_services/message.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { User } from 'src/app/_core/_models/user';
 import { LocalStorageContains } from 'src/app/_core/_constants/localStorageContains';
-import { NgxNotiflixService } from 'src/app/_core/_services/ngx-notiflix.service';
+
 import { tap } from 'rxjs';
 import { OperationResult } from 'src/app/_core/_helpers/utilities/operationResult';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NgSnotifyService } from 'src/app/_core/_services/ng-snotify.service';
 
 
 @Component({
@@ -34,7 +36,8 @@ export class MemeberMessageComponent implements OnInit {
   defaultImage: string = '../../../../assets/user_default.png';
   constructor(
     private messageService: MessageService,
-    private notiflix: NgxNotiflixService
+    private snotify: NgSnotifyService,
+    private spinner:NgxSpinnerService
   ) { }
 
   ngOnInit(): void {
@@ -57,7 +60,7 @@ export class MemeberMessageComponent implements OnInit {
           this.messages = res
         },
         error: () => {
-          this.notiflix.error(MessageConstants.UN_KNOWN_ERROR);
+          this.snotify.error(CaptionConstants.ERROR, MessageConstants.UN_KNOWN_ERROR);
         }
       })
   }
@@ -68,10 +71,10 @@ export class MemeberMessageComponent implements OnInit {
       next: (res: OperationResult) => {
         this.messages.unshift(res.data);
         this.newMessages.content = '';
-        this.notiflix.hideLoading()
+        this.spinner.hide();
       },
-      error: () => this.notiflix.error(MessageConstants.UN_KNOWN_ERROR),
-      complete: () => this.notiflix.hideLoading()
+      error: () => this.snotify.error(CaptionConstants.ERROR, MessageConstants.UN_KNOWN_ERROR),
+      complete: () => this.spinner.hide()
     })
   }
 

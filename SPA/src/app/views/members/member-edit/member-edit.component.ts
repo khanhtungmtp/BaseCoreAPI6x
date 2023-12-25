@@ -1,10 +1,12 @@
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MessageConstants } from 'src/app/_core/_constants/message.enum';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { CaptionConstants, MessageConstants } from 'src/app/_core/_constants/message.enum';
 import { User } from 'src/app/_core/_models/user';
 import { AuthService } from 'src/app/_core/_services/auth.service';
-import { NgxNotiflixService } from 'src/app/_core/_services/ngx-notiflix.service';
+import { NgSnotifyService } from 'src/app/_core/_services/ng-snotify.service';
+
 import { UserService } from 'src/app/_core/_services/user.service';
 
 @Component({
@@ -26,7 +28,8 @@ export class MemberEditComponent implements OnInit {
     }
   }
   constructor(
-    private notiflix: NgxNotiflixService,
+    private snotify: NgSnotifyService,
+    private spinner: NgxSpinnerService,
     private router: Router,
     private userService: UserService,
     private authService: AuthService
@@ -40,12 +43,12 @@ export class MemberEditComponent implements OnInit {
           this.userid = res.id
         } else {
           this.router.navigate(['/']);
-          this.notiflix.hideLoading();
+          this.spinner.hide();
         }
       },
       error: () => {
-        this.notiflix.error(MessageConstants.SYSTEM_ERROR_MSG);
-        this.notiflix.hideLoading();
+        this.snotify.error(CaptionConstants.ERROR, MessageConstants.SYSTEM_ERROR_MSG);
+        this.spinner.hide();
       }
     })
     this.getUserData()
@@ -53,47 +56,47 @@ export class MemberEditComponent implements OnInit {
       next: (res) => {
         this.photo_url = res;
       }, error: () => {
-        this.notiflix.error(MessageConstants.SYSTEM_ERROR_MSG);
+        this.snotify.error(CaptionConstants.ERROR, MessageConstants.SYSTEM_ERROR_MSG);
       }
     })
-    this.notiflix.hideLoading();
+    this.spinner.hide();
   }
 
   getUserData() {
-    this.notiflix.showLoading();
+    this.spinner.show();
     if (this.userid) {
       this.userService.getUser(this.userid).subscribe({
         next: (res) => {
           if (res !== null) {
             this.user = res
-            this.notiflix.hideLoading();
+            this.spinner.hide();
           } else {
             this.router.navigate(['/']);
-            this.notiflix.hideLoading();
+            this.spinner.hide();
           }
         }, error: () => {
-          this.notiflix.error(MessageConstants.SYSTEM_ERROR_MSG);
-          this.notiflix.hideLoading();
+          this.snotify.error(CaptionConstants.ERROR, MessageConstants.SYSTEM_ERROR_MSG);
+          this.spinner.hide();
         }
       });
     }
   }
 
   updateUser() {
-    this.notiflix.showLoading();
+    this.spinner.show();
     this.userService.updateUser(this.user.id, this.user).subscribe({
       next: () => {
-        this.notiflix.success(MessageConstants.UPDATED_OK_MSG);
+        this.snotify.success(CaptionConstants.SUCCESS, MessageConstants.UPDATED_OK_MSG);
         this.editFrofile.resetForm();
-        this.notiflix.hideLoading();
+        this.spinner.hide();
       },
       error: () => {
-        this.notiflix.error(MessageConstants.SYSTEM_ERROR_MSG);
-        this.notiflix.hideLoading();
+        this.snotify.error(CaptionConstants.ERROR, MessageConstants.SYSTEM_ERROR_MSG);
+        this.spinner.hide();
       },
       complete: () => {
         this.getUserData();
-        this.notiflix.hideLoading();
+        this.spinner.hide();
       }
     })
   }

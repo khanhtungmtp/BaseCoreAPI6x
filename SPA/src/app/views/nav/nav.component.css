@@ -3,5 +3,18 @@ li.nav-item.active {
 }
 
 .edit-profile{
- cursor: pointer;   
+ cursor: pointer;
+}
+
+button {
+  white-space: nowrap;
+}
+
+.button-translate:focus {
+  outline: none;
+}
+
+.img-translate {
+  width: 40px;
+  height: 40px;
 }
