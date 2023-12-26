@@ -7,10 +7,10 @@ namespace API._Repositories
 {
     public class Repository<T, DBContext> : IRepository<T> where T : class where DBContext : DbContext
     {
-        private readonly DataContext _context;
-        public Repository(DataContext dataContext)
+        private readonly ApplicationDbContext _context;
+        public Repository(ApplicationDbContext ApplicationDbContext)
         {
-            _context = dataContext;
+            _context = ApplicationDbContext;
         }
         public void Add(T entity)
         {

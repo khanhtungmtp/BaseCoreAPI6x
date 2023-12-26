@@ -9,7 +9,7 @@ namespace API.Configurations
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
             string area = configuration.GetSection("Appsetting:Area").Value;
-            services.AddDbContext<DataContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
         }
     }
 }
