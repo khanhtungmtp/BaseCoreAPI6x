@@ -52,24 +52,24 @@ namespace API._Services.Services
 
         public async Task<User> GetUser(int id)
         {
-            return await _dataContext.Users.Include(p => p.photos).FirstOrDefaultAsync(u => u.Id == id);
+            return await _dataContext.Users.Include(p => p.Photos).FirstOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task<UserDto> Login(LoginUserParam param)
         {
-            User userName = await _userManager.Users.Include(p => p.photos).SingleOrDefaultAsync(x => x.UserName.ToLower() == param.username.ToLower());
-            if (userName == null) throw new Exception("Invalid Username");
-            bool userPassword = await _userManager.CheckPasswordAsync(userName, param.password);
+            User UserName = await _userManager.Users.Include(p => p.Photos).SingleOrDefaultAsync(x => x.UserName.ToLower() == param.UserName.ToLower());
+            if (UserName == null) throw new Exception("Invalid UserName");
+            bool userPassword = await _userManager.CheckPasswordAsync(UserName, param.Password);
             if (!userPassword) throw new Exception("Invalid Password");
-            IList<string> roles = await _userManager.GetRolesAsync(userName);
+            IList<string> roles = await _userManager.GetRolesAsync(UserName);
             return new UserDto
             {
-                Id = userName.Id,
-                Username = userName.UserName,
-                Gender = userName.gender,
-                PhotoUrl = userName.photos != null ? userName.photos.FirstOrDefault(x => x.is_main)?.url : "",
-                KnownAs = userName.known_as,
-                Token = await CreateToken(userName),
+                Id = UserName.Id,
+                UserName = UserName.UserName,
+                Gender = UserName.Gender,
+                PhotoUrl = UserName.Photos != null ? UserName.Photos.FirstOrDefault(x => x.IsMain)?.Url : "",
+                KnownAs = UserName.KnownAs,
+                Token = await CreateToken(UserName),
                 Roles = roles
             };
         }
@@ -78,48 +78,35 @@ namespace API._Services.Services
         {
             param = FunctionUltility.TrimStringProperties(param);
             string errorMessage = null;
-            param.username = param.username.ToLower();
-            if (await UserExits(param.username))
-                throw new Exception("Username already exists");
+            param.UserName = param.UserName.ToLower();
+            if (await UserExits(param.UserName))
+                throw new Exception("UserName already exists");
             User userMapped = _mapper.Map<User>(param);
-            IdentityResult createdUser = await _userManager.CreateAsync(userMapped, param.password);
-            if (!createdUser.Succeeded)
+            IdentityResult CreatedUser = await _userManager.CreateAsync(userMapped, param.Password);
+            if (!CreatedUser.Succeeded)
             {
-                errorMessage = string.Join(", ", createdUser.Errors.Select(e => e.Description));
+                errorMessage = string.Join(", ", CreatedUser.Errors.Select(e => e.Description));
                 throw new Exception(errorMessage);
             }
-            // Add the Admin role to the database
-            IdentityResult roleResult = null;
-            bool adminRoleExists = await _roleManager.RoleExistsAsync("Member");
-            if (!adminRoleExists)
-            {
-                roleResult = await _roleManager.CreateAsync(new Role { Name = "Member" });
-            }
+            var roleResult = await _userManager.AddToRoleAsync(userMapped, "Member");
 
-            // Select the user, and then add the Member role to the user
-            // User user = await _userManager.FindByNameAsync("sysMember");
-            if (!await _userManager.IsInRoleAsync(userMapped, "Member"))
-            {
-                IdentityResult userResult = await _userManager.AddToRoleAsync(userMapped, "Member");
-            }
-
-            if (roleResult != null)
-            {
-                errorMessage = string.Join(", ", roleResult.Errors.Select(e => e.Description));
+            if (!roleResult.Succeeded) {
+                errorMessage = string.Join(", ", CreatedUser.Errors.Select(e => e.Description));
                 throw new Exception(errorMessage);
             }
+
             return new UserDto
             {
-                Username = userMapped.UserName,
+                UserName = userMapped.UserName,
                 Token = await CreateToken(userMapped),
-                KnownAs = userMapped.known_as,
-                Gender = userMapped.gender
+                KnownAs = userMapped.KnownAs,
+                Gender = userMapped.Gender
             };
         }
 
-        public async Task<bool> UserExits(string username)
+        public async Task<bool> UserExits(string UserName)
         {
-            return await _userManager.Users.AnyAsync(x => x.UserName == username);
+            return await _userManager.Users.AnyAsync(x => x.UserName == UserName);
         }
     }
 }

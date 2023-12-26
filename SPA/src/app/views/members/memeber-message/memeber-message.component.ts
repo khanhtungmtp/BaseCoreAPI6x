@@ -17,21 +17,21 @@ import { NgSnotifyService } from 'src/app/_core/_services/ng-snotify.service';
   styleUrls: ['./memeber-message.component.css']
 })
 export class MemeberMessageComponent implements OnInit {
-  @Input() recipientid: number;
+  @Input() recipientId: number;
   user: User = JSON.parse(localStorage.getItem(LocalStorageContains.USER) as string);
   messages: Message[] = [];
   newMessages: Message = {
     id: 0,
-    senderid: 0,
-    sender_known_as: '',
-    sender_photo_url: '',
-    recipientid: 0,
-    recipient_known_as: '',
-    recipient_photo_url: '',
+    senderId: 0,
+    senderKnownAs: '',
+    senderPhotoUrl: '',
+    recipientId: 0,
+    recipientKnownAs: '',
+    recipientPhotoUrl: '',
     content: '',
-    is_read: false,
-    date_read: undefined,
-    message_sent: new Date(),
+    isRead: false,
+    dateRead: undefined,
+    messageSent: new Date(),
   };
   defaultImage: string = '../../../../assets/user_default.png';
   constructor(
@@ -45,11 +45,11 @@ export class MemeberMessageComponent implements OnInit {
   }
 
   getMessagesThread() {
-    this.messageService.getMesageThread(this.user.id, this.recipientid)
+    this.messageService.getMesageThread(this.user.id, this.recipientId)
       .pipe(
         tap(messages => {
           for (let i = 0; i < messages.length; i++) {
-            if (messages[i].is_read === false && messages[i].recipientid == this.user.id) {
+            if (messages[i].isRead === false && messages[i].recipientId == this.user.id) {
               this.messageService.markAsRead(this.user.id, messages[i].id);
             }
           }
@@ -58,15 +58,14 @@ export class MemeberMessageComponent implements OnInit {
       .subscribe({
         next: (res) => {
           this.messages = res
-        },
-        error: () => {
-          this.snotify.error(CaptionConstants.ERROR, MessageConstants.UN_KNOWN_ERROR);
+        }, error: (e) => {
+          throw e;
         }
       })
   }
 
   sendMessage() {
-    this.newMessages.recipientid = this.recipientid;
+    this.newMessages.recipientId = this.recipientId;
     this.messageService.createMessage(this.user.id, this.newMessages).subscribe({
       next: (res: OperationResult) => {
         this.messages.unshift(res.data);

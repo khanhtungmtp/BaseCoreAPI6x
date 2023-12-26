@@ -9,7 +9,7 @@ import { NgSnotifyService } from 'src/app/_core/_services/ng-snotify.service';
 import { LocalStorageContains } from 'src/app/_core/_constants/localStorageContains';
 import { LangConstants } from 'src/app/_core/_constants/langs.constants';
 import { TranslateService } from '@ngx-translate/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NgxSpinnerService } from 'ngx-spinner';
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
@@ -17,17 +17,18 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class NavComponent implements OnInit {
   loginForms: LoginModel = {
-    username: '',
+    userName: '',
     password: '',
   };
   photo_url: string;
   isAdmin: string[] = ["Admin", "SuperAdmin"];
-  lang: string | null = localStorage.getItem(LocalStorageContains.LANG);
+  lang: string | null = localStorage.getItem(LocalStorageContains.LANG) ?? 'vi';
   destroyRef = inject(DestroyRef);
   langConstants: typeof LangConstants = LangConstants;
   constructor(
     public authService: AuthService,
     private snotify: NgSnotifyService,
+    private spinner: NgxSpinnerService,
     private router: Router,
     private userService: UserService,
     private translateServices: TranslateService
@@ -35,7 +36,7 @@ export class NavComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (!this.lang)
+    if (this.lang !== null)
       localStorage.setItem(LocalStorageContains.LANG, LangConstants.VI);
     this.translateServices.use(this.lang as string);
     this.authService.currentPhotoUrl.subscribe({
@@ -63,26 +64,21 @@ export class NavComponent implements OnInit {
         this.snotify.success(CaptionConstants.SUCCESS, MessageConstants.LOGGED_IN)
       }, error: (e) => {
         throw e;
-        // this.snotify.error(CaptionConstants.ERROR,e);
       },
       complete: () => {
         this.router.navigate(['/members']);
       },
-    })
+    }).add(() => this.spinner.hide())
   }
 
   loggedIn() {
     return this.authService.loggedIn();
   }
 
-  // isAdmin() {
-  //   return this.authService.isAdmin();
-  // }
-
   logOut() {
     this.authService.logOut();
     this.loginForms = {
-      username: '',
+      userName: '',
       password: ''
     }
     this.snotify.success(CaptionConstants.SUCCESS, MessageConstants.LOGGED_OUT)

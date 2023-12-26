@@ -9,7 +9,10 @@ namespace API.Configurations
     {
         public static void AddAuthenticationConfig(this IServiceCollection services, IConfiguration config)
         {
-            if (services == null) throw new ArgumentNullException(nameof(services));
+            if (services == null)
+            {
+                throw new ArgumentNullException(nameof(services));
+            }
             // add auth
             services.AddAuthentication(x =>
             {
@@ -43,11 +46,11 @@ namespace API.Configurations
             });
 
             // add roles
-            services.AddAuthorization(opt =>
-            {
-                opt.AddPolicy("RequiredAdminRole", policy => policy.RequireRole("Admin"));
-                opt.AddPolicy("MemberRole", policy => policy.RequireRole("Member"));
-            });
+            services.AddAuthorizationBuilder()
+                // add roles
+                .AddPolicy("RequiredAdminRole", policy => policy.RequireRole("Admin"))
+                // add roles
+                .AddPolicy("MemberRole", policy => policy.RequireRole("Member"));
         }
     }
 }

@@ -3,9 +3,9 @@ namespace API.Dtos.Message
 {
     public class MessageForCreationDto
     {
-        public int senderid { get; set; }
-        public int recipientid { get; set; }
-        public DateTime message_sent { get; set; }
-        public string content { get; set; }
+        public int SenderId { get; set; }
+        public int RecipientId { get; set; }
+        public DateTime MessageSent { get; set; }
+        public string Content { get; set; }
     }
 }

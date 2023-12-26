@@ -14,25 +14,13 @@ namespace API.Helpers.Utilities
             {
                 HttpResponse response = context.Response;
                 response.ContentType = "application/json";
-                switch (error)
+                response.StatusCode = error switch
                 {
-                    case ApplicationException e:
-                        // custom application error
-                        response.StatusCode = (int)HttpStatusCode.BadRequest;
-                        break;
-                    case KeyNotFoundException e:
-                        // not found error
-                        response.StatusCode = (int)HttpStatusCode.NotFound;
-                        break;
-                    case UnauthorizedAccessException e:
-                        // Unauthorized error
-                        response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                        break;
-                    default:
-                        // unhandled error
-                        response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                        break;
-                }
+                    ApplicationException e => (int)HttpStatusCode.BadRequest,// custom application error
+                    KeyNotFoundException e => (int)HttpStatusCode.NotFound,// not found error
+                    UnauthorizedAccessException e => (int)HttpStatusCode.Unauthorized,// Unauthorized error
+                    _ => (int)HttpStatusCode.InternalServerError,// unhandled error
+                };
                 await context.Response.WriteAsync(error.Message);
             }
         }

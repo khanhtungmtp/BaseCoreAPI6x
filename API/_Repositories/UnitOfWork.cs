@@ -1,30 +1,27 @@
-
 using API._Repositories.Interfaces;
 using API.Data;
+using API.Models;
 namespace API._Repositories.Repository
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly DataContext _dataContext;
+        private readonly DataContext _context;
         public UnitOfWork(DataContext dataContext)
         {
-            _dataContext = dataContext;
-            User = new UserRepository(_dataContext);
-            Like = new LikeRepository(_dataContext);
-            Message = new MessageRepository(_dataContext);
-            Photo = new PhotoRepository(_dataContext);
+            _context = dataContext;
+            User = new Repository<User, DataContext>(_context);
+            Like = new Repository<Like, DataContext>(_context);
+            Message = new Repository<Message, DataContext>(_context);
+            Photo = new Repository<Photo, DataContext>(_context);
         }
-        public IUserRepository User { get; private set; }
-
-        public ILikeRepository Like { get; private set; }
-
-        public IMessageRepository Message { get; private set; }
-
-        public IPhotoRepository Photo { get; private set; }
+        public IRepository<User> User { get; private set; }
+        public IRepository<Like> Like { get; private set; }
+        public IRepository<Message> Message { get; private set; }
+        public IRepository<Photo> Photo { get; private set; }
 
         public async Task<bool> SaveAll()
         {
-            return await _dataContext.SaveChangesAsync() > 0;
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

@@ -6,6 +6,8 @@ using System.Text.Json.Serialization;
 using API.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
+// add AddSignalR
+builder.Services.AddSignalR();
 // add databaseconfig
 builder.Services.AddDatabaseConfig(builder.Configuration);
 // add cors
@@ -24,7 +26,8 @@ builder.Services.AddEndpointsApiExplorer();
 // add Swapger config with jwt
 builder.Services.AddIdentityAndSwaggerGenConfig(builder.Configuration);
 // RepositoryAccessor and Service
-builder.Services.AddDependencyInjectionConfig();
+builder.Services.AddDependencyInjectionConfiguration(typeof(Program));
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 // add auth
 builder.Services.AddAuthenticationConfig(builder.Configuration);
 // add logUserActivity custom user

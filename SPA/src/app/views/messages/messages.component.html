@@ -1,8 +1,8 @@
 <div class="container mt-5">
   <div class="row">
     <div class="btn-group">
-      <button class="btn btn-primary" (click)="getMessageForUser('unread')">
-        <i class="fa fa-envelope"></i> Unread
+      <button class="btn btn-primary" (click)="getMessageForUser('unRead')">
+        <i class="fa fa-envelope"></i> unRead
       </button>
       <button class="btn btn-primary" (click)="getMessageForUser('inbox')">
         <i class="fa fa-envelope-open"></i> Inbox
@@ -29,20 +29,22 @@
       </thead>
       <tbody>
         <tr *ngFor="let message of messages" [routerLink]="['/members',
-                messageContainer == 'Outbox' ? message.recipientid : message.senderid]"
+                messageContainer == 'Outbox' ? message.recipientId : message.senderId]"
           [queryParams]="{tab: 'Messages'}">
           <td>{{message.content}}</td>
           <td>
             <div *ngIf="messageContainer != 'Outbox'">
-              <img src="{{message?.sender_photo_url}}" alt="sender_photo" class="img-circle rounded-circle">
-              <strong>{{message.sender_known_as}}</strong>
+              <img src="{{message?.senderPhotoUrl}}" alt="sender_photo"
+                class="img-circle rounded-circle">
+              <strong>{{message.senderKnownAs}}</strong>
             </div>
             <div *ngIf="messageContainer == 'Outbox'">
-              <img src="{{message?.recipient_photo_url}}" alt="recipient_photo" class="img-circle rounded-circle">
-              <strong>{{message.recipient_known_as}}</strong>
+              <img src="{{message?.recipientPhotoUrl}}" alt="recipient_photo"
+                class="img-circle rounded-circle">
+              <strong>{{message.recipientKnownAs}}</strong>
             </div>
           </td>
-          <td>{{message.message_sent | dateAgo}}</td>
+          <td>{{message.messageSent | dateAgo}}</td>
           <td>
             <button type="button" class="btn btn-warning" (click)="$event.stopPropagation()"
               (click)="deleteMessage(message.id)">Delete</button>
@@ -55,7 +57,7 @@
 </div>
 
 <div class="d-flex justify-content-center">
-  <pagination [boundaryLinks]="true" [totalItems]="pagination.totalItems" [itemsPerPage]="pagination.pageSize"
+  <pagination [boundaryLinks]="true" [totalItems]="pagination.totalPage" [itemsPerPage]="pagination.pageSize"
     [(ngModel)]="pagination.pageNumber" (pageChanged)="pageChanged($event)" previousText="&lsaquo;" nextText="&rsaquo;"
     firstText="&laquo;" lastText="&raquo;">
   </pagination>

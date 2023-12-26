@@ -2,25 +2,25 @@ import { Photo } from "./photo";
 
 export interface User {
   id: number;
-  username: string;
+  userName: string;
   gender: string;
   age: number;
-  known_as: string;
+  knownAs: string;
   created: string;
-  last_active: string;
+  lastActive: string;
   introduction: string;
-  looking_for: string;
+  lookingFor: string;
   interests: string;
   city: string;
   country: string;
-  photo_url: string;
+  photoUrl: string;
   photos: Photo[];
   roles: string[];
 }
 
 export interface UserLogin {
   id: number;
-  username: string;
+  userName: string;
   token: string;
   photoUrl: string | null;
   knownAs: string;
@@ -29,20 +29,20 @@ export interface UserLogin {
 }
 
 export interface UserForRegister {
-  username: string;
+  userName: string;
   password: string;
   gender: string;
-  known_as: string;
-  date_of_birth: string;
+  knownAs: string;
+  dateOfBirth: Date | string;
   city: string;
   country: string;
-  created: string;
-  last_active: string;
+  created: Date | string;
+  lastActive: Date | string;
 }
 
 export interface UserFilter {
-  gender: string;
-  min_age: number;
-  max_age: number;
-  order_by: string;
+    gender: string;
+    minAge: number;
+    maxAge: number;
+    orderBy: string;
 }

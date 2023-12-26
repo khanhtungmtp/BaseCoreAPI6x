@@ -20,7 +20,7 @@ namespace API.Helpers.Utilities
             int userid = int.Parse(actionContext.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
             IDatingServices repo = actionContext.HttpContext.RequestServices.GetService<IDatingServices>();
             User user = await repo.GetUser(userid);
-            user.last_active = DateTime.Now;
+            user.LastActive = DateTime.Now;
             await _repo.SaveAll();
         }
     }

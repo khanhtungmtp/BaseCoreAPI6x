@@ -37,7 +37,7 @@ namespace API.Configurations
                                 Id = "Bearer"
                             }
                         },
-                        new string[] { }
+                        Array.Empty<string>()
                     }
                 });
             });

@@ -3,10 +3,10 @@ namespace API.Dtos.User
 {
     public class UserForUpdateDto
     {
-        public string introduction { get; set; }
-        public string looking_for { get; set; }
-        public string interests { get; set; }
-        public string city { get; set; }
-        public string country { get; set; }
+        public string Introduction { get; set; }
+        public string LookingFor { get; set; }
+        public string Interests { get; set; }
+        public string City { get; set; }
+        public string Country { get; set; }
     }
 }

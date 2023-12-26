@@ -1,19 +1,19 @@
 <div class="text-center mt-3">
-  <h2 *ngIf="pagination">Your matches - {{pagination.totalItems}} found</h2>
+  <h2 *ngIf="pagination">Your matches - {{pagination.totalCount}} found</h2>
 </div>
 
 <div class="container mt-3">
   <form class="d-flex flex-row align-items-center flex-wrap" novalidate
     #form="ngForm" (submit)="getUsers()">
-    <label class="my-1 me-2" for="min_age">Age From</label>
-    <ng-select [(ngModel)]="userFilter.min_age" name="min_age"
+    <label class="my-1 me-2" for="minAge">Age From</label>
+    <ng-select [(ngModel)]="userFilter.minAge" name="minAge"
       [dropdownPosition]="'bottom'" [clearable]="false" class="params">
       <ng-option *ngFor="let ageMin of ageList()"
         [value]="ageMin">{{ageMin}}</ng-option>
     </ng-select>
-    <label class="ms-2 me-2" for="max_age">Age to</label>
-    <ng-select [(ngModel)]="userFilter.max_age" [clearable]="false"
-      [dropdownPosition]="'bottom'" name="max_age" class="params">
+    <label class="ms-2 me-2" for="maxAge">Age to</label>
+    <ng-select [(ngModel)]="userFilter.maxAge" [clearable]="false"
+      [dropdownPosition]="'bottom'" name="maxAge" class="params">
       <ng-option *ngFor="let ageMax of ageList()"
         [value]="ageMax">{{ageMax}}</ng-option>
     </ng-select>
@@ -29,10 +29,10 @@
     <div class="col">
       <div class="btn-group float-right ms-5">
         <button type="button" name="orderBy" (click)="getUsers()"
-          [(ngModel)]="userFilter.order_by" class="btn btn-create"
+          [(ngModel)]="userFilter.orderBy" class="btn btn-create"
           btnRadio="last_active">Last Active</button>
         <button type="button" name="orderBy" (click)="getUsers()"
-          [(ngModel)]="userFilter.order_by" class="btn btn-warning"
+          [(ngModel)]="userFilter.orderBy" class="btn btn-warning"
           btnRadio="created">Newest Members</button>
       </div>
     </div>
@@ -46,7 +46,7 @@
   </div>
 </div>
 <div class="d-flex justify-content-center mt-3" *ngIf="users.length > 0">
-  <pagination [boundaryLinks]="true" [totalItems]="pagination.totalItems"
+  <pagination [boundaryLinks]="true" [totalItems]="pagination.totalPage"
     [itemsPerPage]="pagination.pageSize" [maxSize]="5"
     [(ngModel)]="pagination.pageNumber" (pageChanged)="pageChanged($event)"
     previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;"

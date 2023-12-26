@@ -12,23 +12,23 @@ namespace API.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Like_Users_likee_id",
+                name: "FK_Like_Users_LikeeId",
                 table: "Like");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Like_Users_liker_id",
+                name: "FK_Like_Users_LikerId",
                 table: "Like");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Messages_Users_recipientid",
+                name: "FK_Messages_Users_RecipientId",
                 table: "Messages");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Messages_Users_senderid",
+                name: "FK_Messages_Users_SenderId",
                 table: "Messages");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Photos_Users_userid",
+                name: "FK_Photos_Users_UserId",
                 table: "Photos");
 
             migrationBuilder.DropPrimaryKey(
@@ -36,11 +36,11 @@ namespace API.Migrations
                 table: "Users");
 
             migrationBuilder.DropColumn(
-                name: "password_hash",
+                name: "PasswordHash",
                 table: "Users");
 
             migrationBuilder.DropColumn(
-                name: "password_salt",
+                name: "PasswordSalt",
                 table: "Users");
 
             migrationBuilder.RenameTable(
@@ -48,17 +48,17 @@ namespace API.Migrations
                 newName: "AspNetUsers");
 
             migrationBuilder.RenameColumn(
-                name: "username",
+                name: "Username",
                 table: "AspNetUsers",
-                newName: "UserName");
+                newName: "Username");
 
             migrationBuilder.RenameColumn(
-                name: "id",
+                name: "Id",
                 table: "AspNetUsers",
                 newName: "Id");
 
             migrationBuilder.AlterColumn<string>(
-                name: "UserName",
+                name: "Username",
                 table: "AspNetUsers",
                 type: "nvarchar(256)",
                 maxLength: 256,
@@ -115,7 +115,7 @@ namespace API.Migrations
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
-                name: "NormalizedUserName",
+                name: "NormalizedUsername",
                 table: "AspNetUsers",
                 type: "nvarchar(256)",
                 maxLength: 256,
@@ -198,14 +198,14 @@ namespace API.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LoginProvIder = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProvIderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProvIderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
+                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvIder, x.ProvIderKey });
                     table.ForeignKey(
                         name: "FK_AspNetUserLogins_AspNetUsers_UserId",
                         column: x => x.UserId,
@@ -219,13 +219,13 @@ namespace API.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LoginProvIder = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
+                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvIder, x.Name });
                     table.ForeignKey(
                         name: "FK_AspNetUserTokens_AspNetUsers_UserId",
                         column: x => x.UserId,
@@ -285,11 +285,11 @@ namespace API.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
-                name: "UserNameIndex",
+                name: "UsernameIndex",
                 table: "AspNetUsers",
-                column: "NormalizedUserName",
+                column: "NormalizedUsername",
                 unique: true,
-                filter: "[NormalizedUserName] IS NOT NULL");
+                filter: "[NormalizedUsername] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -319,41 +319,41 @@ namespace API.Migrations
                 column: "RoleId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Like_AspNetUsers_likee_id",
+                name: "FK_Like_AspNetUsers_LikeeId",
                 table: "Like",
-                column: "likee_id",
+                column: "LikeeId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Like_AspNetUsers_liker_id",
+                name: "FK_Like_AspNetUsers_LikerId",
                 table: "Like",
-                column: "liker_id",
+                column: "LikerId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Messages_AspNetUsers_recipientid",
+                name: "FK_Messages_AspNetUsers_RecipientId",
                 table: "Messages",
-                column: "recipientid",
+                column: "RecipientId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Messages_AspNetUsers_senderid",
+                name: "FK_Messages_AspNetUsers_SenderId",
                 table: "Messages",
-                column: "senderid",
+                column: "SenderId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Photos_AspNetUsers_userid",
+                name: "FK_Photos_AspNetUsers_UserId",
                 table: "Photos",
-                column: "userid",
+                column: "UserId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
@@ -363,23 +363,23 @@ namespace API.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Like_AspNetUsers_likee_id",
+                name: "FK_Like_AspNetUsers_LikeeId",
                 table: "Like");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Like_AspNetUsers_liker_id",
+                name: "FK_Like_AspNetUsers_LikerId",
                 table: "Like");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Messages_AspNetUsers_recipientid",
+                name: "FK_Messages_AspNetUsers_RecipientId",
                 table: "Messages");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Messages_AspNetUsers_senderid",
+                name: "FK_Messages_AspNetUsers_SenderId",
                 table: "Messages");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Photos_AspNetUsers_userid",
+                name: "FK_Photos_AspNetUsers_UserId",
                 table: "Photos");
 
             migrationBuilder.DropTable(
@@ -409,7 +409,7 @@ namespace API.Migrations
                 table: "AspNetUsers");
 
             migrationBuilder.DropIndex(
-                name: "UserNameIndex",
+                name: "UsernameIndex",
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
@@ -441,7 +441,7 @@ namespace API.Migrations
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
-                name: "NormalizedUserName",
+                name: "NormalizedUsername",
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
@@ -469,17 +469,17 @@ namespace API.Migrations
                 newName: "Users");
 
             migrationBuilder.RenameColumn(
-                name: "UserName",
+                name: "Username",
                 table: "Users",
-                newName: "username");
+                newName: "Username");
 
             migrationBuilder.RenameColumn(
                 name: "Id",
                 table: "Users",
-                newName: "id");
+                newName: "Id");
 
             migrationBuilder.AlterColumn<string>(
-                name: "username",
+                name: "Username",
                 table: "Users",
                 type: "nvarchar(max)",
                 nullable: true,
@@ -489,13 +489,13 @@ namespace API.Migrations
                 oldNullable: true);
 
             migrationBuilder.AddColumn<byte[]>(
-                name: "password_hash",
+                name: "PasswordHash",
                 table: "Users",
                 type: "varbinary(max)",
                 nullable: true);
 
             migrationBuilder.AddColumn<byte[]>(
-                name: "password_salt",
+                name: "PasswordSalt",
                 table: "Users",
                 type: "varbinary(max)",
                 nullable: true);
@@ -503,46 +503,46 @@ namespace API.Migrations
             migrationBuilder.AddPrimaryKey(
                 name: "PK_Users",
                 table: "Users",
-                column: "id");
+                column: "Id");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Like_Users_likee_id",
+                name: "FK_Like_Users_LikeeId",
                 table: "Like",
-                column: "likee_id",
+                column: "LikeeId",
                 principalTable: "Users",
-                principalColumn: "id",
+                principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Like_Users_liker_id",
+                name: "FK_Like_Users_LikerId",
                 table: "Like",
-                column: "liker_id",
+                column: "LikerId",
                 principalTable: "Users",
-                principalColumn: "id",
+                principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Messages_Users_recipientid",
+                name: "FK_Messages_Users_RecipientId",
                 table: "Messages",
-                column: "recipientid",
+                column: "RecipientId",
                 principalTable: "Users",
-                principalColumn: "id",
+                principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Messages_Users_senderid",
+                name: "FK_Messages_Users_SenderId",
                 table: "Messages",
-                column: "senderid",
+                column: "SenderId",
                 principalTable: "Users",
-                principalColumn: "id",
+                principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Photos_Users_userid",
+                name: "FK_Photos_Users_UserId",
                 table: "Photos",
-                column: "userid",
+                column: "UserId",
                 principalTable: "Users",
-                principalColumn: "id",
+                principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
         }
     }

@@ -2,7 +2,7 @@ import { Router } from '@angular/router';
 
 import { UserService } from 'src/app/_core/_services/user.service';
 import { User } from 'src/app/_core/_models/user';
-import { Component, Input, OnInit, computed, effect } from '@angular/core';
+import { Component, Input, OnInit, computed } from '@angular/core';
 import { LocalStorageContains } from 'src/app/_core/_constants/localStorageContains';
 import { SearchParams } from 'src/app/_core/_models/dating';
 import { NgSnotifyService } from 'src/app/_core/_services/ng-snotify.service';
@@ -36,20 +36,19 @@ export class MemberCardComponent implements OnInit {
   sendLike(recipient: number) {
     this.userService.sendLike(this.userLogin.id, recipient).subscribe({
       next: (res) => {
-        this.snotify.success(CaptionConstants.SUCCESS, `You have ${res.message}: ` + this.user.username);
-      },
-      error: (err) => {
-        this.snotify.error(CaptionConstants.ERROR,err);
+        this.snotify.success(CaptionConstants.SUCCESS, `You have ${res.message}: ` + this.user.userName);
+      }, error: (e) => {
+        throw e;
       }
     })
   }
 
   redirectDetail(user: User) {
     this.searchParam = {
-      min_age: this.params.min_age,
-      max_age: this.params.max_age,
+      minAge: this.params.minAge,
+      maxAge: this.params.maxAge,
       gender: this.params.gender,
-      order_by: this.params.order_by
+      orderBy: this.params.orderBy
     }
     this.userService.searchInput.set(this.searchParam);
     this.router.navigate(['/members/' + user.id]);

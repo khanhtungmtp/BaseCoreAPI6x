@@ -37,40 +37,39 @@ namespace API._Services.Services
             return _mapper.Map<UserForDetailedDto>(user);
         }
 
-        public async Task<PaginationUtilities<User>> GetUserLikes(PaginationParams pagination, UserLikes userLikes)
+        public async Task<PaginationUtility<UserForDetailedDto>> GetUserLikes(PaginationParams pagination, UserLikes userLikes)
         {
-            userLikes.user_id = GetUserCurrent();
+            userLikes.UserId = GetUserCurrent();
             return await _datingServices.GetUsersLike(pagination, userLikes);
         }
 
-        public async Task<PaginationUtilities<User>> GetUsers(PaginationParams paginationParams, UserFilter userFilter)
+        public async Task<PaginationUtility<UserForDetailedDto>> GetUsers(PaginationParams paginationParams, UserFilter userFilter)
         {
             int user_id = GetUserCurrent();
             User user = await _datingServices.GetUser(user_id);
-            userFilter.user_id = user_id;
-            if (userFilter.gender == null)
-                userFilter.gender = user.gender;
+            userFilter.UserId = user_id;
+            userFilter.Gender ??= user.Gender;
             return await _datingServices.GetUsers(paginationParams, userFilter);
         }
 
-        public async Task<OperationResult> Likes(int userid, int recipientid)
+        public async Task<OperationResult> Likes(int userid, int RecipientId)
         {
             if (userid != GetUserCurrent())
                 throw new Exception("Unauthorization");
-            User recipient = await _datingServices.GetUser(recipientid);
+            User recipient = await _datingServices.GetUser(RecipientId);
             if (recipient == null)
                 throw new Exception("recipient not found");
             Like like = await _datingServices.GetLike(userid, recipient.Id);
             if (like != null)
             {
-                _unitOfWork.Like.Delete(like);
+                _unitOfWork.Like.Remove(like);
                 if (await _unitOfWork.SaveAll())
                     return new OperationResult { Message = "Unliked" };
             };
             like = new Like
             {
-                liker_id = userid,
-                likee_id = recipientid
+                LikerId = userid,
+                LikeeId = RecipientId
             };
 
             _unitOfWork.Like.Add(like);

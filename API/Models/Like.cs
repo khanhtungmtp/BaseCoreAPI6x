@@ -3,9 +3,9 @@ namespace API.Models
 {
     public class Like
     {
-        public int liker_id { get; set; }
-        public int likee_id { get; set; }
-        public User likers { get; set; }
-        public User likee { get; set; } // nguoi nhan
+        public int LikerId { get; set; }
+        public int LikeeId { get; set; }
+        public User Likers { get; set; }
+        public User Likee { get; set; } // nguoi nhan
     }
 }

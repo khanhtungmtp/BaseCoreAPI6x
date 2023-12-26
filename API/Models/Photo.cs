@@ -2,13 +2,13 @@ namespace API.Models
 {
     public class Photo
     {
-        public int id { get; set; }
-        public string url { get; set; }
-        public string description { get; set; }
-        public DateTime date_added { get; set; }
-        public bool is_main { get; set; }
-        public User user { get; set; }
-        public int userid { get; set; }
-        public string public_id { get; set; }
+        public int Id { get; set; }
+        public string Url { get; set; }
+        public string Description { get; set; }
+        public DateTime DateAdded { get; set; }
+        public bool IsMain { get; set; }
+        public User User { get; set; }
+        public int Userid { get; set; }
+        public string PublicId { get; set; }
     }
 }

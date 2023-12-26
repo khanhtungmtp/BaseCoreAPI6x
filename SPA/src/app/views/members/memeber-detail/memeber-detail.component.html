@@ -1,13 +1,13 @@
 <div class="container mt-4" *ngIf="user">
   <div class="row">
-    <h1>{{user.known_as || 'user'}} profile</h1>
+    <h1>{{user.knownAs || 'user'}} profile</h1>
   </div>
   <div class="row">
     <div class="col-sm-4">
       <div class="card">
         <img class="card-img-top img-thumbnail"
-          src="{{user.photo_url || '../../assets/user_default.png'}}"
-          alt="{{user.known_as || 'user'}}">
+          src="{{user.photoUrl || '../../assets/user_default.png'}}"
+          alt="{{user.knownAs || 'user'}}">
         <div class="card-body">
           <div>
             <strong>Location:</strong>
@@ -19,7 +19,7 @@
           </div>
           <div>
             <strong>Last active:</strong>
-            <p>{{user.last_active | dateAgo}}</p>
+            <p>{{user.lastActive | dateAgo}}</p>
           </div>
           <div>
             <strong>Member since:</strong>
@@ -38,12 +38,12 @@
     <div class="col-sm-8">
       <div class="tab-panel">
         <tabset class="member-tabset" #memberTabs>
-          <tab heading="Aboult {{user.known_as || 'user'}}"
+          <tab heading="Aboult {{user.knownAs || 'user'}}"
             (selectTab)="onTabActivated($event)">
             <h4>Description</h4>
             <p>{{user.introduction}}</p>
             <h4>Looking for</h4>
-            <p>{{user.looking_for}}</p>
+            <p>{{user.lookingFor}}</p>
           </tab>
           <tab heading="Interests" (selectTab)="onTabActivated($event)">
             <h4>Interests</h4>
@@ -61,7 +61,7 @@
           </tab>
           <tab heading="Messages" (selectTab)="onTabActivated($event)">
             <h4>Messages</h4>
-            <app-memeber-message [recipientid]="user.id"></app-memeber-message>
+            <app-memeber-message [recipientId]="user.id"></app-memeber-message>
           </tab>
         </tabset>
       </div>

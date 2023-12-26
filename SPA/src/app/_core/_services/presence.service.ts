@@ -18,8 +18,8 @@ export class PresenceService {
     }).withAutomaticReconnect().build()
 
     this.hubConnection.start().catch(error => console.log(error));
-    this.hubConnection.on("UserIsOnline", username => {
-      this.snotify.info(CaptionConstants.SUCCESS, username + 'has connected')
+    this.hubConnection.on("UserIsOnline", userName => {
+      this.snotify.info(CaptionConstants.SUCCESS, userName + 'has connected')
     })
     this.hubConnection.on("UserIsOffline", userName => {
       this.snotify.warning(CaptionConstants.WARNING, userName + 'has disconnected')

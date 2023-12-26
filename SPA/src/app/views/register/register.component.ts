@@ -8,7 +8,6 @@ import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { CaptionConstants, MessageConstants } from 'src/app/_core/_constants/message.enum';
 import { AuthService } from 'src/app/_core/_services/auth.service';
 import Validation from 'src/app/_core/_helpers/utilities/validation';
-import { FunctionUtility } from 'src/app/_core/_helpers/utilities/function-utility';
 import { NgSnotifyService } from 'src/app/_core/_services/ng-snotify.service';
 
 @Component({
@@ -22,15 +21,15 @@ export class RegisterComponent implements OnInit {
     password: FormControl<string | null>;
     gender: FormControl<string | null>;
     city: FormControl<string | null>;
-    date_of_birth: FormControl<string | null>;
+    dateOfBirth: FormControl<string | null>;
     confirmPassword: FormControl<string | null>;
-    known_as: FormControl<string | null>;
-    username: FormControl<string | null>
+    knownAs: FormControl<string | null>;
+    userName: FormControl<string | null>
   }> = new FormGroup({
     gender: new FormControl(''),
-    username: new FormControl(''),
-    known_as: new FormControl(''),
-    date_of_birth: new FormControl(),
+    userName: new FormControl(''),
+    knownAs: new FormControl(''),
+    dateOfBirth: new FormControl(),
     city: new FormControl(''),
     country: new FormControl(''),
     password: new FormControl(''),
@@ -62,7 +61,7 @@ export class RegisterComponent implements OnInit {
     this.registerForm = this.formBuilder.group(
       {
         gender: ['male'],
-        username: [
+        userName: [
           '',
           [
             Validators.required,
@@ -70,8 +69,8 @@ export class RegisterComponent implements OnInit {
             Validators.maxLength(20),
           ],
         ],
-        known_as: ['', Validators.required],
-        date_of_birth: ['', [Validators.required]],
+        knownAs: ['', Validators.required],
+        dateOfBirth: ['', [Validators.required]],
         city: [''],
         country: [''],
         password: [
@@ -107,7 +106,7 @@ export class RegisterComponent implements OnInit {
         complete: () => {
           // đăng ký xong đăng nhập luôn
           this.loginModel = {
-            username: this.registerForm.get('username')?.value as string,
+            userName: this.registerForm.get('userName')?.value as string,
             password: this.registerForm.get('password')?.value as string
           }
           this.authService.login(this.loginModel).subscribe({

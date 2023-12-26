@@ -3,38 +3,77 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Helpers.Utilities
 {
-    public class PaginationUtilities<T> : List<T>
+    public class PaginationUtility<T> where T : class
     {
+        public PaginationResult Pagination { get; set; }
+        public List<T> Result { get; set; }
         public int PageNumber { get; set; }
         public int TotalPages { get; set; }
         public int PageSize { get; set; }
         public int TotalItems { get; set; }
 
-        public PaginationUtilities(List<T> items, int count, int pageNumber, int pageSize)
+        public PaginationUtility(List<T> items, int count, int pageNumber, int pageSize, int skip)
         {
-            TotalItems = count;
+            Result = items;
+            Pagination = PaginationResult.Create(count, pageNumber, pageSize, skip);
+        }
+
+        public PaginationUtility(List<T> items, List<T> itemsChart, string machine_name, int count, int pageNumber, int pageSize, int skip)
+        {
+            Result = items;
+            Pagination = PaginationResult.Create(count, pageNumber, pageSize, skip);
+        }
+        public static async Task<PaginationUtility<T>> CreateAsync(IQueryable<T> source, int pageNumber, int pageSize = 10, bool isPaging = true)
+        {
+            var count = await source.CountAsync();
+            var skip = (pageNumber - 1) * pageSize;
+            var items = isPaging ? await source.Skip(skip).Take(pageSize).ToListAsync() : await source.ToListAsync();
+
+            return new PaginationUtility<T>(items, count, pageNumber, pageSize, skip);
+        }
+
+        public static PaginationUtility<T> Create(List<T> source, int pageNumber, int pageSize = 10, bool isPaging = true)
+        {
+            var count = source.Count;
+            var skip = (pageNumber - 1) * pageSize;
+            var items = isPaging ? source.Skip(skip).Take(pageSize).ToList() : source.ToList();
+
+            return new PaginationUtility<T>(items, count, pageNumber, pageSize, skip);
+        }
+    }
+
+    public class PaginationResult
+    {
+        public int TotalCount { get; set; }
+        public int TotalPage { get; set; }
+        public int PageNumber { get; set; }
+        public int PageSize { get; set; }
+        public int Skip { get; set; }
+
+        public PaginationResult(int count, int pageNumber, int pageSize, int skip)
+        {
+            TotalCount = count;
+            TotalPage = (int)Math.Ceiling(TotalCount / (double)pageSize);
             PageNumber = pageNumber;
             PageSize = pageSize;
-            TotalPages = (int)Math.Ceiling(count / (double)pageSize);
-            this.AddRange(items);
+            Skip = skip;
         }
-        public static async Task<PaginationUtilities<T>> CreateAsync(IQueryable<T> source, int pageNumber, int pageSize)
+
+        public static PaginationResult Create(int count, int pageNumber, int pageSize, int skip)
         {
-            int count = await source.CountAsync();
-            List<T> items = await source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
-            return new PaginationUtilities<T>(items, count, pageNumber, pageSize);
+            return new PaginationResult(count, pageNumber, pageSize, skip);
         }
     }
 
     public class PaginationParams
     {
         private const int MaxPageSize = 50;
-        public int pageNumber { get; set; } = 1;
-        private int pageSize = 10;
+        public int PageNumber { get; set; } = 1;
+        private int _pageSize = 10;
         public int PageSize
         {
-            get { return pageSize; }
-            set { pageSize = (value > MaxPageSize) ? MaxPageSize : value; }
+            get { return _pageSize; }
+            set { _pageSize = (value > MaxPageSize) ? MaxPageSize : value; }
         }
     }
 

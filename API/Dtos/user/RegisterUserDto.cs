@@ -6,25 +6,25 @@ namespace API.Dtos.User
     {
         public RegisterUserDto()
         {
-            this.created = DateTime.Now;
-            this.last_active = DateTime.Now;
+            this.Created = DateTime.Now;
+            this.LastActive = DateTime.Now;
         }
         [Required]
-        public string username { get; set; }
+        public string UserName { get; set; }
         [Required]
         [StringLength(32, MinimumLength = 4, ErrorMessage = "You must specify password between 8 and 32 characters")]
-        public string password { get; set; }
+        public string Password { get; set; }
         [Required]
-        public string gender { get; set; }
+        public string Gender { get; set; }
         [Required]
-        public string known_as { get; set; }
+        public string KnownAs { get; set; }
         [Required]
-        public DateTime date_of_birth { get; set; }
+        public DateTime DateOfBirth { get; set; }
         [Required]
-        public string city { get; set; }
+        public string City { get; set; }
         [Required]
-        public string country { get; set; }
-        public DateTime created { get; set; }
-        public DateTime last_active { get; set; }
+        public string Country { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime LastActive { get; set; }
     }
 }

@@ -3,17 +3,17 @@ namespace API.Models
 {
     public class Message
     {
-        public int id { get; set; }
-        public int senderid { get; set; }
-        public User sender { get; set; }
-        public int recipientid { get; set; }
-        public User recipient { get; set; }
-        public string content { get; set; }
-        public bool is_read { get; set; }
-        public DateTime? date_read { get; set; }
-        public DateTime message_sent { get; set; } = DateTime.Now;
-        public bool sender_deleted { get; set; }
-        public bool recipient_deleted { get; set; }
+        public int Id { get; set; }
+        public int SenderId { get; set; }
+        public User Sender { get; set; }
+        public int RecipientId { get; set; }
+        public User Recipient { get; set; }
+        public string Content { get; set; }
+        public bool IsRead { get; set; }
+        public DateTime? DateRead { get; set; }
+        public DateTime MessageSent { get; set; } = DateTime.Now;
+        public bool SenderDeleted { get; set; }
+        public bool RecipientDeleted { get; set; }
 
     }
 }

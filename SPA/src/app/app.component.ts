@@ -1,7 +1,7 @@
 import { LocalStorageContains } from 'src/app/_core/_constants/localStorageContains';
 import { Component } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { User, UserLogin } from './_core/_models/user';
+import { UserLogin } from './_core/_models/user';
 import { AuthService } from './_core/_services/auth.service';
 
 @Component({

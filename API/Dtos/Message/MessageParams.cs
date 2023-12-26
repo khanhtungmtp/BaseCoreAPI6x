@@ -3,8 +3,8 @@ namespace API.Dtos.Message
 {
     public class MessageParams
     {
-        public int userid { get; set; }
-        public string message_container { get; set; } = "unread";
+        public int Userid { get; set; }
+        public string MessageContainer { get; set; } = "unRead";
 
     }
 }

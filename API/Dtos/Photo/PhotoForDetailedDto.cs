@@ -5,13 +5,13 @@ namespace API.Dtos.Photo
     {
         public PhotoForDetailedDto()
         {
-            date_added = DateTime.Now;
+            DateAdded = DateTime.Now;
         }
 
-        public int id { get; set; }
-        public string url { get; set; }
-        public string description { get; set; }
-        public DateTime date_added { get; set; }
-        public bool is_main { get; set; }
+        public int Id { get; set; }
+        public string Url { get; set; }
+        public string Description { get; set; }
+        public DateTime DateAdded { get; set; }
+        public bool IsMain { get; set; }
     }
 }
