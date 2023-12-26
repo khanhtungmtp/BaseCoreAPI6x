@@ -15,46 +15,46 @@ namespace API.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    username = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    password_hash = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    password_salt = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    date_of_birth = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    known_as = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    last_active = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    introduction = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    looking_for = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    interests = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    city = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    country = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PasswordHash = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    PasswordSalt = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    KnownAs = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastActive = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Introduction = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LookingFor = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Interests = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Country = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.id);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Like",
                 columns: table => new
                 {
-                    liker_id = table.Column<int>(type: "int", nullable: false),
-                    likee_id = table.Column<int>(type: "int", nullable: false)
+                    LikerId = table.Column<int>(type: "int", nullable: false),
+                    LikeeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Like", x => new { x.liker_id, x.likee_id });
+                    table.PrimaryKey("PK_Like", x => new { x.LikerId, x.LikeeId });
                     table.ForeignKey(
-                        name: "FK_Like_Users_likee_id",
-                        column: x => x.likee_id,
+                        name: "FK_Like_Users_LikeeId",
+                        column: x => x.LikeeId,
                         principalTable: "Users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Like_Users_liker_id",
-                        column: x => x.liker_id,
+                        name: "FK_Like_Users_LikerId",
+                        column: x => x.LikerId,
                         principalTable: "Users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
@@ -64,29 +64,29 @@ namespace API.Migrations
                 name: "Messages",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    senderid = table.Column<int>(type: "int", nullable: false),
-                    recipientid = table.Column<int>(type: "int", nullable: false),
-                    content = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    is_read = table.Column<bool>(type: "bit", nullable: false),
-                    date_read = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    message_sent = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    sender_deleted = table.Column<bool>(type: "bit", nullable: false),
-                    recipient_deleted = table.Column<bool>(type: "bit", nullable: false)
+                    SenderId = table.Column<int>(type: "int", nullable: false),
+                    RecipientId = table.Column<int>(type: "int", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsRead = table.Column<bool>(type: "bit", nullable: false),
+                    DateRead = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    MessageSent = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SenderDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    RecipientDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Messages", x => x.id);
+                    table.PrimaryKey("PK_Messages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Messages_Users_recipientid",
-                        column: x => x.recipientid,
+                        name: "FK_Messages_Users_RecipientId",
+                        column: x => x.RecipientId,
                         principalTable: "Users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Messages_Users_senderid",
-                        column: x => x.senderid,
+                        name: "FK_Messages_Users_SenderId",
+                        column: x => x.SenderId,
                         principalTable: "Users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
@@ -96,40 +96,40 @@ namespace API.Migrations
                 name: "Photos",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    url = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    date_added = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    is_main = table.Column<bool>(type: "bit", nullable: false),
-                    userid = table.Column<int>(type: "int", nullable: false),
-                    public_id = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DateAdded = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsMain = table.Column<bool>(type: "bit", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    PublicId = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Photos", x => x.id);
+                    table.PrimaryKey("PK_Photos", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Photos_Users_userid",
-                        column: x => x.userid,
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Like_likee_id",
+                name: "IX_Like_LikeeId",
                 table: "Like",
-                column: "likee_id");
+                column: "LikeeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Messages_recipientid",
+                name: "IX_Messages_RecipientId",
                 table: "Messages",
-                column: "recipientid");
+                column: "RecipientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Messages_senderid",
+                name: "IX_Messages_SenderId",
                 table: "Messages",
-                column: "senderid");
+                column: "SenderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Photos_userid",

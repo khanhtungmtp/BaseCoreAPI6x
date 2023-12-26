@@ -1,10 +1,10 @@
 import { LocalStorageContains } from 'src/app/_core/_constants/localStorageContains';
-import { PaginationUtilities } from 'src/app/_core/_helpers/utilities/pagination-utilities';
+import { Pagination } from 'src/app/_core/_helpers/utilities/pagination-utilities';
 import { MessageConstants, CaptionConstants } from 'src/app/_core/_constants/message.enum';
 
 import { User, UserFilter } from 'src/app/_core/_models/user';
 import { UserService } from 'src/app/_core/_services/user.service';
-import { AfterContentChecked, Component, OnInit, computed, effect } from '@angular/core';
+import { AfterContentChecked, Component, OnInit, computed } from '@angular/core';
 import { SearchParams } from 'src/app/_core/_models/dating';
 import { DatingContains } from 'src/app/_core/_constants/datingContains';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -18,23 +18,23 @@ import { NgSnotifyService } from 'src/app/_core/_services/ng-snotify.service';
 export class MemberListComponent implements OnInit, AfterContentChecked {
   user: User = JSON.parse(localStorage.getItem(LocalStorageContains.USER) as string) ?? '';
   userFilter: UserFilter = <UserFilter>{
-    min_age: DatingContains.MIN_AGE,
-    max_age: DatingContains.MAX_AGE,
+    minAge: DatingContains.minAge,
+    maxAge: DatingContains.maxAge,
     gender: this.user.gender === 'male' ? 'female' : 'male',
-    order_by: 'last_active'
+    orderBy: 'last_active'
   }
   users: User[] = [];
   searchParam: SearchParams = <SearchParams>{
-    min_age: this.userFilter.min_age,
-    max_age: this.userFilter.max_age,
+    minAge: this.userFilter.minAge,
+    maxAge: this.userFilter.maxAge,
     gender: this.userFilter.gender,
-    order_by: this.userFilter.order_by
+    orderBy: this.userFilter.orderBy
   };
   // signal angular 16
   getParamSearch = computed(() => {
     return this.userService.searchInput()
   })
-  pagination: PaginationUtilities = <PaginationUtilities>{
+  pagination: Pagination = <Pagination>{
     pageNumber: 1,
     pageSize: 6,
   }
@@ -70,7 +70,6 @@ export class MemberListComponent implements OnInit, AfterContentChecked {
   }
 
   ngOnInit(): void {
-    console.log(' this.userFilter ngOnInit: ', this.userFilter);
     // using computed function
     if (Object.values(this.getParamSearch()).length != 0)
       this.userFilter = this.getParamSearch();
@@ -81,18 +80,18 @@ export class MemberListComponent implements OnInit, AfterContentChecked {
   ngAfterContentChecked(): void {
     // lấy những parameter mới nhất khi changes
     this.searchParam = <SearchParams>{
-      min_age: this.userFilter.min_age,
-      max_age: this.userFilter.max_age,
+      minAge: this.userFilter.minAge,
+      maxAge: this.userFilter.maxAge,
       gender: this.userFilter.gender,
-      order_by: this.userFilter.order_by
+      orderBy: this.userFilter.orderBy
     };
   }
 
   resetFilter() {
-    this.userFilter.min_age = DatingContains.MIN_AGE;
-    this.userFilter.max_age = DatingContains.MAX_AGE;
+    this.userFilter.minAge = DatingContains.minAge;
+    this.userFilter.maxAge = DatingContains.maxAge;
     this.userFilter.gender = this.user.gender === 'male' ? 'female' : 'male';
-    this.userFilter.order_by = 'last_active';
+    this.userFilter.orderBy = 'last_active';
     this.getUsers();
   }
 
@@ -107,9 +106,8 @@ export class MemberListComponent implements OnInit, AfterContentChecked {
         this.users = res.result;
         this.pagination = res.pagination;
         this.spinner.hide();
-      }, error: () => {
-        this.snotify.error(CaptionConstants.ERROR,MessageConstants.SYSTEM_ERROR_MSG);
-        this.spinner.hide();
+      }, error: (e) => {
+        throw e;
       }
     })
   }

@@ -33,12 +33,12 @@ namespace API._Services.Services
             User sender = await _datingServices.GetUser(userid);
             if (GetUserCurrent() != sender.Id)
                 throw new Exception("unauthorization");
-            messageForCreationDto.senderid = userid;
-            User userRecipient = await _datingServices.GetUser(messageForCreationDto.recipientid);
+            messageForCreationDto.SenderId = userid;
+            User userRecipient = await _datingServices.GetUser(messageForCreationDto.RecipientId);
             if (userRecipient == null)
                 throw new Exception("User recipient not found");
             Message message = _mapper.Map<Message>(messageForCreationDto);
-            message.message_sent = DateTime.Now;
+            message.MessageSent = DateTime.Now;
             _repo.Message.Add(message);
 
             if (await _repo.SaveAll())
@@ -54,12 +54,12 @@ namespace API._Services.Services
             if (GetUserCurrent() != userid)
                 throw new Exception("unauthorization");
             Message message = await _datingServices.GetMessage(message_id);
-            if (message.senderid == GetUserCurrent())
-                message.sender_deleted = true;
-            if (message.recipientid == GetUserCurrent())
-                message.recipient_deleted = true;
-            if (message.recipient_deleted && message.sender_deleted)
-                _repo.Message.Delete(message);
+            if (message.SenderId == GetUserCurrent())
+                message.SenderDeleted = true;
+            if (message.RecipientId == GetUserCurrent())
+                message.RecipientDeleted = true;
+            if (message.RecipientDeleted && message.SenderDeleted)
+                _repo.Message.Remove(message);
             if (await _repo.SaveAll())
             {
                 return new OperationResult { IsSuccess = true };
@@ -69,40 +69,40 @@ namespace API._Services.Services
 
         public async Task<Message> GetMessage(int user_id, MessageDetailDto messageDetail)
         {
-            if (user_id != messageDetail.User_id)
+            if (user_id != messageDetail.UserId)
                 throw new Exception("Unauthorize user");
-            Message message = await _datingServices.GetMessage(messageDetail.Message_id);
+            Message message = await _datingServices.GetMessage(messageDetail.MessageId);
             if (message == null)
                 return null;
             return message;
         }
 
-        public async Task<PaginationUtilities<Message>> GetMessageForUser(int userid, PaginationParams paginationParams, MessageParams messageParams)
+        public async Task<PaginationUtility<Message>> GetMessageForUser(int userid, PaginationParams paginationParams, MessageParams messageParams)
         {
             if (userid != GetUserCurrent())
                 throw new Exception("Unauthorize user");
-            messageParams.userid = userid;
+            messageParams.Userid = userid;
             return await _datingServices.GetMessagesForUser(paginationParams, messageParams);
         }
 
-        public async Task<IEnumerable<MessageToReturnDto>> GetMessagesThread(int userid, int recipientid)
+        public async Task<IEnumerable<MessageToReturnDto>> GetMessagesThread(int userid, int RecipientId)
         {
             if (userid != GetUserCurrent())
                 throw new Exception("Unauthorization");
-            IEnumerable<Message> message = await _datingServices.GetMessagesThread(userid, recipientid);
+            IEnumerable<Message> message = await _datingServices.GetMessagesThread(userid, RecipientId);
             return _mapper.Map<IEnumerable<MessageToReturnDto>>(message);
         }
 
-        public async Task<OperationResult> markAsRead(int userid, int message_id)
+        public async Task<OperationResult> MarkAsRead(int userid, int message_id)
         {
             if (userid != GetUserCurrent())
                 throw new Exception("Unauthorization");
             Message message = await _datingServices.GetMessage(message_id);
             if (message == null) throw new Exception("Cannot get message");
-            if (message.recipientid != userid)
+            if (message.RecipientId != userid)
                 throw new Exception("unauthorization");
-            message.is_read = true;
-            message.date_read = DateTime.Now;
+            message.IsRead = true;
+            message.DateRead = DateTime.Now;
             await _repo.SaveAll();
             return new OperationResult { IsSuccess = true };
         }

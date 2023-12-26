@@ -38,31 +38,29 @@ namespace API._Services.Services
             if (userid != GetUserCurrent())
                 throw new Exception("Unauthorization");
             User user = await _datingServices.GetUser(userid);
-            IFormFile file = photoForCreationDto.file;
+            IFormFile file = photoForCreationDto.File;
             // upload image
             ImageUploadResult uploadResult = new ImageUploadResult();
             if (file.Length > 0)
             {
-                using (Stream stream = file.OpenReadStream())
+                using Stream stream = file.OpenReadStream();
+                ImageUploadParams uploadParams = new()
                 {
-                    ImageUploadParams uploadParams = new ImageUploadParams()
-                    {
-                        File = new FileDescription(file.Name, stream),
-                        Transformation = new Transformation()
-                        .Width(500)
-                        .Height(500)
-                        .Crop("fill")
-                        .Gravity("face")
-                    };
-                    uploadResult = _cloudinary.Upload(uploadParams);
-                }
+                    File = new FileDescription(file.Name, stream),
+                    Transformation = new Transformation()
+                    .Width(500)
+                    .Height(500)
+                    .Crop("fill")
+                    .Gravity("face")
+                };
+                uploadResult = _cloudinary.Upload(uploadParams);
             }
-            photoForCreationDto.url = uploadResult.Url.ToString();
-            photoForCreationDto.public_id = uploadResult.PublicId;
+            photoForCreationDto.Url = uploadResult.Url.ToString();
+            photoForCreationDto.PublicId = uploadResult.PublicId;
             Photo photo = _mapper.Map<Photo>(photoForCreationDto);
-            if (!user.photos.Any(u => u.is_main))
-                photo.is_main = true;
-            user.photos.Add(photo);
+            if (!user.Photos.Any(u => u.IsMain))
+                photo.IsMain = true;
+            user.Photos.Add(photo);
             if (await _repo.SaveAll())
             {
                 PhotoForReturnDto photo_mapped = _mapper.Map<PhotoForReturnDto>(photo);
@@ -76,22 +74,22 @@ namespace API._Services.Services
             if (userid != GetUserCurrent())
                 throw new Exception("Unauthorization");
             User user = await _datingServices.GetUser(userid);
-            if (!user.photos.Any(p => p.is_main))
+            if (!user.Photos.Any(p => p.IsMain))
                 throw new Exception("Unauthorization");
             Photo photoFromRepo = await _datingServices.GetPhoto(photoid);
             if (photoFromRepo != null)
             {
-                if (photoFromRepo.is_main)
+                if (photoFromRepo.IsMain)
                     throw new Exception("You cannot delete your main photo");
-                if (photoFromRepo.public_id != null)
+                if (photoFromRepo.PublicId != null)
                 {
-                    DeletionParams deleteParams = new DeletionParams(photoFromRepo.public_id);
+                    DeletionParams deleteParams = new DeletionParams(photoFromRepo.PublicId);
                     DeletionResult result = _cloudinary.Destroy(deleteParams);
                     if (result.Result == "ok")
-                        _repo.Photo.Delete(photoFromRepo);
+                        _repo.Photo.Remove(photoFromRepo);
                 }
                 else
-                    _repo.Photo.Delete(photoFromRepo);
+                    _repo.Photo.Remove(photoFromRepo);
             }
             if (await _repo.SaveAll())
                 return new OperationResult { IsSuccess = true, Message = "Delete photo successfully" };
@@ -109,17 +107,17 @@ namespace API._Services.Services
             if (userid != GetUserCurrent())
                 throw new Exception("Unauthorization");
             User user = await _datingServices.GetUser(userid);
-            if (!user.photos.Any(p => p.id == photoid))
+            if (!user.Photos.Any(p => p.Id == photoid))
                 throw new Exception("Unauthorization");
             // lấy hình trong csdl ra để kt hinh do la main chua
             Photo photo = await _datingServices.GetPhoto(photoid);
-            if (photo.is_main)
+            if (photo.IsMain)
                 throw new Exception("This is already the main photo");
             // current main photo selected
             Photo currentMainPhoto = await _datingServices.GetMainPhotoForUser(userid);
-            currentMainPhoto.is_main = false;
+            currentMainPhoto.IsMain = false;
             // update main cho hinh vua chon
-            photo.is_main = true;
+            photo.IsMain = true;
             if (await _repo.SaveAll())
                 return new OperationResult { IsSuccess = true, Message = "Photo set main successfully" };
             throw new Exception("Could not set photo to main");

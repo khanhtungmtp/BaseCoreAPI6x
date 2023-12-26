@@ -28,14 +28,14 @@ namespace API.Controllers
         }
 
         [Authorize(Policy = "RequiredAdminRole")]
-        [HttpPost("edit-roles/{username}")]
-        public async Task<ActionResult> EditRoles(string username, [FromQuery] string roles)
+        [HttpPost("edit-roles/{userName}")]
+        public async Task<ActionResult> EditRoles(string userName, [FromQuery] string roles)
         {
             if (string.IsNullOrEmpty(roles)) return BadRequest("You must select at least one role");
 
             string[] selectedRoles = roles.Split(",").ToArray();
 
-            var user = await _userManager.FindByNameAsync(username);
+            var user = await _userManager.FindByNameAsync(userName);
 
             if (user == null) return NotFound();
 

@@ -5,6 +5,8 @@ using API.Dtos.Message;
 using API.Dtos.User;
 using API.Helpers.Utilities;
 using API.Models;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using LinqKit;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,128 +14,128 @@ namespace API._Services.Services
 {
     public class DatingServices : IDatingServices
     {
-        private readonly DataContext _dataContext;
-        public DatingServices(DataContext dataContext)
+        private readonly DataContext _context;
+		private readonly IMapper _mapper;
+		public DatingServices(
+			DataContext dataContext,
+			IMapper mapper)
         {
-            _dataContext = dataContext;
+			_mapper = mapper;
+            _context = dataContext;
         }
-        public async Task<Like> GetLike(int userid, int recipientid)
+        public async Task<Like> GetLike(int userid, int RecipientId)
         {
-            return await _dataContext.Like.FirstOrDefaultAsync(l => l.liker_id == userid && l.likee_id == recipientid);
+            return await _context.Like.FirstOrDefaultAsync(l => l.LikerId == userid && l.LikeeId == RecipientId);
         }
 
         public async Task<Photo> GetMainPhotoForUser(int userid)
         {
-            return await _dataContext.Photos.Where(u => u.userid == userid).FirstOrDefaultAsync(m => m.is_main);
+            return await _context.Photos.Where(u => u.Userid == userid).FirstOrDefaultAsync(m => m.IsMain);
         }
 
         public async Task<Photo> GetPhoto(int id)
         {
-            return await _dataContext.Photos.FirstOrDefaultAsync(p => p.id == id);
+            return await _context.Photos.FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task<User> GetUser(int id)
         {
-            return await _dataContext.Users.Include(p => p.photos).FirstOrDefaultAsync(u => u.Id == id);
+            return await _context.Users.Include(p => p.Photos).FirstOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task<IEnumerable<int>> ListUserLikes(int userid, bool likers)
         {
-            User user = await _dataContext.Users
-            .Include(u => u.likers)
-            .Include(u => u.likees)
+            User user = await _context.Users
+            .Include(u => u.Likers)
+            .Include(u => u.Likees)
             .FirstOrDefaultAsync(u => u.Id == userid);
             if (likers)
-                return user.likers.Select(x => x.liker_id);
+                return user.Likers.Select(x => x.LikerId);
             else
-                return user.likees.Where(u => u.liker_id == userid).Select(x => x.likee_id);
+                return user.Likees.Where(u => u.LikerId == userid).Select(x => x.LikeeId);
         }
 
-        public async Task<PaginationUtilities<User>> GetUsers(PaginationParams paginationParams, UserFilter userFilter)
+        public async Task<PaginationUtility<UserForDetailedDto>> GetUsers(PaginationParams paginationParams, UserFilter userFilter)
         {
             ExpressionStarter<User> predicate = PredicateBuilder.New<User>(true);
             // neu co chon gioi tinh
-            if (!string.IsNullOrEmpty(userFilter.gender))
-                predicate.And(u => u.gender == userFilter.gender);
-            predicate.And(u => u.Id != userFilter.user_id);
+            if (!string.IsNullOrEmpty(userFilter.Gender))
+                predicate.And(u => u.Gender == userFilter.Gender);
+            predicate.And(u => u.Id != userFilter.UserId);
 
             // filter age
-            if (userFilter.min_age != 18 || userFilter.max_age != 99)
+            if (userFilter.MinAge != 18 || userFilter.MaxAge != 99)
             {
                 // nam hien tai trừ đi số tuổi => ra năm sinh 
-                DateTime minDob = DateTime.Today.AddYears(-userFilter.max_age - 1);
-                DateTime maxDob = DateTime.Today.AddYears(-userFilter.min_age);
-                predicate.And(u => u.date_of_birth >= minDob && u.date_of_birth <= maxDob);
+                DateTime minDob = DateTime.Today.AddYears(-userFilter.MaxAge - 1);
+                DateTime maxDob = DateTime.Today.AddYears(-userFilter.MinAge);
+                predicate.And(u => u.DateOfBirth >= minDob && u.DateOfBirth <= maxDob);
             }
-            IQueryable<User> users = _dataContext.Users.Include(p => p.photos).Where(predicate);
+            IQueryable<User> users = _context.Users.Include(p => p.Photos).Where(predicate);
+            IQueryable<UserForDetailedDto> usersMapped = users.ProjectTo<UserForDetailedDto>(_mapper.ConfigurationProvider);
 
-            // sorting created, last active
-            if (!string.IsNullOrEmpty(userFilter.order_by))
+            // sorting Created, last active
+            if (!string.IsNullOrEmpty(userFilter.OrderBy))
             {
-                if (userFilter.order_by == "created")
-                    users = users.OrderByDescending(u => u.created);
+                if (userFilter.OrderBy == "Created")
+                    usersMapped = usersMapped.OrderByDescending(u => u.Created);
                 else
-                    users = users.OrderByDescending(u => u.last_active);
+                    usersMapped = usersMapped.OrderByDescending(u => u.LastActive);
             }
-            return await PaginationUtilities<User>.CreateAsync(users, paginationParams.pageNumber, paginationParams.PageSize);
+            return await PaginationUtility<UserForDetailedDto>.CreateAsync(usersMapped, paginationParams.PageNumber, paginationParams.PageSize);
         }
 
-        public async Task<PaginationUtilities<User>> GetUsersLike(PaginationParams paginationParams, UserLikes userLikes)
+        public async Task<PaginationUtility<UserForDetailedDto>> GetUsersLike(PaginationParams paginationParams, UserLikes userLikes)
         {
-            IQueryable<User> users = _dataContext.Users.Include(p => p.photos).Where(u => u.Id != userLikes.user_id);
-            if (userLikes.likers)
+            IQueryable<User> users = _context.Users.Include(p => p.Photos).Where(u => u.Id != userLikes.UserId);
+            if (userLikes.Likers)
             {
-                IEnumerable<int> userLiker = await ListUserLikes(userLikes.user_id, userLikes.likers);
+                IEnumerable<int> userLiker = await ListUserLikes(userLikes.UserId, userLikes.Likers);
                 users = users.Where(u => userLiker.Contains(u.Id));
             }
-            if (userLikes.likees)
+            if (userLikes.Likees)
             {
-                IEnumerable<int> userLikees = await ListUserLikes(userLikes.user_id, userLikes.likers);
+                IEnumerable<int> userLikees = await ListUserLikes(userLikes.UserId, userLikes.Likers);
                 users = users.Where(u => userLikees.Contains(u.Id));
             }
-            return await PaginationUtilities<User>.CreateAsync(users, paginationParams.pageNumber, paginationParams.PageSize);
+            var UserForDetailedDto = _mapper.ProjectTo<UserForDetailedDto>(users);
+            return await PaginationUtility<UserForDetailedDto>.CreateAsync(UserForDetailedDto, paginationParams.PageNumber, paginationParams.PageSize);
         }
 
         public async Task<bool> SaveAll()
         {
-            return await _dataContext.SaveChangesAsync() > 0;
+            return await _context.SaveChangesAsync() > 0;
         }
 
         public async Task<Message> GetMessage(int id)
         {
-            return await _dataContext.Messages.FirstOrDefaultAsync(m => m.id == id);
+            return await _context.Messages.FirstOrDefaultAsync(m => m.Id == id);
         }
 
-        public async Task<IEnumerable<Message>> GetMessagesThread(int user_id, int recipientid)
+        public async Task<List<Message>> GetMessagesThread(int user_id, int RecipientId)
         {
-            return await _dataContext.Messages
-         .Include(u => u.sender).ThenInclude(p => p.photos)
-         .Include(r => r.recipient).ThenInclude(p => p.photos)
-         .Where(u => u.recipientid == user_id && u.senderid == recipientid && u.sender_deleted == false
-          || u.recipientid == recipientid && u.senderid == user_id && u.recipient_deleted == false)
-         .OrderByDescending(o => o.message_sent)
+            return await _context.Messages
+         .Include(u => u.Sender).ThenInclude(p => p.Photos)
+         .Include(r => r.Recipient).ThenInclude(p => p.Photos)
+         .Where(u => u.RecipientId == user_id && u.SenderId == RecipientId && u.SenderDeleted == false
+          || u.RecipientId == RecipientId && u.SenderId == user_id && u.RecipientDeleted == false)
+         .OrderByDescending(o => o.MessageSent)
          .ToListAsync();
         }
 
-        public async Task<PaginationUtilities<Message>> GetMessagesForUser(PaginationParams paginationParams, MessageParams messageParams)
+        public async Task<PaginationUtility<Message>> GetMessagesForUser(PaginationParams paginationParams, MessageParams messageParams)
         {
-            IQueryable<Message> messages = _dataContext.Messages
-            .Include(u => u.sender).ThenInclude(p => p.photos)
-            .Include(r => r.recipient).ThenInclude(p => p.photos).AsQueryable();
-            switch (messageParams.message_container)
+            IQueryable<Message> messages = _context.Messages
+            .Include(u => u.Sender).ThenInclude(p => p.Photos)
+            .Include(r => r.Recipient).ThenInclude(p => p.Photos).AsQueryable();
+            messages = messageParams.MessageContainer switch
             {
-                case "inbox":
-                    messages = messages.Where(u => u.recipientid == messageParams.userid && u.recipient_deleted == false);
-                    break;
-                case "outbox":
-                    messages = messages.Where(u => u.senderid == messageParams.userid && u.sender_deleted == false);
-                    break;
-                default:
-                    messages = messages.Where(u => u.recipientid == messageParams.userid && u.recipient_deleted == false && u.is_read == false);
-                    break;
-            }
-            messages.OrderByDescending(o => o.message_sent);
-            return await PaginationUtilities<Message>.CreateAsync(messages, paginationParams.pageNumber, paginationParams.PageSize);
+                "inbox" => messages.Where(u => u.RecipientId == messageParams.Userid && u.RecipientDeleted == false),
+                "outbox" => messages.Where(u => u.SenderId == messageParams.Userid && u.SenderDeleted == false),
+                _ => messages.Where(u => u.RecipientId == messageParams.Userid && u.RecipientDeleted == false && u.IsRead == false),
+            };
+            messages.OrderByDescending(o => o.MessageSent);
+            return await PaginationUtility<Message>.CreateAsync(messages, paginationParams.PageNumber, paginationParams.PageSize);
         }
     }
 }

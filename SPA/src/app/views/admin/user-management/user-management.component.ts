@@ -37,9 +37,8 @@ export class UserManagementComponent implements OnInit {
     this.service.getUserWithRole().subscribe({
       next: (res) => {
         this.users = res
-      },
-      error: (e) => {
-        this.snotify.error(CaptionConstants.ERROR,e);
+      }, error: (e) => {
+        throw e;
       }
     }).add(() => this.spinner.hide())
   }
@@ -61,9 +60,8 @@ export class UserManagementComponent implements OnInit {
             next: (roles) => {
               user.roleName = roles;
               this.snotify.success(CaptionConstants.SUCCESS,MessageConstants.UPDATED_OK_MSG);
-            },
-            error: (e) => {
-              this.snotify.error(CaptionConstants.ERROR, e);
+            }, error: (e) => {
+              throw e;
             }
           })
         }

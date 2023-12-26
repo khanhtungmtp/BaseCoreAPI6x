@@ -1,9 +1,7 @@
-using API._Repositories.Interfaces;
 using API._Services.Interfaces;
 using API.Dtos.Message;
 using API.Helpers.Utilities;
 using API.Models;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,11 +13,9 @@ namespace API.Controllers
     [Route("api/users/{userid}/[controller]")]
     public class MessageController : ControllerBase
     {
-        private readonly IMapper _mapper;
         private readonly IMessageServices _messageServices;
-        public MessageController(IMapper mapper, IUnitOfWork repo, IDatingServices datingServices, IMessageServices messageServices)
+        public MessageController(IMessageServices messageServices)
         {
-            _mapper = mapper;
             _messageServices = messageServices;
         }
 
@@ -31,7 +27,7 @@ namespace API.Controllers
             return Ok(message);
         }
 
-        [HttpPost]
+        [HttpPost("CreateMessage")]
         public async Task<IActionResult> CreateMessage(int userid, MessageForCreationDto messageForCreationDto)
         {
             OperationResult result = await _messageServices.CreateMessage(userid, messageForCreationDto);
@@ -42,27 +38,25 @@ namespace API.Controllers
         [Route("GetMessageForUser")]
         public async Task<IActionResult> GetMessageForUser(int userid, [FromQuery] PaginationParams paginationParams, [FromQuery] MessageParams messageParams)
         {
-            PaginationUtilities<Message> messageForReturn = await _messageServices.GetMessageForUser(userid, paginationParams, messageParams);
-            IEnumerable<MessageToReturnDto> messages = _mapper.Map<IEnumerable<MessageToReturnDto>>(messageForReturn);
-            Response.AddPagination(messageForReturn.PageNumber, messageForReturn.PageSize, messageForReturn.TotalItems, messageForReturn.TotalPages);
-            return Ok(messages);
+            PaginationUtility<Message> messageForReturn = await _messageServices.GetMessageForUser(userid, paginationParams, messageParams);
+            return Ok(messageForReturn);
         }
 
-        [HttpGet("thread/{recipientid}")]
-        public async Task<IActionResult> GetMessagesThread(int userid, int recipientid)
+        [HttpGet("Thread/{RecipientId}")]
+        public async Task<IActionResult> GetMessagesThread(int userid, int RecipientId)
         {
-            return Ok(await _messageServices.GetMessagesThread(userid, recipientid));
+            return Ok(await _messageServices.GetMessagesThread(userid, RecipientId));
         }
-        [HttpDelete("{message_id}")]
-        public async Task<IActionResult> DeleteMessage(int userid, int message_id)
+        [HttpDelete("DeleteMessage/{messageId}")]
+        public async Task<IActionResult> DeleteMessage(int userid, int messageId)
         {
-            return Ok(await _messageServices.DeleteMessage(userid, message_id));
+            return Ok(await _messageServices.DeleteMessage(userid, messageId));
         }
 
-        [HttpPost("{message_id}")]
-        public async Task<IActionResult> markAsRead(int userid, int message_id)
+        [HttpPost("MarkAsRead/{messageId}")]
+        public async Task<IActionResult> MarkAsRead(int userid, int messageId)
         {
-            return Ok(await _messageServices.markAsRead(userid, message_id));
+            return Ok(await _messageServices.MarkAsRead(userid, messageId));
         }
     }
 }

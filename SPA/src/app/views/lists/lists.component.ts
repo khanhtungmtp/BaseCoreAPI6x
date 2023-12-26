@@ -1,5 +1,5 @@
 import { User } from './../../_core/_models/user';
-import { PaginationUtilities } from './../../_core/_helpers/utilities/pagination-utilities';
+import { Pagination } from './../../_core/_helpers/utilities/pagination-utilities';
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/_core/_services/user.service';
 import { NgSnotifyService } from 'src/app/_core/_services/ng-snotify.service';
@@ -13,7 +13,7 @@ import { CaptionConstants } from 'src/app/_core/_constants/message.enum';
 })
 export class ListsComponent implements OnInit {
   likesParam: string;
-  pagination: PaginationUtilities = <PaginationUtilities>{
+  pagination: Pagination = <Pagination>{
     pageNumber: 1,
     pageSize: 6
   };

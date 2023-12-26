@@ -35,19 +35,19 @@ namespace API.Migrations
                 table: "AspNetUserTokens");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Like_AspNetUsers_likee_id",
+                name: "FK_Like_AspNetUsers_LikeeId",
                 table: "Like");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Like_AspNetUsers_liker_id",
+                name: "FK_Like_AspNetUsers_LikerId",
                 table: "Like");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Messages_AspNetUsers_recipientid",
+                name: "FK_Messages_AspNetUsers_RecipientId",
                 table: "Messages");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Messages_AspNetUsers_senderid",
+                name: "FK_Messages_AspNetUsers_SenderId",
                 table: "Messages");
 
             migrationBuilder.DropForeignKey(
@@ -166,33 +166,33 @@ namespace API.Migrations
                 column: "Id");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Like_Users_likee_id",
+                name: "FK_Like_Users_LikeeId",
                 table: "Like",
-                column: "likee_id",
+                column: "LikeeId",
                 principalTable: "Users",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Like_Users_liker_id",
+                name: "FK_Like_Users_LikerId",
                 table: "Like",
-                column: "liker_id",
+                column: "LikerId",
                 principalTable: "Users",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Messages_Users_recipientid",
+                name: "FK_Messages_Users_RecipientId",
                 table: "Messages",
-                column: "recipientid",
+                column: "RecipientId",
                 principalTable: "Users",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Messages_Users_senderid",
+                name: "FK_Messages_Users_SenderId",
                 table: "Messages",
-                column: "senderid",
+                column: "SenderId",
                 principalTable: "Users",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
@@ -258,19 +258,19 @@ namespace API.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Like_Users_likee_id",
+                name: "FK_Like_Users_LikeeId",
                 table: "Like");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Like_Users_liker_id",
+                name: "FK_Like_Users_LikerId",
                 table: "Like");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Messages_Users_recipientid",
+                name: "FK_Messages_Users_RecipientId",
                 table: "Messages");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Messages_Users_senderid",
+                name: "FK_Messages_Users_SenderId",
                 table: "Messages");
 
             migrationBuilder.DropForeignKey(
@@ -461,33 +461,33 @@ namespace API.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Like_AspNetUsers_likee_id",
+                name: "FK_Like_AspNetUsers_LikeeId",
                 table: "Like",
-                column: "likee_id",
+                column: "LikeeId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Like_AspNetUsers_liker_id",
+                name: "FK_Like_AspNetUsers_LikerId",
                 table: "Like",
-                column: "liker_id",
+                column: "LikerId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Messages_AspNetUsers_recipientid",
+                name: "FK_Messages_AspNetUsers_RecipientId",
                 table: "Messages",
-                column: "recipientid",
+                column: "RecipientId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Messages_AspNetUsers_senderid",
+                name: "FK_Messages_AspNetUsers_SenderId",
                 table: "Messages",
-                column: "senderid",
+                column: "SenderId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);

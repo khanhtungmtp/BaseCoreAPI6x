@@ -68,8 +68,7 @@ export function tokenGetter() {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
-      },
-      defaultLanguage:'vi'
+      }
     }),
     JwtModule.forRoot({
       config: {

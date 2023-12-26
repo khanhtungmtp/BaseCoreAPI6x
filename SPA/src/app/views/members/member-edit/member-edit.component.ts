@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { CaptionConstants, MessageConstants } from 'src/app/_core/_constants/message.enum';
 import { User } from 'src/app/_core/_models/user';
@@ -16,8 +16,8 @@ import { UserService } from 'src/app/_core/_services/user.service';
 })
 export class MemberEditComponent implements OnInit {
   user: User = <User>{}
-  userid: number;
-  photo_url: string = '../../../../assets/user.png';
+  userId: number;
+  photoUrl: string = '../../../../assets/user.png';
   defaultImage: string = '../../../../assets/user_default.png';
   @ViewChild('editFrofile') editFrofile: NgForm
 
@@ -40,23 +40,22 @@ export class MemberEditComponent implements OnInit {
     this.userService.currentUser.subscribe({
       next: (res) => {
         if (res) {
-          this.userid = res.id
+          this.userId = res.id
         } else {
           this.router.navigate(['/']);
           this.spinner.hide();
         }
       },
-      error: () => {
-        this.snotify.error(CaptionConstants.ERROR, MessageConstants.SYSTEM_ERROR_MSG);
-        this.spinner.hide();
+      error: (e) => {
+        throw e
       }
     })
     this.getUserData()
     this.authService.currentPhotoUrl.subscribe({
       next: (res) => {
-        this.photo_url = res;
-      }, error: () => {
-        this.snotify.error(CaptionConstants.ERROR, MessageConstants.SYSTEM_ERROR_MSG);
+        this.photoUrl = res;
+      }, error: (e) => {
+        throw e;
       }
     })
     this.spinner.hide();
@@ -64,8 +63,8 @@ export class MemberEditComponent implements OnInit {
 
   getUserData() {
     this.spinner.show();
-    if (this.userid) {
-      this.userService.getUser(this.userid).subscribe({
+    if (this.userId) {
+      this.userService.getUser(this.userId).subscribe({
         next: (res) => {
           if (res !== null) {
             this.user = res
@@ -74,9 +73,8 @@ export class MemberEditComponent implements OnInit {
             this.router.navigate(['/']);
             this.spinner.hide();
           }
-        }, error: () => {
-          this.snotify.error(CaptionConstants.ERROR, MessageConstants.SYSTEM_ERROR_MSG);
-          this.spinner.hide();
+        }, error: (e) => {
+          throw e;
         }
       });
     }
@@ -89,10 +87,8 @@ export class MemberEditComponent implements OnInit {
         this.snotify.success(CaptionConstants.SUCCESS, MessageConstants.UPDATED_OK_MSG);
         this.editFrofile.resetForm();
         this.spinner.hide();
-      },
-      error: () => {
-        this.snotify.error(CaptionConstants.ERROR, MessageConstants.SYSTEM_ERROR_MSG);
-        this.spinner.hide();
+      }, error: (e) => {
+        throw e;
       },
       complete: () => {
         this.getUserData();

@@ -1,4 +1,3 @@
-using API.Dtos;
 using API.Dtos.Message;
 using API.Dtos.Photo;
 using API.Dtos.User;
@@ -13,25 +12,25 @@ namespace API.Configurations
         public AutoMapperProfilesConfig()
         {
             CreateMap<User, UserForListDto>()
-            .ForMember(dest => dest.photo_url, opt =>
+            .ForMember(dest => dest.PhotoUrl, opt =>
             {
-                opt.MapFrom(src => src.photos.FirstOrDefault(p => p.is_main).url);
-            }).ForMember(dest => dest.age, opt =>
+                opt.MapFrom(src => src.Photos.FirstOrDefault(p => p.IsMain).Url);
+            }).ForMember(dest => dest.Age, opt =>
             {
-                opt.MapFrom(src => src.date_of_birth.CalculateAge());
+                opt.MapFrom(src => src.DateOfBirth.CalculateAge());
             });
             CreateMap<User, UserForDetailedDto>()
-            .ForMember(dest => dest.photo_url, opt =>
+            .ForMember(dest => dest.PhotoUrl, opt =>
             {
-                opt.MapFrom(src => src.photos.FirstOrDefault(p => p.is_main).url);
-            }).ForMember(dest => dest.age, opt =>
+                opt.MapFrom(src => src.Photos.FirstOrDefault(p => p.IsMain).Url);
+            }).ForMember(dest => dest.Age, opt =>
             {
-                opt.MapFrom(src => src.date_of_birth.CalculateAge());
+                opt.MapFrom(src => src.DateOfBirth.CalculateAge());
             });
             CreateMap<User, UserForLogedIn>()
-            .ForMember(dest => dest.photo_url, opt =>
+            .ForMember(dest => dest.PhotoUrl, opt =>
             {
-                opt.MapFrom(src => src.photos.FirstOrDefault(p => p.is_main).url);
+                opt.MapFrom(src => src.Photos.FirstOrDefault(p => p.IsMain).Url);
             });
             CreateMap<Photo, PhotoForDetailedDto>();
             CreateMap<UserForUpdateDto, User>();
@@ -40,10 +39,10 @@ namespace API.Configurations
             CreateMap<RegisterUserDto, User>();
             CreateMap<MessageForCreationDto, Message>().ReverseMap();
             CreateMap<Message, MessageToReturnDto>()
-            .ForMember(p => p.sender_photo_url, opt => opt.MapFrom(u => u.sender.photos.FirstOrDefault(p => p.is_main).url))
-            .ForMember(p => p.recipient_photo_url, opt => opt.MapFrom(u => u.recipient.photos.FirstOrDefault(p => p.is_main).url))
-            .ForMember(u => u.sender_known_as, opt => opt.MapFrom(u => u.sender.known_as))
-            .ForMember(u => u.recipient_known_as, opt => opt.MapFrom(u => u.recipient.known_as));
+            .ForMember(p => p.SenderPhotoUrl, opt => opt.MapFrom(u => u.Sender.Photos.FirstOrDefault(p => p.IsMain).Url))
+            .ForMember(p => p.RecipientPhotoUrl, opt => opt.MapFrom(u => u.Recipient.Photos.FirstOrDefault(p => p.IsMain).Url))
+            .ForMember(u => u.SenderKnownAs, opt => opt.MapFrom(u => u.Sender.KnownAs))
+            .ForMember(u => u.RecipientKnownAs, opt => opt.MapFrom(u => u.Recipient.KnownAs));
         }
     }
 }

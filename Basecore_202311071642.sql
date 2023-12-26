@@ -40,17 +40,17 @@ PRINT (N'Create table [dbo].[Users]')
 GO
 CREATE TABLE dbo.Users (
   Id int IDENTITY,
-  UserName nvarchar(256) NULL,
-  gender nvarchar(max) NULL,
-  date_of_birth datetime2 NOT NULL,
-  known_as nvarchar(max) NULL,
-  created datetime2 NOT NULL,
-  last_active datetime2 NOT NULL,
-  introduction nvarchar(max) NULL,
-  looking_for nvarchar(max) NULL,
-  interests nvarchar(max) NULL,
-  city nvarchar(max) NULL,
-  country nvarchar(max) NULL,
+  Username nvarchar(256) NULL,
+  Gender nvarchar(max) NULL,
+  DateOfBirth datetime2 NOT NULL,
+  KnownAs nvarchar(max) NULL,
+  Created datetime2 NOT NULL,
+  LastActive datetime2 NOT NULL,
+  Introduction nvarchar(max) NULL,
+  LookingFor nvarchar(max) NULL,
+  Interests nvarchar(max) NULL,
+  City nvarchar(max) NULL,
+  Country nvarchar(max) NULL,
   AccessFailedCount int NOT NULL DEFAULT (0),
   ConcurrencyStamp nvarchar(max) NULL,
   Email nvarchar(256) NULL,
@@ -58,7 +58,7 @@ CREATE TABLE dbo.Users (
   LockoutEnabled bit NOT NULL DEFAULT (CONVERT([bit],(0))),
   LockoutEnd datetimeoffset NULL,
   NormalizedEmail nvarchar(256) NULL,
-  NormalizedUserName nvarchar(256) NULL,
+  NormalizedUsername nvarchar(256) NULL,
   PasswordHash nvarchar(max) NULL,
   PhoneNumber nvarchar(max) NULL,
   PhoneNumberConfirmed bit NOT NULL DEFAULT (CONVERT([bit],(0))),
@@ -81,13 +81,13 @@ CREATE INDEX EmailIndex
 GO
 
 --
--- Create index [UserNameIndex] on table [dbo].[Users]
+-- Create index [UsernameIndex] on table [dbo].[Users]
 --
-PRINT (N'Create index [UserNameIndex] on table [dbo].[Users]')
+PRINT (N'Create index [UsernameIndex] on table [dbo].[Users]')
 GO
-CREATE UNIQUE INDEX UserNameIndex
-  ON dbo.Users (NormalizedUserName)
-  WHERE ([NormalizedUserName] IS NOT NULL)
+CREATE UNIQUE INDEX UsernameIndex
+  ON dbo.Users (NormalizedUsername)
+  WHERE ([NormalizedUsername] IS NOT NULL)
   ON [PRIMARY]
 GO
 
@@ -202,14 +202,14 @@ GO
 PRINT (N'Create table [dbo].[Photos]')
 GO
 CREATE TABLE dbo.Photos (
-  id int IDENTITY,
-  url nvarchar(max) NULL,
+  Id int IDENTITY,
+  Url nvarchar(max) NULL,
   description nvarchar(max) NULL,
   date_added datetime2 NOT NULL,
   is_main bit NOT NULL,
   userid int NOT NULL,
   public_id nvarchar(max) NULL,
-  CONSTRAINT PK_Photos PRIMARY KEY CLUSTERED (id)
+  CONSTRAINT PK_Photos PRIMARY KEY CLUSTERED (Id)
 )
 ON [PRIMARY]
 TEXTIMAGE_ON [PRIMARY]
@@ -231,38 +231,38 @@ GO
 PRINT (N'Create table [dbo].[Messages]')
 GO
 CREATE TABLE dbo.Messages (
-  id int IDENTITY,
-  senderid int NOT NULL,
-  recipientid int NOT NULL,
-  content nvarchar(max) NULL,
-  is_read bit NOT NULL,
-  date_read datetime2 NULL,
-  message_sent datetime2 NOT NULL,
-  sender_deleted bit NOT NULL,
-  recipient_deleted bit NOT NULL,
-  CONSTRAINT PK_Messages PRIMARY KEY CLUSTERED (id)
+  Id int IDENTITY,
+  SenderId int NOT NULL,
+  RecipientId int NOT NULL,
+  Content nvarchar(max) NULL,
+  IsRead bit NOT NULL,
+  DateRead datetime2 NULL,
+  MessageSent datetime2 NOT NULL,
+  SenderDeleted bit NOT NULL,
+  RecipientDeleted bit NOT NULL,
+  CONSTRAINT PK_Messages PRIMARY KEY CLUSTERED (Id)
 )
 ON [PRIMARY]
 TEXTIMAGE_ON [PRIMARY]
 GO
 
 --
--- Create index [IX_Messages_recipientid] on table [dbo].[Messages]
+-- Create index [IX_Messages_RecipientId] on table [dbo].[Messages]
 --
-PRINT (N'Create index [IX_Messages_recipientid] on table [dbo].[Messages]')
+PRINT (N'Create index [IX_Messages_RecipientId] on table [dbo].[Messages]')
 GO
-CREATE INDEX IX_Messages_recipientid
-  ON dbo.Messages (recipientid)
+CREATE INDEX IX_Messages_RecipientId
+  ON dbo.Messages (RecipientId)
   ON [PRIMARY]
 GO
 
 --
--- Create index [IX_Messages_senderid] on table [dbo].[Messages]
+-- Create index [IX_Messages_SenderId] on table [dbo].[Messages]
 --
-PRINT (N'Create index [IX_Messages_senderid] on table [dbo].[Messages]')
+PRINT (N'Create index [IX_Messages_SenderId] on table [dbo].[Messages]')
 GO
-CREATE INDEX IX_Messages_senderid
-  ON dbo.Messages (senderid)
+CREATE INDEX IX_Messages_SenderId
+  ON dbo.Messages (SenderId)
   ON [PRIMARY]
 GO
 
@@ -308,20 +308,20 @@ GO
 PRINT (N'Create table [dbo].[Like]')
 GO
 CREATE TABLE dbo.[Like] (
-  liker_id int NOT NULL,
-  likee_id int NOT NULL,
-  CONSTRAINT PK_Like PRIMARY KEY CLUSTERED (liker_id, likee_id)
+  LikerId int NOT NULL,
+  LikeeId int NOT NULL,
+  CONSTRAINT PK_Like PRIMARY KEY CLUSTERED (LikerId, LikeeId)
 )
 ON [PRIMARY]
 GO
 
 --
--- Create index [IX_Like_likee_id] on table [dbo].[Like]
+-- Create index [IX_Like_LikeeId] on table [dbo].[Like]
 --
-PRINT (N'Create index [IX_Like_likee_id] on table [dbo].[Like]')
+PRINT (N'Create index [IX_Like_LikeeId] on table [dbo].[Like]')
 GO
-CREATE INDEX IX_Like_likee_id
-  ON dbo.[Like] (likee_id)
+CREATE INDEX IX_Like_LikeeId
+  ON dbo.[Like] (LikeeId)
   ON [PRIMARY]
 GO
 
@@ -346,13 +346,13 @@ PRINT (N'Dumping data for table UserTokens')
 PRINT (N'Dumping data for table Users')
 SET IDENTITY_INSERT dbo.Users ON
 GO
-INSERT dbo.Users(Id, UserName, gender, date_of_birth, known_as, created, last_active, introduction, looking_for, interests, city, country, AccessFailedCount, ConcurrencyStamp, Email, EmailConfirmed, LockoutEnabled, LockoutEnd, NormalizedEmail, NormalizedUserName, PasswordHash, PhoneNumber, PhoneNumberConfirmed, SecurityStamp, TwoFactorEnabled) VALUES (4, N'tung', N'string', '1997-01-23 08:31:18.5820000', N'string', '2023-05-31 08:31:18.5820000', '2023-08-19 07:50:54.5733960', NULL, NULL, NULL, N'Binh Duong', N'Viet Nam', 0, N'ea352514-1709-4d91-9379-59f9004e7fe2', NULL, CONVERT(bit, 'False'), CONVERT(bit, 'True'), NULL, NULL, N'TUNG', N'AQAAAAIAAYagAAAAEOtyfymlMWh4cgZCcygetzADstsNpJ6gLJ78TqP4Ij8fXC+939WQebX6uloQbG/J4w==', NULL, CONVERT(bit, 'False'), N'A4GPFCCQRUGQLA77UUUZVQYSJMRUHT6T', CONVERT(bit, 'False'))
-INSERT dbo.Users(Id, UserName, gender, date_of_birth, known_as, created, last_active, introduction, looking_for, interests, city, country, AccessFailedCount, ConcurrencyStamp, Email, EmailConfirmed, LockoutEnabled, LockoutEnd, NormalizedEmail, NormalizedUserName, PasswordHash, PhoneNumber, PhoneNumberConfirmed, SecurityStamp, TwoFactorEnabled) VALUES (5, N'tungmtp', N'female', '1997-01-23 08:31:18.5820000', N'mtp', '2023-05-31 08:31:18.5820000', '2023-05-31 08:31:18.5820000', NULL, NULL, NULL, N'Binh Duong', N'Viet Nam', 0, N'02c63a68-f3d0-48dc-9503-b3e0519006ea', NULL, CONVERT(bit, 'False'), CONVERT(bit, 'True'), NULL, NULL, N'TUNGMTP', N'AQAAAAIAAYagAAAAEOHkXT0zDrWwhEDlphcpDD+akGVYqkwSe3L4dtfQtP8wkhLAErUKGY3QRi6e+Tj0Kw==', NULL, CONVERT(bit, 'False'), N'4RXOUN3IYFXBMI3DJPUGBHEKXPUVQLNK', CONVERT(bit, 'False'))
-INSERT dbo.Users(Id, UserName, gender, date_of_birth, known_as, created, last_active, introduction, looking_for, interests, city, country, AccessFailedCount, ConcurrencyStamp, Email, EmailConfirmed, LockoutEnabled, LockoutEnd, NormalizedEmail, NormalizedUserName, PasswordHash, PhoneNumber, PhoneNumberConfirmed, SecurityStamp, TwoFactorEnabled) VALUES (11, N'tung.nguyen', N'male', '1997-01-22 17:00:00.0000000', N'tung', '2023-06-03 08:34:32.4711521', '2023-11-07 11:38:11.1057354', NULL, NULL, NULL, N'Bình Dương', N'Việt nam', 0, N'4b2dcaee-8cdd-4715-8be6-19106a2e69ea', NULL, CONVERT(bit, 'False'), CONVERT(bit, 'True'), NULL, NULL, N'TUNG.NGUYEN', N'AQAAAAIAAYagAAAAEId6DJKEk4+jm3rniiXgIKjzsVCxwfCx9RGI8Tei1JaNiCUwkwMpO/mwJk7PrNWwjw==', NULL, CONVERT(bit, 'False'), N'EFVHEG7DZVUQ5XMHCCJADELYWHCHQYLZ', CONVERT(bit, 'False'))
-INSERT dbo.Users(Id, UserName, gender, date_of_birth, known_as, created, last_active, introduction, looking_for, interests, city, country, AccessFailedCount, ConcurrencyStamp, Email, EmailConfirmed, LockoutEnabled, LockoutEnd, NormalizedEmail, NormalizedUserName, PasswordHash, PhoneNumber, PhoneNumberConfirmed, SecurityStamp, TwoFactorEnabled) VALUES (12, N'trung.nguyen', N'male', '1997-01-22 17:00:00.0000000', N'tung', '2023-06-03 08:37:43.3733763', '2023-06-03 08:45:06.4620001', NULL, NULL, NULL, N'Bình Dương', N'Việt nam', 0, N'8f96a668-7f8c-40b4-99e0-3b326d0a163b', NULL, CONVERT(bit, 'False'), CONVERT(bit, 'True'), NULL, NULL, N'TRUNG.NGUYEN', N'AQAAAAIAAYagAAAAELrwEZne6XImKsxk8mBimq1M5be8LwpGbcPmqvSdZBQ1uvduwphhckwwqvglyqj9sg==', NULL, CONVERT(bit, 'False'), N'CE3AJPJ3V5YM34UW4DG4SHVTX66XCHNA', CONVERT(bit, 'False'))
-INSERT dbo.Users(Id, UserName, gender, date_of_birth, known_as, created, last_active, introduction, looking_for, interests, city, country, AccessFailedCount, ConcurrencyStamp, Email, EmailConfirmed, LockoutEnabled, LockoutEnd, NormalizedEmail, NormalizedUserName, PasswordHash, PhoneNumber, PhoneNumberConfirmed, SecurityStamp, TwoFactorEnabled) VALUES (13, N'lan.nguyen', N'female', '2001-05-15 17:00:00.0000000', N'lan', '2023-06-03 08:58:52.1817244', '2023-06-15 16:16:17.0370537', NULL, NULL, NULL, N'Phú Quốc', N'Việt Nam', 0, N'e84e24e6-f22e-4b98-a824-2ab8a9933001', NULL, CONVERT(bit, 'False'), CONVERT(bit, 'True'), NULL, NULL, N'LAN.NGUYEN', N'AQAAAAIAAYagAAAAEP9PbT0wo1wx6eBciw5WsBZr6tx/hKlD/NyxtuqcAJSbDVXG784XF+dS54/1OpiuZg==', NULL, CONVERT(bit, 'False'), N'FURP2Y23ZPI5WWZMPS3HLPSMF2OZ47CT', CONVERT(bit, 'False'))
-INSERT dbo.Users(Id, UserName, gender, date_of_birth, known_as, created, last_active, introduction, looking_for, interests, city, country, AccessFailedCount, ConcurrencyStamp, Email, EmailConfirmed, LockoutEnabled, LockoutEnd, NormalizedEmail, NormalizedUserName, PasswordHash, PhoneNumber, PhoneNumberConfirmed, SecurityStamp, TwoFactorEnabled) VALUES (14, N'tuan.tran', N'male', '2001-02-07 17:00:00.0000000', N'tuan.pham', '2023-06-16 12:01:45.0715154', '2023-06-16 12:02:41.3381465', NULL, NULL, NULL, N'tuan.pham', N'tuan.pham', 0, N'7c3081e3-7445-4073-818c-1f605e43d814', NULL, CONVERT(bit, 'False'), CONVERT(bit, 'True'), NULL, NULL, N'TUAN.PHAM1', N'AQAAAAIAAYagAAAAEDLmiw/jqbC/eQO0YRx0Y9sc2oXvdH3GBu9A8KCeGtC2KHTPugqXlWYiInvTHcSEfg==', NULL, CONVERT(bit, 'False'), N'TWXFBSSY7CEAABE32K2UEH66GSONHD2S', CONVERT(bit, 'False'))
-INSERT dbo.Users(Id, UserName, gender, date_of_birth, known_as, created, last_active, introduction, looking_for, interests, city, country, AccessFailedCount, ConcurrencyStamp, Email, EmailConfirmed, LockoutEnabled, LockoutEnd, NormalizedEmail, NormalizedUserName, PasswordHash, PhoneNumber, PhoneNumberConfirmed, SecurityStamp, TwoFactorEnabled) VALUES (15, N'tuan.pham', N'male', '2000-01-31 17:00:00.0000000', N'roleResult', '2023-06-16 12:03:22.4697816', '2023-06-16 14:34:45.0169854', NULL, NULL, NULL, N'roleResult', N'roleResult', 0, N'c315569a-dabf-4a59-861c-131e83fe7d6a', NULL, CONVERT(bit, 'False'), CONVERT(bit, 'True'), NULL, NULL, N'TUAN.PHAM', N'AQAAAAIAAYagAAAAELKGhVJsbXvrhNGclIc1/1ND8kIkQlwly8xSOZ5T5hlDSQJ1K9lLL3haZQw1vqofJA==', NULL, CONVERT(bit, 'False'), N'HY33DTVKNMGFVIXRAWSRIUQPOFZPTWBB', CONVERT(bit, 'False'))
+INSERT dbo.Users(Id, Username, Gender, DateOfBirth, KnownAs, Created, LastActive, introduction, LookingFor, Interests, City, Country, AccessFailedCount, ConcurrencyStamp, Email, EmailConfirmed, LockoutEnabled, LockoutEnd, NormalizedEmail, NormalizedUsername, PasswordHash, PhoneNumber, PhoneNumberConfirmed, SecurityStamp, TwoFactorEnabled) VALUES (4, N'tung', N'string', '1997-01-23 08:31:18.5820000', N'string', '2023-05-31 08:31:18.5820000', '2023-08-19 07:50:54.5733960', NULL, NULL, NULL, N'Binh Duong', N'Viet Nam', 0, N'ea352514-1709-4d91-9379-59f9004e7fe2', NULL, CONVERT(bit, 'False'), CONVERT(bit, 'True'), NULL, NULL, N'TUNG', N'AQAAAAIAAYagAAAAEOtyfymlMWh4cgZCcygetzADstsNpJ6gLJ78TqP4Ij8fXC+939WQebX6uloQbG/J4w==', NULL, CONVERT(bit, 'False'), N'A4GPFCCQRUGQLA77UUUZVQYSJMRUHT6T', CONVERT(bit, 'False'))
+INSERT dbo.Users(Id, Username, Gender, DateOfBirth, KnownAs, Created, LastActive, introduction, LookingFor, Interests, City, Country, AccessFailedCount, ConcurrencyStamp, Email, EmailConfirmed, LockoutEnabled, LockoutEnd, NormalizedEmail, NormalizedUsername, PasswordHash, PhoneNumber, PhoneNumberConfirmed, SecurityStamp, TwoFactorEnabled) VALUES (5, N'tungmtp', N'female', '1997-01-23 08:31:18.5820000', N'mtp', '2023-05-31 08:31:18.5820000', '2023-05-31 08:31:18.5820000', NULL, NULL, NULL, N'Binh Duong', N'Viet Nam', 0, N'02c63a68-f3d0-48dc-9503-b3e0519006ea', NULL, CONVERT(bit, 'False'), CONVERT(bit, 'True'), NULL, NULL, N'TUNGMTP', N'AQAAAAIAAYagAAAAEOHkXT0zDrWwhEDlphcpDD+akGVYqkwSe3L4dtfQtP8wkhLAErUKGY3QRi6e+Tj0Kw==', NULL, CONVERT(bit, 'False'), N'4RXOUN3IYFXBMI3DJPUGBHEKXPUVQLNK', CONVERT(bit, 'False'))
+INSERT dbo.Users(Id, Username, Gender, DateOfBirth, KnownAs, Created, LastActive, introduction, LookingFor, Interests, City, Country, AccessFailedCount, ConcurrencyStamp, Email, EmailConfirmed, LockoutEnabled, LockoutEnd, NormalizedEmail, NormalizedUsername, PasswordHash, PhoneNumber, PhoneNumberConfirmed, SecurityStamp, TwoFactorEnabled) VALUES (11, N'tung.nguyen', N'male', '1997-01-22 17:00:00.0000000', N'tung', '2023-06-03 08:34:32.4711521', '2023-11-07 11:38:11.1057354', NULL, NULL, NULL, N'Bình Dương', N'Việt nam', 0, N'4b2dcaee-8cdd-4715-8be6-19106a2e69ea', NULL, CONVERT(bit, 'False'), CONVERT(bit, 'True'), NULL, NULL, N'TUNG.NGUYEN', N'AQAAAAIAAYagAAAAEId6DJKEk4+jm3rniiXgIKjzsVCxwfCx9RGI8Tei1JaNiCUwkwMpO/mwJk7PrNWwjw==', NULL, CONVERT(bit, 'False'), N'EFVHEG7DZVUQ5XMHCCJADELYWHCHQYLZ', CONVERT(bit, 'False'))
+INSERT dbo.Users(Id, Username, Gender, DateOfBirth, KnownAs, Created, LastActive, introduction, LookingFor, Interests, City, Country, AccessFailedCount, ConcurrencyStamp, Email, EmailConfirmed, LockoutEnabled, LockoutEnd, NormalizedEmail, NormalizedUsername, PasswordHash, PhoneNumber, PhoneNumberConfirmed, SecurityStamp, TwoFactorEnabled) VALUES (12, N'trung.nguyen', N'male', '1997-01-22 17:00:00.0000000', N'tung', '2023-06-03 08:37:43.3733763', '2023-06-03 08:45:06.4620001', NULL, NULL, NULL, N'Bình Dương', N'Việt nam', 0, N'8f96a668-7f8c-40b4-99e0-3b326d0a163b', NULL, CONVERT(bit, 'False'), CONVERT(bit, 'True'), NULL, NULL, N'TRUNG.NGUYEN', N'AQAAAAIAAYagAAAAELrwEZne6XImKsxk8mBimq1M5be8LwpGbcPmqvSdZBQ1uvduwphhckwwqvglyqj9sg==', NULL, CONVERT(bit, 'False'), N'CE3AJPJ3V5YM34UW4DG4SHVTX66XCHNA', CONVERT(bit, 'False'))
+INSERT dbo.Users(Id, Username, Gender, DateOfBirth, KnownAs, Created, LastActive, introduction, LookingFor, Interests, City, Country, AccessFailedCount, ConcurrencyStamp, Email, EmailConfirmed, LockoutEnabled, LockoutEnd, NormalizedEmail, NormalizedUsername, PasswordHash, PhoneNumber, PhoneNumberConfirmed, SecurityStamp, TwoFactorEnabled) VALUES (13, N'lan.nguyen', N'female', '2001-05-15 17:00:00.0000000', N'lan', '2023-06-03 08:58:52.1817244', '2023-06-15 16:16:17.0370537', NULL, NULL, NULL, N'Phú Quốc', N'Việt Nam', 0, N'e84e24e6-f22e-4b98-a824-2ab8a9933001', NULL, CONVERT(bit, 'False'), CONVERT(bit, 'True'), NULL, NULL, N'LAN.NGUYEN', N'AQAAAAIAAYagAAAAEP9PbT0wo1wx6eBciw5WsBZr6tx/hKlD/NyxtuqcAJSbDVXG784XF+dS54/1OpiuZg==', NULL, CONVERT(bit, 'False'), N'FURP2Y23ZPI5WWZMPS3HLPSMF2OZ47CT', CONVERT(bit, 'False'))
+INSERT dbo.Users(Id, Username, Gender, DateOfBirth, KnownAs, Created, LastActive, introduction, LookingFor, Interests, City, Country, AccessFailedCount, ConcurrencyStamp, Email, EmailConfirmed, LockoutEnabled, LockoutEnd, NormalizedEmail, NormalizedUsername, PasswordHash, PhoneNumber, PhoneNumberConfirmed, SecurityStamp, TwoFactorEnabled) VALUES (14, N'tuan.tran', N'male', '2001-02-07 17:00:00.0000000', N'tuan.pham', '2023-06-16 12:01:45.0715154', '2023-06-16 12:02:41.3381465', NULL, NULL, NULL, N'tuan.pham', N'tuan.pham', 0, N'7c3081e3-7445-4073-818c-1f605e43d814', NULL, CONVERT(bit, 'False'), CONVERT(bit, 'True'), NULL, NULL, N'TUAN.PHAM1', N'AQAAAAIAAYagAAAAEDLmiw/jqbC/eQO0YRx0Y9sc2oXvdH3GBu9A8KCeGtC2KHTPugqXlWYiInvTHcSEfg==', NULL, CONVERT(bit, 'False'), N'TWXFBSSY7CEAABE32K2UEH66GSONHD2S', CONVERT(bit, 'False'))
+INSERT dbo.Users(Id, Username, Gender, DateOfBirth, KnownAs, Created, LastActive, introduction, LookingFor, Interests, City, Country, AccessFailedCount, ConcurrencyStamp, Email, EmailConfirmed, LockoutEnabled, LockoutEnd, NormalizedEmail, NormalizedUsername, PasswordHash, PhoneNumber, PhoneNumberConfirmed, SecurityStamp, TwoFactorEnabled) VALUES (15, N'tuan.pham', N'male', '2000-01-31 17:00:00.0000000', N'roleResult', '2023-06-16 12:03:22.4697816', '2023-06-16 14:34:45.0169854', NULL, NULL, NULL, N'roleResult', N'roleResult', 0, N'c315569a-dabf-4a59-861c-131e83fe7d6a', NULL, CONVERT(bit, 'False'), CONVERT(bit, 'True'), NULL, NULL, N'TUAN.PHAM', N'AQAAAAIAAYagAAAAELKGhVJsbXvrhNGclIc1/1ND8kIkQlwly8xSOZ5T5hlDSQJ1K9lLL3haZQw1vqofJA==', NULL, CONVERT(bit, 'False'), N'HY33DTVKNMGFVIXRAWSRIUQPOFZPTWBB', CONVERT(bit, 'False'))
 GO
 SET IDENTITY_INSERT dbo.Users OFF
 GO
@@ -411,11 +411,11 @@ PRINT (N'Dumping data for table RoleClaims')
 PRINT (N'Dumping data for table Photos')
 SET IDENTITY_INSERT dbo.Photos ON
 GO
-INSERT dbo.Photos(id, url, description, date_added, is_main, userid, public_id) VALUES (2, N'http://res.cloudinary.com/dfuhlrkz1/image/upload/v1685756628/fwptcthbeycl2igyp6nn.jpg', NULL, '2023-06-03 08:43:42.3650944', CONVERT(bit, 'True'), 12, N'fwptcthbeycl2igyp6nn')
-INSERT dbo.Photos(id, url, description, date_added, is_main, userid, public_id) VALUES (3, N'http://res.cloudinary.com/dfuhlrkz1/image/upload/v1685758071/vqmivwaw7mnttwjgknke.jpg', NULL, '2023-06-03 09:07:50.3601324', CONVERT(bit, 'True'), 13, N'vqmivwaw7mnttwjgknke')
-INSERT dbo.Photos(id, url, description, date_added, is_main, userid, public_id) VALUES (4, N'http://res.cloudinary.com/dfuhlrkz1/image/upload/v1689319627/ibpsdfwwe9jyde3matjo.png', NULL, '2023-07-14 14:27:05.8819800', CONVERT(bit, 'True'), 11, N'ibpsdfwwe9jyde3matjo')
-INSERT dbo.Photos(id, url, description, date_added, is_main, userid, public_id) VALUES (5, N'http://res.cloudinary.com/dfuhlrkz1/image/upload/v1689319630/bbot24nlz5sljqoflce0.png', NULL, '2023-07-14 14:27:08.9388391', CONVERT(bit, 'False'), 11, N'bbot24nlz5sljqoflce0')
-INSERT dbo.Photos(id, url, description, date_added, is_main, userid, public_id) VALUES (6, N'http://res.cloudinary.com/dfuhlrkz1/image/upload/v1689319746/uwcplzo0l80plxkpadao.jpg', NULL, '2023-07-14 14:28:06.4998011', CONVERT(bit, 'False'), 11, N'uwcplzo0l80plxkpadao')
+INSERT dbo.Photos(Id, Url, description, date_added, is_main, userid, public_id) VALUES (2, N'http://res.cloudinary.com/dfuhlrkz1/image/upload/v1685756628/fwptcthbeycl2igyp6nn.jpg', NULL, '2023-06-03 08:43:42.3650944', CONVERT(bit, 'True'), 12, N'fwptcthbeycl2igyp6nn')
+INSERT dbo.Photos(Id, Url, description, date_added, is_main, userid, public_id) VALUES (3, N'http://res.cloudinary.com/dfuhlrkz1/image/upload/v1685758071/vqmivwaw7mnttwjgknke.jpg', NULL, '2023-06-03 09:07:50.3601324', CONVERT(bit, 'True'), 13, N'vqmivwaw7mnttwjgknke')
+INSERT dbo.Photos(Id, Url, description, date_added, is_main, userid, public_id) VALUES (4, N'http://res.cloudinary.com/dfuhlrkz1/image/upload/v1689319627/ibpsdfwwe9jyde3matjo.png', NULL, '2023-07-14 14:27:05.8819800', CONVERT(bit, 'True'), 11, N'ibpsdfwwe9jyde3matjo')
+INSERT dbo.Photos(Id, Url, description, date_added, is_main, userid, public_id) VALUES (5, N'http://res.cloudinary.com/dfuhlrkz1/image/upload/v1689319630/bbot24nlz5sljqoflce0.png', NULL, '2023-07-14 14:27:08.9388391', CONVERT(bit, 'False'), 11, N'bbot24nlz5sljqoflce0')
+INSERT dbo.Photos(Id, Url, description, date_added, is_main, userid, public_id) VALUES (6, N'http://res.cloudinary.com/dfuhlrkz1/image/upload/v1689319746/uwcplzo0l80plxkpadao.jpg', NULL, '2023-07-14 14:28:06.4998011', CONVERT(bit, 'False'), 11, N'uwcplzo0l80plxkpadao')
 GO
 SET IDENTITY_INSERT dbo.Photos OFF
 GO
@@ -484,21 +484,21 @@ ALTER TABLE dbo.Photos
 GO
 
 --
--- Create foreign key [FK_Messages_Users_recipientid] on table [dbo].[Messages]
+-- Create foreign key [FK_Messages_Users_RecipientId] on table [dbo].[Messages]
 --
-PRINT (N'Create foreign key [FK_Messages_Users_recipientid] on table [dbo].[Messages]')
+PRINT (N'Create foreign key [FK_Messages_Users_RecipientId] on table [dbo].[Messages]')
 GO
 ALTER TABLE dbo.Messages
-  ADD CONSTRAINT FK_Messages_Users_recipientid FOREIGN KEY (recipientid) REFERENCES dbo.Users (Id)
+  ADD CONSTRAINT FK_Messages_Users_RecipientId FOREIGN KEY (RecipientId) REFERENCES dbo.Users (Id)
 GO
 
 --
--- Create foreign key [FK_Messages_Users_senderid] on table [dbo].[Messages]
+-- Create foreign key [FK_Messages_Users_SenderId] on table [dbo].[Messages]
 --
-PRINT (N'Create foreign key [FK_Messages_Users_senderid] on table [dbo].[Messages]')
+PRINT (N'Create foreign key [FK_Messages_Users_SenderId] on table [dbo].[Messages]')
 GO
 ALTER TABLE dbo.Messages
-  ADD CONSTRAINT FK_Messages_Users_senderid FOREIGN KEY (senderid) REFERENCES dbo.Users (Id)
+  ADD CONSTRAINT FK_Messages_Users_SenderId FOREIGN KEY (SenderId) REFERENCES dbo.Users (Id)
 GO
 
 --
@@ -520,21 +520,21 @@ ALTER TABLE dbo.UserRoles
 GO
 
 --
--- Create foreign key [FK_Like_Users_likee_id] on table [dbo].[Like]
+-- Create foreign key [FK_Like_Users_LikeeId] on table [dbo].[Like]
 --
-PRINT (N'Create foreign key [FK_Like_Users_likee_id] on table [dbo].[Like]')
+PRINT (N'Create foreign key [FK_Like_Users_LikeeId] on table [dbo].[Like]')
 GO
 ALTER TABLE dbo.[Like]
-  ADD CONSTRAINT FK_Like_Users_likee_id FOREIGN KEY (likee_id) REFERENCES dbo.Users (Id)
+  ADD CONSTRAINT FK_Like_Users_LikeeId FOREIGN KEY (LikeeId) REFERENCES dbo.Users (Id)
 GO
 
 --
--- Create foreign key [FK_Like_Users_liker_id] on table [dbo].[Like]
+-- Create foreign key [FK_Like_Users_LikerId] on table [dbo].[Like]
 --
-PRINT (N'Create foreign key [FK_Like_Users_liker_id] on table [dbo].[Like]')
+PRINT (N'Create foreign key [FK_Like_Users_LikerId] on table [dbo].[Like]')
 GO
 ALTER TABLE dbo.[Like]
-  ADD CONSTRAINT FK_Like_Users_liker_id FOREIGN KEY (liker_id) REFERENCES dbo.Users (Id)
+  ADD CONSTRAINT FK_Like_Users_LikerId FOREIGN KEY (LikerId) REFERENCES dbo.Users (Id)
 GO
 SET NOEXEC OFF
 GO

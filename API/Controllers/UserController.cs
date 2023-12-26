@@ -32,20 +32,14 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUsers([FromQuery] PaginationParams paginationParams, [FromQuery] UserFilter userFilter)
         {
-            PaginationUtilities<User> users = await _userServices.GetUsers(paginationParams, userFilter);
-            IEnumerable<UserForDetailedDto> usersMapped = _mapper.Map<IEnumerable<UserForDetailedDto>>(users);
-            Response.AddPagination(users.PageNumber, users.PageSize, users.TotalItems, users.TotalPages);
-            return Ok(usersMapped);
+            return Ok(await _userServices.GetUsers(paginationParams, userFilter));
         }
 
         [HttpGet]
         [Route("GetUserLikes")]
         public async Task<IActionResult> GetUserLikes([FromQuery] PaginationParams pagination, [FromQuery] UserLikes userLikes)
         {
-            PaginationUtilities<User> users = await _userServices.GetUserLikes(pagination, userLikes);
-            IEnumerable<UserForDetailedDto> usersToReturn = _mapper.Map<IEnumerable<UserForDetailedDto>>(users);
-            Response.AddPagination(users.PageNumber, users.PageSize, users.TotalItems, users.TotalPages);
-            return Ok(usersToReturn);
+            return Ok(await _userServices.GetUserLikes(pagination, userLikes));
         }
 
         [HttpPut("{id}")]
@@ -55,10 +49,10 @@ namespace API.Controllers
         }
 
         // like user
-        [HttpPost("{userid}/like/{recipientid}")]
-        public async Task<IActionResult> Likes(int userid, int recipientid)
+        [HttpPost("{userid}/like/{RecipientId}")]
+        public async Task<IActionResult> Likes(int userid, int RecipientId)
         {
-            return Ok(await _userServices.Likes(userid, recipientid));
+            return Ok(await _userServices.Likes(userid, RecipientId));
         }
 
     }

@@ -1,12 +1,12 @@
-import { PaginationUtilities } from 'src/app/_core/_helpers/utilities/pagination-utilities';
+import { Pagination } from 'src/app/_core/_helpers/utilities/pagination-utilities';
 import { MessageService } from 'src/app/_core/_services/message.service';
 import { Component, OnInit } from '@angular/core';
 import { LocalStorageContains } from 'src/app/_core/_constants/localStorageContains';
 import { User } from 'src/app/_core/_models/user';
 import { Message } from 'src/app/_core/_models/message';
-import { CaptionConstants, MessageConstants } from 'src/app/_core/_constants/message.enum';
+import { CaptionConstants } from 'src/app/_core/_constants/message.enum';
 import { NgSnotifyService } from 'src/app/_core/_services/ng-snotify.service';
-import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-messages',
@@ -15,12 +15,12 @@ import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
 })
 export class MessagesComponent implements OnInit {
   user: User = JSON.parse(localStorage.getItem(LocalStorageContains.USER) as string);
-  pagination: PaginationUtilities = <PaginationUtilities>{
+  pagination: Pagination = <Pagination>{
     pageNumber: 1,
     pageSize: 10
   };
   messages: Message[] = [];
-  messageContainer: string = 'unread';
+  messageContainer: string = 'unRead';
   constructor(
     private messageService: MessageService,
     private snotify: NgSnotifyService,
@@ -41,24 +41,22 @@ export class MessagesComponent implements OnInit {
           this.messages = res.result;
           this.pagination = res.pagination;
           this.spinner.hide();
-        }, error: () => {
-          this.snotify.error(CaptionConstants.ERROR, MessageConstants.SYSTEM_ERROR_MSG);
-          this.spinner.hide();
+        }, error: (e) => {
+          throw e;
         }
       });
   }
 
-  deleteMessage(message_id: number) {
+  deleteMessage(messageId: number) {
     this.snotify.confirm('Delete this message ?', 'Are you sure you want to delete this message', () => {
-      this.messageService.deleteMessage(this.user.id, message_id).subscribe({
+      this.messageService.deleteMessage(this.user.id, messageId).subscribe({
         next: () => {
-          this.messages.splice(this.messages.findIndex(m => m.id == message_id), 1);
+          this.messages.splice(this.messages.findIndex(m => m.id == messageId), 1);
           this.snotify.success(CaptionConstants.SUCCESS, 'Message has been deleted');
           this.spinner.hide();
         },
-        error: () => this.snotify.error(CaptionConstants.ERROR, 'Failed to delete the message'),
-        complete: () => this.spinner.hide()
-      })
+        error: () => this.snotify.error(CaptionConstants.ERROR, 'Failed to delete the message')
+      }).add(() => this.spinner.hide())
     })
   }
 

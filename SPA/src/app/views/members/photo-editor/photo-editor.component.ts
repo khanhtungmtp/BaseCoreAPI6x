@@ -59,13 +59,13 @@ export class PhotoEditorComponent implements OnInit {
         const photo = {
           id: res.id,
           url: res.url,
-          date_added: res.date_added,
+          dateAdded: res.dateAdded,
           description: res.description,
-          is_main: res.is_main
+          isMain: res.isMain
         };
         this.photos.push(photo);
         // update image profile if new user change image first
-        if (photo.is_main) {
+        if (photo.isMain) {
           this.authService.changeMemberPhoto(res.url);
           this.authService.currentUser.photoUrl = res.url;
           localStorage.setItem(LocalStorageContains.USER, JSON.stringify(this.authService.currentUser));
@@ -81,10 +81,10 @@ export class PhotoEditorComponent implements OnInit {
     this.photoService.setMainPhoto(this.user.id, photo.id).subscribe({
       next: () => {
         // cho hinh hien tai ve failse
-        this.currentMain = this.photos.filter(p => p.is_main == true)[0];
-        this.currentMain.is_main = false;
+        this.currentMain = this.photos.filter(p => p.isMain == true)[0];
+        this.currentMain.isMain = false;
         // cho hinh selected true
-        photo.is_main = true;
+        photo.isMain = true;
         // update lai thong tin hinh anh, user current khi set main
         this.authService.changeMemberPhoto(photo.url);
         this.authService.currentUser.photoUrl = photo.url;
