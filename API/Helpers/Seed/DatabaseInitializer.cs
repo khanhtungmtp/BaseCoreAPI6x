@@ -44,8 +44,8 @@ public class DatabaseInitializer : IDatabaseInitializer
             await EnsureRoleAsync(adminRoleName, "Default administrator", ApplicationPermissions.GetAllPermissionValues());
             await EnsureRoleAsync(userRoleName, "Default user", []);
 
-            await CreateUserAsync("admin", "@@Basecore8x", "Inbuilt Administrator", "admin@basecore.com", "0338716085", [adminRoleName]);
-            await CreateUserAsync("user", "@@Basecore8x", "Inbuilt Standard User", "user@basecore.com", "0338716085", [userRoleName]);
+            await CreateUserAsync("admin", "@@Basecore8x", "admin", "admin@basecore.com", "0338716085", [adminRoleName]);
+            await CreateUserAsync("user", "@@Basecore8x", "tung", "tung@basecore.com", "0338716085", [userRoleName]);
 
             _logger.LogInformation("Inbuilt account generation completed");
         }

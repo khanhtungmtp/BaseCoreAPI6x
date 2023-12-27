@@ -29,7 +29,7 @@ public class Program
         var app = builder.Build();
         ConfigureRequestPipeline(app); // Configure the HTTP request pipeline.
 
-        await SeedDatabase(app); //Seed initial database
+        // await SeedDatabase(app); //Seed initial database
 
         await app.RunAsync();
     }
@@ -39,14 +39,15 @@ public class Program
         // add AddSignalR
         builder.Services.AddSignalR();
         // add databaseconfig
-        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
+        string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
                             throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-        var migrationsAssembly = typeof(Program).GetTypeInfo().Assembly.GetName().Name; //Basecore
+        string migrationsAssembly = typeof(Program).GetTypeInfo().Assembly.GetName().Name; //Basecore
 
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
         {
-            options.UseSqlServer(connectionString, b => b.MigrationsAssembly(migrationsAssembly)).UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
+            options.UseSqlServer(connectionString, b => b.MigrationsAssembly(migrationsAssembly))
+            .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
             options.UseOpenIddict();
         });
 
@@ -146,7 +147,7 @@ public class Program
         .AllowCredentials()));
 
         builder.Services.AddControllersWithViews();
-       
+
         builder.Services.AddSwaggerGen(c =>
            {
                c.SwaggerDoc("v1", new OpenApiInfo { Title = OidcServerManager.ApiFriendlyName, Version = "v1" });
@@ -175,7 +176,7 @@ public class Program
         builder.Services.AddSingleton<IAuthorizationHandler, AssignRolesAuthorizationHandler>();
 
         // DB Creation and Seeding
-        builder.Services.AddTransient<IDatabaseInitializer, DatabaseInitializer>();
+        // builder.Services.AddTransient<IDatabaseInitializer, DatabaseInitializer>();
 
         //File Logger
         builder.Logging.AddFile(builder.Configuration.GetSection("Logging"));
@@ -183,14 +184,9 @@ public class Program
         //Email Templates
         // EmailTemplates.Initialize(builder.Environment);
         builder.Services.AddControllers();
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        builder.Services.AddEndpointsApiExplorer();
-       
-        // RepositoryAccessor and Service
-        builder.Services.AddDependencyInjectionConfiguration(typeof(Program));
-        builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         // add auth
-      //  builder.Services.AddAuthenticationConfig(builder.Configuration);
+        builder.Services.AddDependencyInjectionConfiguration(typeof(Program));
+        //  builder.Services.AddAuthenticationConfig(builder.Configuration);
         // add middleware error global
         builder.Services.AddTransient<ExceptionHandlingMiddleware>();
         // add config json 
@@ -204,7 +200,12 @@ public class Program
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
-            app.UseSwaggerUI();
+            app.UseSwaggerUI(c =>
+            {
+                c.DocumentTitle = "Swagger UI - Basecore App";
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{OidcServerManager.ApiFriendlyName} V1");
+                c.OAuthClientId(OidcServerManager.SwaggerClientID);
+            });
         }
         else
         {
@@ -232,21 +233,27 @@ public class Program
                       .AllowCredentials());
         // middleware global
         app.UseMiddleware<ExceptionHandlingMiddleware>();
-        // use auth
-        app.UseAuthentication();
+
         app.UseHttpsRedirection();
         app.UseStaticFiles();
         app.UseRouting();
+        // use auth
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();
         app.MapHub<PresenceHub>("hubs/presense");
         app.MapControllerRoute(
-            name: "default",
-            pattern: "{controller}/{action=Index}/{id?}");
+                name: "default",
+                pattern: "{controller}/{action=Index}/{id?}");
+
+        app.Map("api/{**slug}", context =>
+        {
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            return Task.CompletedTask;
+        });
 
         app.MapFallbackToFile("index.html");
-        app.Run();
 
     }
 
@@ -255,10 +262,12 @@ public class Program
         using var scope = app.Services.CreateScope();
         try
         {
+            Console.WriteLine("Seeding the database...");
             var databaseInitializer = scope.ServiceProvider.GetRequiredService<IDatabaseInitializer>();
             await databaseInitializer.SeedAsync();
 
-            await OidcServerManager.RegisterApplicationsAsync(scope.ServiceProvider);
+            // await OidcServerManager.RegisterApplicationsAsync(scope.ServiceProvider);
+            Console.WriteLine("end the database...");
         }
         catch (Exception ex)
         {
