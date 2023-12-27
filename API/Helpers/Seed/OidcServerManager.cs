@@ -18,6 +18,7 @@ public class OidcServerManager
             _ = await manager.CreateAsync(new OpenIddictApplicationDescriptor
             {
                 ClientId = BasecoreClientID,
+                ClientType = ClientTypes.Public,
                 DisplayName = "Basecore SPA",
                 Permissions =
                     {
@@ -39,6 +40,7 @@ public class OidcServerManager
             _ = await manager.CreateAsync(new OpenIddictApplicationDescriptor
             {
                 ClientId = SwaggerClientID,
+                ClientType = ClientTypes.Public,
                 DisplayName = "Swagger UI",
                 Permissions =
                     {

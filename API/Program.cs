@@ -29,7 +29,7 @@ public class Program
         var app = builder.Build();
         ConfigureRequestPipeline(app); // Configure the HTTP request pipeline.
 
-        // await SeedDatabase(app); //Seed initial database
+        await SeedDatabase(app); //Seed initial database
 
         await app.RunAsync();
     }
@@ -139,7 +139,6 @@ public class Program
             .AddPolicy(Policies.ViewRoleByRoleNamePolicy, policy => policy.Requirements.Add(new ViewRoleAuthorizationRequirement()))
             .AddPolicy(Policies.ManageAllRolesPolicy, policy => policy.RequireClaim(ClaimConstants.Permission, AppPermissions.ManageRoles))
             .AddPolicy(Policies.AssignAllowedRolesPolicy, policy => policy.Requirements.Add(new AssignRolesAuthorizationRequirement()));
-
         // add cors
         builder.Services.AddCors(opt => opt.AddDefaultPolicy(p => p.WithOrigins("http://localhost:4200", "https://localhost:4200")
         .AllowAnyHeader()
@@ -266,7 +265,7 @@ public class Program
             var databaseInitializer = scope.ServiceProvider.GetRequiredService<IDatabaseInitializer>();
             await databaseInitializer.SeedAsync();
 
-            // await OidcServerManager.RegisterApplicationsAsync(scope.ServiceProvider);
+            await OidcServerManager.RegisterApplicationsAsync(scope.ServiceProvider);
             Console.WriteLine("end the database...");
         }
         catch (Exception ex)
