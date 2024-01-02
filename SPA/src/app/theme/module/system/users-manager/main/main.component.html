@@ -1,0 +1,30 @@
+<page-header class="bg-green-600"></page-header>
+
+<div class="data-grid-options">
+  <mat-checkbox [(ngModel)]="showToolbar">Show Toolbar</mat-checkbox>
+  <mat-checkbox [(ngModel)]="columnResizable">Column Resizable</mat-checkbox>
+</div>
+
+<mtx-grid [data]="list" [columns]="columns" [loading]="isLoading"
+  [columnResizable]="columnResizable" [rowHover]="true" [rowStriped]="true"
+  [showToolbar]="showToolbar" [toolbarTitle]="'Users Managements'"
+  [noResultTemplate]="noResultTpl" [toolbarTemplate]="searchTpl"
+  [pageOnFront]="showPaginator" [showPaginator]="true"
+  [pageSizeOptions]="[5,10,50,100]" [pageIndex]="0" [pageSize]="5"
+  (sortChange)="changeSort($event)" (selectionChange)="changeSelect($event)">
+</mtx-grid>
+<ng-template #noResultTpl>
+  {{'system.noData' | translate}}
+</ng-template>
+
+<ng-template #searchTpl>
+  <mat-form-field class="example-form-field">
+    <mat-label>{{'system.search' | translate}}</mat-label>
+    <input matInput type="text" [(ngModel)]="searchStr"
+      (ngModelChange)="onInputChange()">
+    <button *ngIf="searchStr" matSuffix mat-icon-button aria-label="Clear"
+      (click)="clearInputSearch()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+</ng-template>

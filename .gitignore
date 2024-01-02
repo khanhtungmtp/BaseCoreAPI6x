@@ -1,6 +1,7 @@
 .vscode
 .history
 .vs
+.idea
 dist
 publish
 EF_Core_Tool
