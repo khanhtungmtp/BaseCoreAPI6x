@@ -1,68 +1,68 @@
 import { Injectable } from '@angular/core';
 
 export interface PeriodicElement {
-  title: string;
+  jobTitle: string;
   position: number;
   userName: string;
   fullName: string;
   email?: string;
-  roles?: string;
-  phoneNumer?: string;
+  roles?: string[];
+  phoneNumber?: string;
 }
 
 const ELEMENT_DATA: PeriodicElement[] = [
   {
     position: 1,
-    title: 'Hydrogen',
-    phoneNumer: '13198765432',
+    jobTitle: 'Hydrogen',
+    phoneNumber: '13198765432',
     userName: 'chipheo',
     fullName: 'New York',
-    roles: 'guest',
+    roles: ['guest'],
     email: 'Hydrogen@gmail.com',
   },
   {
     position: 2,
-    title: 'suboi',
-    phoneNumer: '13198765432',
+    jobTitle: 'suboi',
+    phoneNumber: '13198765432',
     userName: 'suboi',
     fullName: 'New York',
-    roles: 'user',
+    roles: ['user'],
     email: 'suboi@gmail.com',
   },
   {
     position: 3,
-    title: 'sieunhando',
-    phoneNumer: '13198765432',
+    jobTitle: 'sieunhando',
+    phoneNumber: '13198765432',
     userName: 'gao red',
     fullName: 'New York',
-    roles: 'guest',
+    roles: ['guest'],
     email: 'sieunhando@gmail.com',
   },
   {
     position: 4,
-    title: 'sieunhanxanh',
-    phoneNumer: '13198765432',
+    jobTitle: 'sieunhanxanh',
+    phoneNumber: '13198765432',
     userName: '010-12345678',
     fullName: 'gao blue',
-    roles: 'user',
+    roles: ['user'],
     email: 'sieunhanxanh@gmail.com',
   },
   {
     position: 5,
-    title: 'sieunhanvang',
-    phoneNumer: '0979459639',
+    jobTitle: 'sieunhanvang',
+    phoneNumber: '0979459639',
     userName: 'gaoyellow',
     fullName: 'New York',
-    roles: 'admin',
+    roles: ['admin', 'superadmin'],
     email: 'sieunhanvang@gmail.com',
   },
   {
     position: 6,
-    title: 'sieunhanbac',
-    phoneNumer: '01238860500',
+    jobTitle: 'sieunhanbac',
+    phoneNumber: '01238860500',
     userName: 'gaobacmtp',
     fullName: 'New York',
-    roles: 'superadmin',
+    roles: ['superadmin'],
     email: 'gaobac@gmail.com',
   },
 ];

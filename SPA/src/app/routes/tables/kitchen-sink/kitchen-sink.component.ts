@@ -51,8 +51,8 @@ export class TablesKitchenSinkComponent implements OnInit {
       minWidth: 100,
     },
     {
-      header: this.translate.stream('usersManager.phoneNumer'),
-      field: 'phoneNumer',
+      header: this.translate.stream('usersManager.phoneNumber'),
+      field: 'phoneNumber',
       hide: true,
       minWidth: 120,
     },

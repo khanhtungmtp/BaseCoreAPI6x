@@ -4,6 +4,7 @@ import { MtxGridColumn } from '@ng-matero/extensions/grid';
 import { TranslateService } from '@ngx-translate/core';
 import { FormComponent } from '../form/form.component';
 import { PeriodicElement, TablesDataService } from 'app/routes/tables/data.service';
+import { Users } from '@core/models/system/users/users.model';
 
 @Component({
   selector: 'app-main',
@@ -22,7 +23,7 @@ export class MainComponent implements OnInit {
       width: '100px',
     },
     {
-      header: this.translate.stream('usersManager.title'),
+      header: this.translate.stream('usersManager.jobTitle'),
       field: 'title',
       sortable: true,
       minWidth: 100,
@@ -50,13 +51,13 @@ export class MainComponent implements OnInit {
       minWidth: 100,
     },
     {
-      header: this.translate.stream('usersManager.phoneNumer'),
-      field: 'phoneNumer',
+      header: this.translate.stream('usersManager.phoneNumber'),
+      field: 'phoneNumber',
       hide: true,
       minWidth: 120,
     },
     {
-      header: this.translate.stream('usersManager.operation'),
+      header: this.translate.stream('system.operation'),
       field: 'operation',
       minWidth: 140,
       width: '140px',
@@ -66,18 +67,18 @@ export class MainComponent implements OnInit {
         {
           type: 'icon',
           icon: 'edit',
-          tooltip: this.translate.stream('usersManager.edit'),
-          click: record => this.edit(record),
+          tooltip: this.translate.stream('system.edit'),
+          click: record => this.openAddEditUsersDialog(record),
         },
         {
           type: 'icon',
           color: 'warn',
           icon: 'delete',
-          tooltip: this.translate.stream('usersManager.delete'),
+          tooltip: this.translate.stream('system.delete'),
           pop: {
-            title: this.translate.stream('usersManager.confirm_delete'),
-            closeText: this.translate.stream('usersManager.close'),
-            okText: this.translate.stream('usersManager.ok'),
+            title: this.translate.stream('system.confirm_delete'),
+            closeText: this.translate.stream('system.close'),
+            okText: this.translate.stream('system.ok'),
           },
           click: record => this.delete(record),
         },
@@ -87,9 +88,6 @@ export class MainComponent implements OnInit {
   list: PeriodicElement[] = [];
   dataMain: PeriodicElement[] = [];
   isLoading = true;
-
-  multiSelectable = true;
-  rowSelectable = true;
   hideRowSelectionCheckbox = false;
   showToolbar = true;
   columnHideable = true;
@@ -112,13 +110,28 @@ export class MainComponent implements OnInit {
     this.isLoading = false;
   }
 
+  openAddEditUsersDialog(value?: Users) {
+    const dialogRef = this.dialog.originalOpen(FormComponent, {
+      width: '900px',
+      disableClose: true,
+      data: { value },
+    });
+
+    dialogRef.afterClosed().subscribe({
+      next: val => {
+        if (val) {
+          // this.getEmployeeList();
+        }
+      },
+    });
+  }
+
   getData() {
     this.list = this.dataSrv.getData();
     this.dataMain = this.list;
   }
 
   search() {
-    console.log('this.searchStr : ', this.searchStr);
     if (this.searchStr === '') {
       // Nếu searchTerm rỗng, trả về toàn bộ danh sách
       return (this.list = this.dataMain);
@@ -132,20 +145,11 @@ export class MainComponent implements OnInit {
   }
 
   clearInputSearch() {
-    this.searchStr = ''
+    this.searchStr = '';
     this.search();
   }
   onInputChange() {
     this.search();
-  }
-
-  edit(value: any) {
-    const dialogRef = this.dialog.originalOpen(FormComponent, {
-      width: '600px',
-      data: { record: value },
-    });
-
-    dialogRef.afterClosed().subscribe(() => console.log('The dialog was closed'));
   }
 
   delete(value: any) {

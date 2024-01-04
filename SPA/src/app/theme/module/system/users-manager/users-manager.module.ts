@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
+import { TrimInputDirective } from '@core/directives/trim-input.directive';
 const COMPONENTS: any[] = [MainComponent];
 const COMPONENTS_DYNAMIC: any[] = [FormComponent];
 const MODULES: any[] = [
@@ -26,7 +27,7 @@ const MODULES: any[] = [
 ];
 
 @NgModule({
-  declarations: [...COMPONENTS, ...COMPONENTS_DYNAMIC],
+  declarations: [...COMPONENTS, ...COMPONENTS_DYNAMIC, TrimInputDirective],
   imports: [...MODULES],
 })
 export class UsersManagerModule {}

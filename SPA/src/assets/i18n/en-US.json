@@ -90,7 +90,16 @@
   },
   "system": {
     "noData": "No Data",
-    "search": "Search"
+    "search": "Search",
+    "operation": "Operation",
+    "edit": "Edit",
+    "save": "Save",
+    "update": "Update",
+    "delete": "Delete",
+    "confirm_delete": "Confirm delete?",
+    "ok": "Ok",
+    "close": "Close",
+    "cancel": "Cancel"
   },
   "paginator": {
     "items_per_page_label": "Items per page:",
@@ -103,18 +112,15 @@
   },
   "usersManager": {
     "position": "#",
-    "title": "Title",
-    "userName": "Name",
+    "jobTitle": "Job Title",
     "fullName": "Full Name",
+    "userName": "User Name",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
     "email": "Email",
     "roles": "Roles",
-    "phoneNumer": "Phone Numer",
-    "operation": "Operation",
-    "edit": "Edit",
-    "delete": "Delete",
-    "confirm_delete": "Confirm delete?",
-    "ok": "Ok",
-    "close": "Close"
+    "phoneNumber": "Phone Numer",
+    "new": "New Users"
   },
   "profile": "Profile",
   "edit_profile": "Edit profile",

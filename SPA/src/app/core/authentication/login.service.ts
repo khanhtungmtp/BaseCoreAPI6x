@@ -8,9 +8,11 @@ import { map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class LoginService {
-  constructor(protected http: HttpClient) {}
+  constructor(protected http: HttpClient) { }
 
   login(username: string, password: string, rememberMe = false) {
+    console.log('password: ', password);
+    console.log('username: ', username);
     return this.http.post<Token>('/auth/login', { username, password, rememberMe });
   }
 

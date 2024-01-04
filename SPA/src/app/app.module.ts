@@ -20,6 +20,8 @@ import { BASE_URL, httpInterceptorProviders, appInitializerProviders } from '@co
 
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemDataService } from '@shared/in-mem/in-mem-data.service';
+import { TrimInputDirective } from '@core/directives/trim-input.directive';
+import { AppTranslationService } from '@core/services/base/apptranslation.service';
 
 // Required for AOT compilation
 export function TranslateHttpLoaderFactory(http: HttpClient) {
@@ -50,13 +52,14 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     HttpClientInMemoryWebApiModule.forRoot(InMemDataService, {
       dataEncapsulation: false,
       passThruUnknownUrl: true,
-    }),
+    })
   ],
   providers: [
     { provide: BASE_URL, useValue: environment.baseUrl },
     httpInterceptorProviders,
-    appInitializerProviders,
+    AppTranslationService
+    // appInitializerProviders,
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
